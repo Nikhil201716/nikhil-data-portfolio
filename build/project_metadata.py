@@ -259,6 +259,33 @@ PROJECTS = [
                              "reporting 100% accuracy for an agent that was right 22.2% of the "
                              "time - 77.8 points of pure inflation.",
     },
+    {
+        "id": "15",
+        "slug": "aegis-health-plan",
+        "dir": "15-Aegis-Health-Plan-Platform",
+        "title": "Aegis Health Plan Intelligence Platform",
+        "pitch": "A payer's analytics platform where every number compiles from one governed "
+                  "definition - and a 'clarifying' definition change silently restates 33 "
+                  "published historical figures.",
+        "roles": ["Data Analyst", "Data Engineer", "ML Engineer", "AI Engineer", "QA / SDET"],
+        "topics": ["Semantic layer / metrics as code", "Metric regression testing",
+                    "Survival analysis", "Right-censoring", "Competing risks",
+                    "Cox proportional hazards", "Discrete-time hazard",
+                    "Hierarchical forecasting", "Forecast reconciliation (MinT)",
+                    "Upcoding detection", "Adversarial red-teaming",
+                    "Risk adjustment", "Model calibration", "Fairness audit",
+                    "NL-to-governed-metrics", "Requirement traceability",
+                    "Hash-chained audit trail", "Injected-defect scoring"],
+        "stack": ["DuckDB", "pandas", "NumPy", "SciPy", "scikit-learn", "FastAPI",
+                   "pytest", "Hypothesis", "Plotly", "Ollama qwen2.5:0.5b"],
+        "metrics_source": "reports",
+        "headline_finding": "A fraud detector that scores 95.5% recall drops to 18.2% against "
+                             "the cheapest possible adaptation. And on survival, the "
+                             "discrete-time hazard recovers the injected coefficients 26x more "
+                             "accurately than treating churn as a yes/no label - Cox, the "
+                             "default choice, is 13x worse than the model that matches how the "
+                             "data actually arrive.",
+    },
 ]
 
 ROLES = ["Data Analyst", "Data Engineer", "ML Engineer", "AI Engineer", "QA / SDET"]

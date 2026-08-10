@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-09T21:48:05+00:00",
+  "generated_at": "2026-08-10T16:45:20+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 14,
+  "n_projects": 15,
   "roles": [
     "Data Analyst",
     "Data Engineer",
@@ -10,16 +10,17 @@
     "QA / SDET"
   ],
   "role_counts": {
-    "Data Analyst": 6,
-    "Data Engineer": 8,
-    "ML Engineer": 10,
-    "AI Engineer": 9,
-    "QA / SDET": 3
+    "Data Analyst": 7,
+    "Data Engineer": 9,
+    "ML Engineer": 11,
+    "AI Engineer": 10,
+    "QA / SDET": 4
   },
   "all_topics": [
     "(s,S) inventory policy",
     "A/B testing",
     "AI-augmented QA",
+    "Adversarial red-teaming",
     "Agent trajectories",
     "Airflow DAGs",
     "Anomaly shapes",
@@ -31,13 +32,16 @@
     "Canary deployment",
     "Churn modeling",
     "Clock skew",
+    "Competing risks",
     "Concept drift",
     "Contextual bandits",
+    "Cox proportional hazards",
     "Cross-modal agent",
     "Data contracts",
     "Data quality SLAs",
     "Data quality gates",
     "Difference-in-differences",
+    "Discrete-time hazard",
     "Disparate impact",
     "Document AI",
     "DuckDB",
@@ -47,18 +51,23 @@
     "Exactly-once semantics",
     "Excel reporting",
     "Explainability",
+    "Fairness audit",
     "FastAPI",
     "Fault injection",
     "Flaky-test detection",
+    "Forecast reconciliation (MinT)",
     "Graph fraud detection",
     "GraphRAG",
     "Grounded LLM generation",
     "Guardrailed NL-to-SQL",
     "H3 geospatial",
+    "Hash-chained audit trail",
+    "Hierarchical forecasting",
     "Holt-Winters",
     "Hybrid retrieval",
     "Idempotency",
     "Idempotent sinks",
+    "Injected-defect scoring",
     "K-Means",
     "Knowledge graph",
     "LLM extraction",
@@ -69,11 +78,14 @@
     "Load testing",
     "Local LLM (Ollama)",
     "Metamorphic testing",
+    "Metric regression testing",
+    "Model calibration",
     "Model registry",
     "Model registry + canary gate",
     "Multi-agent loop",
     "Mutation / injected-bug testing",
     "Mutation testing",
+    "NL-to-governed-metrics",
     "OCR",
     "Off-policy evaluation",
     "Offline TTS",
@@ -94,6 +106,9 @@
     "Red-teaming",
     "Redis Streams",
     "Replay determinism",
+    "Requirement traceability",
+    "Right-censoring",
+    "Risk adjustment",
     "Root-cause analysis",
     "Rules engine",
     "SARIMA",
@@ -103,13 +118,16 @@
     "SVD recommender",
     "Seasonal-naive baseline",
     "Self-healing locators",
+    "Semantic layer / metrics as code",
     "Sequential testing",
     "Slowly changing dimensions",
     "Star schema + declared grain",
     "Streamlit",
+    "Survival analysis",
     "Time-based holdout",
     "Training-serving skew",
     "Transformer fine-tuning",
+    "Upcoding detection",
     "WSL",
     "Watermarks",
     "Whisper ASR",
@@ -127,6 +145,7 @@
     "Hypothesis",
     "Locust",
     "NetworkX",
+    "NumPy",
     "Ollama",
     "Ollama qwen2.5:0.5b",
     "OpenAI Whisper",
@@ -158,10 +177,10 @@
     "sentence-transformers",
     "transformers"
   ],
-  "n_topics": 100,
-  "n_technologies": 38,
-  "n_metrics_extracted": 69,
-  "n_charts": 19,
+  "n_topics": 118,
+  "n_technologies": 39,
+  "n_metrics_extracted": 78,
+  "n_charts": 22,
   "projects": [
     {
       "id": "01",
@@ -1681,6 +1700,187 @@
         }
       ],
       "n_report_files": 9,
+      "screenshots": []
+    },
+    {
+      "id": "15",
+      "slug": "aegis-health-plan",
+      "dir": "15-Aegis-Health-Plan-Platform",
+      "title": "Aegis Health Plan Intelligence Platform",
+      "pitch": "A payer's analytics platform where every number compiles from one governed definition - and a 'clarifying' definition change silently restates 33 published historical figures.",
+      "roles": [
+        "Data Analyst",
+        "Data Engineer",
+        "ML Engineer",
+        "AI Engineer",
+        "QA / SDET"
+      ],
+      "topics": [
+        "Semantic layer / metrics as code",
+        "Metric regression testing",
+        "Survival analysis",
+        "Right-censoring",
+        "Competing risks",
+        "Cox proportional hazards",
+        "Discrete-time hazard",
+        "Hierarchical forecasting",
+        "Forecast reconciliation (MinT)",
+        "Upcoding detection",
+        "Adversarial red-teaming",
+        "Risk adjustment",
+        "Model calibration",
+        "Fairness audit",
+        "NL-to-governed-metrics",
+        "Requirement traceability",
+        "Hash-chained audit trail",
+        "Injected-defect scoring"
+      ],
+      "stack": [
+        "DuckDB",
+        "pandas",
+        "NumPy",
+        "SciPy",
+        "scikit-learn",
+        "FastAPI",
+        "pytest",
+        "Hypothesis",
+        "Plotly",
+        "Ollama qwen2.5:0.5b"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "A fraud detector that scores 95.5% recall drops to 18.2% against the cheapest possible adaptation. And on survival, the discrete-time hazard recovers the injected coefficients 26x more accurately than treating churn as a yes/no label - Cox, the default choice, is 13x worse than the model that matches how the data actually arrive.",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "Historical figures moved by one definition change",
+          "value": "33 of 50",
+          "highlight": false,
+          "note": "every one had already been read and acted on",
+          "source": "reports"
+        },
+        {
+          "label": "Members right-censored",
+          "value": "35.6%",
+          "highlight": false,
+          "note": "still enrolled - not negatives",
+          "source": "reports"
+        },
+        {
+          "label": "Naive classifier coefficient error",
+          "value": "0.2965",
+          "highlight": false,
+          "source": "reports"
+        },
+        {
+          "label": "Discrete-time hazard error",
+          "value": "0.0113",
+          "highlight": true,
+          "note": "26x more accurate than the naive arm",
+          "source": "reports"
+        },
+        {
+          "label": "Fraud recall, adversary unaware",
+          "value": "95.5%",
+          "highlight": false,
+          "source": "reports"
+        },
+        {
+          "label": "Fraud recall once adversary adapts",
+          "value": "18.2%",
+          "highlight": false,
+          "note": "same detector, cheapest possible evasion",
+          "source": "reports"
+        },
+        {
+          "label": "Best forecast MAPE",
+          "value": "9.54%",
+          "highlight": true,
+          "note": "top_down - MinT lost on this hierarchy",
+          "source": "reports"
+        },
+        {
+          "label": "NL copilot vs keyword rules",
+          "value": "25% vs 88%",
+          "highlight": false,
+          "note": "the 0.5B model refused 0% of unanswerable questions",
+          "source": "reports"
+        },
+        {
+          "label": "Injected defects caught",
+          "value": "7 of 10",
+          "highlight": true,
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "bar",
+          "title": "Coefficient recovery error by estimator",
+          "x": [
+            "naive logistic",
+            "Cox PH",
+            "discrete-time"
+          ],
+          "series": [
+            {
+              "name": "mean abs error",
+              "y": [
+                0.2965,
+                0.1449,
+                0.0113
+              ]
+            }
+          ],
+          "yaxis": "mean absolute error (lower is better)"
+        },
+        {
+          "type": "bar",
+          "title": "Fraud detection under adversarial adaptation",
+          "x": [
+            "baseline (adversary unawar",
+            "reduced_rate",
+            "stay_below_threshold",
+            "spread_thin"
+          ],
+          "series": [
+            {
+              "name": "recall",
+              "y": [
+                0.9545,
+                0.1818,
+                0.7727,
+                0.5
+              ]
+            }
+          ],
+          "yaxis": "recall"
+        },
+        {
+          "type": "bar",
+          "title": "Forecast reconciliation: MAPE by approach",
+          "x": [
+            "base_independent",
+            "bottom_up",
+            "top_down",
+            "ols_reconciled",
+            "mint_diagonal"
+          ],
+          "series": [
+            {
+              "name": "MAPE %",
+              "y": [
+                13.479,
+                13.341,
+                9.545,
+                13.568,
+                13.586
+              ]
+            }
+          ],
+          "yaxis": "MAPE %"
+        }
+      ],
+      "n_report_files": 8,
       "screenshots": []
     }
   ]

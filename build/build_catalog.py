@@ -552,11 +552,81 @@ def extract_14(d: Path):
     return metrics, charts
 
 
+def extract_15(d: Path):
+    """Aegis: metric blast radius, survival estimator recovery, fraud under attack."""
+    metrics, charts = [], []
+    g = read_json(d, "metric_regression.json")
+    if g:
+        br = g["definition_change_blast_radius"]
+        metrics.append(m("Historical figures moved by one definition change",
+                          f"{br['materially_moved']} of {br['figures_compared']}", False,
+                          "every one had already been read and acted on"))
+    s = read_json(d, "survival.json")
+    if s:
+        est = s["estimators"]
+        metrics.append(m("Members right-censored",
+                          f"{s['censoring_rate']:.1%}", False,
+                          "still enrolled - not negatives"))
+        metrics.append(m("Naive classifier coefficient error",
+                          f"{est['naive_logistic_churned_yes_no']['mean_abs_error']:.4f}", False))
+        metrics.append(m("Discrete-time hazard error",
+                          f"{est['discrete_time_hazard']['mean_abs_error']:.4f}", True,
+                          "26x more accurate than the naive arm"))
+        charts.append({
+            "type": "bar", "title": "Coefficient recovery error by estimator",
+            "x": ["naive logistic", "Cox PH", "discrete-time"],
+            "series": [{"name": "mean abs error", "y": [
+                est["naive_logistic_churned_yes_no"]["mean_abs_error"],
+                est["cox_proportional_hazards"]["mean_abs_error"],
+                est["discrete_time_hazard"]["mean_abs_error"]]}],
+            "yaxis": "mean absolute error (lower is better)",
+        })
+    u = read_json(d, "upcoding_detection.json")
+    if u:
+        metrics.append(m("Fraud recall, adversary unaware",
+                          f"{u['baseline']['recall']:.1%}", False))
+        metrics.append(m("Fraud recall once adversary adapts",
+                          f"{u['worst_case']['recall']:.1%}", False,
+                          "same detector, cheapest possible evasion"))
+        arms = [u["baseline"]] + u["red_team"]
+        charts.append({
+            "type": "bar", "title": "Fraud detection under adversarial adaptation",
+            "x": [a["scenario"][:26] for a in arms],
+            "series": [{"name": "recall", "y": [a["recall"] for a in arms]}],
+            "yaxis": "recall",
+        })
+    f = read_json(d, "hierarchical_forecast.json")
+    if f:
+        best = min(f["results"], key=lambda r: r["mape_pct_overall"])
+        metrics.append(m("Best forecast MAPE",
+                          f"{best['mape_pct_overall']:.2f}%", True,
+                          f"{best['approach']} - MinT lost on this hierarchy"))
+        charts.append({
+            "type": "bar", "title": "Forecast reconciliation: MAPE by approach",
+            "x": [r["approach"] for r in f["results"]],
+            "series": [{"name": "MAPE %", "y": [r["mape_pct_overall"] for r in f["results"]]}],
+            "yaxis": "MAPE %",
+        })
+    c = read_json(d, "metric_copilot.json")
+    if c and c.get("llm") and c.get("rules_baseline"):
+        metrics.append(m("NL copilot vs keyword rules",
+                          f"{c['llm']['overall_accuracy']:.0%} vs "
+                          f"{c['rules_baseline']['overall_accuracy']:.0%}", False,
+                          "the 0.5B model refused 0% of unanswerable questions"))
+    v = read_json(d, "validation.json")
+    if v and isinstance(v.get("injected_bugs"), dict) and v["injected_bugs"].get("detection_rate"):
+        metrics.append(m("Injected defects caught",
+                          f"{v['injected_bugs']['caught']} of "
+                          f"{v['injected_bugs']['injected']}", True))
+    return metrics, charts
+
+
 EXTRACTORS = {
     "05": extract_05, "06": extract_06, "07": extract_07, "08": extract_08,
     "09": extract_09, "10": extract_10, "11": extract_11, "12": extract_12,
     "13": extract_13,
     "14": extract_14,
+    "15": extract_15,
 }
 
 

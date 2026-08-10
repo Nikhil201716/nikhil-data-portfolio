@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-10T16:45:20+00:00",
+  "generated_at": "2026-08-10T16:47:59+00:00",
   "owner": "Nikhil Sinha",
   "n_projects": 15,
   "roles": [
@@ -1807,7 +1807,7 @@
         },
         {
           "label": "Injected defects caught",
-          "value": "7 of 10",
+          "value": "10 of 10",
           "highlight": true,
           "source": "reports"
         }

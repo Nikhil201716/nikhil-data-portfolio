@@ -107,6 +107,9 @@ const BOOKS = [
   { id: "06", title: "Real-Time Transaction Streaming & Fraud Detection",
     repo: "06-Realtime-Transaction-Streaming-Pipeline",
     file: "Project-06-Realtime-Streaming-Fraud-Notebook.pdf", pages: 61 },
+  { id: "07", title: "Autonomous AI Ops & Recommendation Platform",
+    repo: "07-Autonomous-AI-Ops-Recommendation-Platform",
+    file: "Project-07-Autonomous-AI-Ops-Recommender-Notebook.pdf", pages: 62 },
 ];
 
 /* ═══════════════════════════════════════════════════ boot */

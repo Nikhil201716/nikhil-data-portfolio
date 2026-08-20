@@ -1,86 +1,74 @@
-# Data & AI Portfolio Website
+# Nikhil Sinha — Portfolio Website
 
-A single site covering every project in this portfolio, with **two ways to run it**:
+A single static site covering all fifteen projects in the portfolio. No build step, no
+framework, no CDN, no hosting bill: three files plus a JSON catalog, deployed free on
+GitHub Pages.
 
-| Mode | Command | What you get |
-|---|---|---|
-| **Static** | `python -m http.server 8300 --directory site` | The full site, all charts and metrics. Deploys to GitHub Pages as-is — no server, no cost, works forever. |
-| **Live** | `python api/main.py` | The same site on `http://127.0.0.1:8200`, plus interactive demos that run the real models the projects trained. |
+```bash
+python -m http.server 8700
+```
 
-The site is built **static-first**: everything a visitor needs lives in `site/data/catalog.json`.
-If the optional backend happens to be reachable, the page detects it and upgrades itself — a status
-pill flips to "Live API connected" and interactive panels appear. Nothing breaks when the API is
-absent, which is the normal case for someone clicking a link on a CV.
+Then open <http://127.0.0.1:8700>.
 
 ## The rule this site is built on
 
 **No number here is typed by hand.** `build/build_catalog.py` opens each project's own
-`reports/*.json` and extracts the metrics with a per-project extractor, so any figure on the site
-traces back to a file produced by a real executed run. Projects 1–4 predate that convention, so
-their numbers are quoted from the results table in their README and tagged `readme` in the UI —
-the provenance is visible, not implied. If an extractor cannot find its report, the project renders
-with "no machine-readable metrics" rather than a plausible-looking fabrication.
+`reports/*.json` and extracts its metrics with a per-project extractor, so every figure on
+the page traces back to a file produced by a real executed run — 78 metrics across 15
+projects at the last build. Projects 1–4 predate that convention, so their numbers are quoted
+from the results table in their README and tagged `readme` in the UI: the provenance is
+visible rather than implied. If an extractor cannot find its report, the project renders with
+"no machine-readable metrics" instead of a plausible-looking fabrication.
+
+That is also the site's argument. A portfolio that asserts "+35% efficiency" is asking to be
+believed. This one links the claim to the repository, the report file and the line of code
+that produced it.
 
 ```bash
 python build/build_catalog.py     # regenerate after any project reruns
 ```
 
-## Live endpoints
+## Structure
 
-These reuse Project 12's real artifacts rather than reimplementing anything:
+| Path | What it is |
+|---|---|
+| `index.html` | The whole page. Static shell; every list is rendered by JS from the catalog. |
+| `assets/js/site.js` | Rendering, filtering, the project modal, and chart drawing. |
+| `assets/css/site.css` | Theme tokens for dark/light, layout, motion. |
+| `data/catalog.json` | The extracted evidence — projects, metrics, charts, provenance tags. |
+| `assets/vendor/plotly-2.35.2.min.js` | Vendored Plotly (MIT). No CDN request is ever made. |
+| `build/` | The catalog generator. Not served. |
+| `api/main.py` | Optional local FastAPI backend (see below). Not needed by the site. |
 
-- `POST /api/live/classify` — the bigram ticket router (the model P12 measured as worth shipping
-  over a transformer that scored identically while being 36.7x slower)
-- `POST /api/live/price` — the pricing guardrails, mutation-tested to 81.5%
-- `GET  /api/live/impact/{id}` — supply-chain impact by graph traversal, the query where text
-  retrieval scored 0.000 F1
+Sections: hero → **Evidence** (why the numbers are checkable) → **Findings** (six results worth
+an interview conversation) → **Skills** (five roles, each filtering the project grid) →
+**Projects** (15 cards, searchable, each opening a modal with its measured metrics and charts) →
+**Books** (the 60-page technical notebook per project) → About.
 
-Each loads lazily and returns a clear 503 if that project's artifacts are missing, so a partial
-checkout degrades gracefully instead of taking the whole site down.
+## Optional live backend
 
-## Deploying free to GitHub Pages
+`python api/main.py` serves the same site on `:8200` plus three endpoints that reuse Project 12's
+real artifacts rather than reimplementing anything: the bigram ticket router, the mutation-tested
+pricing guardrails, and supply-chain impact by graph traversal. Each loads lazily and returns a
+clear 503 if that project's artifacts are missing. The published site does not depend on it.
 
-```bash
-python build/build_catalog.py
-# commit the site/ directory; point Pages at it. Nothing else required.
-```
+## Verified in a browser
 
-## Verified
+- 15 project cards, 6 findings, 5 role filters, 39 stack chips, 15 book entries, **0 JS errors**
+- Role filter (QA / SDET → 4 of 15) and free-text search ("survival" → 1 of 15) both correct
+- Project modal opens with its metrics and draws **all** its charts from the catalog (P14: 8 metrics, 3/3 charts)
+- Light and dark themes both render; charts are redrawn on theme change
+- **Mobile, 375×812:** no horizontal overflow, hamburger menu opens, hero fits the viewport
+- Plotly is vendored: zero requests to `cdn.plot.ly`
 
-- Live mode: all three interactive demos driven in a real browser and returning correct results
-- Static mode: API stopped, site reloaded — falls back to "Static mode", all 12 cards, charts and
-  findings still render
-- Charts render from a **vendored** Plotly (`assets/vendor/plotly-2.35.2.min.js`, 4.35 MB, MIT),
-  confirmed by the network log: zero requests to `cdn.plot.ly`, `Plotly.version === "2.35.2"`
-- **Mobile, 375x812:** all 12 project pages plus the index checked programmatically — no page
-  overflow, and across all 47 rendered SVG layers no chart text is clipped by its plot area and no
-  two text nodes overlap. Desktop (1280px) re-checked afterwards for regressions: titles stay on one
-  line and category ticks stay horizontal, as before.
+### Known limitation
 
-That check found two real defects that the earlier 762px pass could not see, both now fixed in
-`renderChart`:
+`file://` is **not** supported. `fetch("data/catalog.json")` is blocked by Chrome's opaque origin
+for local files, so the shell would paint with no content. Serve the directory over HTTP — which is
+what GitHub Pages does. Making `file://` work would mean emitting the catalog as
+`catalog.js` (`window.CATALOG = {...}`) instead of fetching JSON.
 
-- Plotly draws a chart title as one unwrapped `<text>`. Long titles ran past the plot area and were
-  **silently clipped** — the SVG hides the overflow, so the page never scrolls and nothing looks
-  wrong. Titles are now wrapped to the measured chart width.
-- Long category tick labels ("Difference-in-differences") overflowed the same way. They are now
-  rotated vertical below 420px, not merely slanted: at a slant a long label still has a wide
-  horizontal footprint, so adjacent labels collide again as soon as the category names grow — an
-  intermediate `-35°` fix measured clean on some charts while still colliding on P9 and P12.
-
-**Not verified:** the reflow when a device rotates. Charts re-fit via a `ResizeObserver` plus
-`resize`/`orientationchange` listeners, but none of them could be exercised here — the test pane
-runs the page throttled and non-visible (`visibilityState: "hidden"`), where the browser fires no
-animation frames and therefore delivers no `ResizeObserver` callbacks at all, not even the mandatory
-one on `observe()`. The redundant triggers are deliberate for that reason. The width-guard that
-prevents a re-render loop is exercised by ordinary rendering; the rotation path is not.
-
-**Claim withdrawn — "also loads correctly from `file://`".** This was listed as verified in an
-earlier pass and is no longer. It could not be re-tested (the browser pane refuses to execute
-`file://` pages), and there is concrete reason to doubt it: `loadCatalog()` uses
-`fetch("data/catalog.json")`, and Chrome gives a `file://` page an opaque origin, which blocks
-`fetch` of a sibling local file. The shell would paint but no cards or charts would populate. Vendoring
-Plotly removed the *network* dependency, not this one. Treat `file://` as unsupported until someone
-opens it and confirms; serving the directory over `http.server` is the supported zero-cost path.
-Making it genuinely true would mean emitting the catalog as `catalog.js` (`window.CATALOG = {...}`)
-instead of fetching JSON.
+The hero counters animate, but the final value is written **before** the animation starts, with a
+timeout fallback. `requestAnimationFrame` does not fire in a hidden or throttled tab, so a counter
+that only reached its value inside the rAF loop showed `0` to anyone opening the page in a
+background tab. That was a real bug, caught in testing, and is fixed.

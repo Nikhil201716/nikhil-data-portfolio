@@ -3,208 +3,251 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nikhil Sinha — Data & AI Engineering Portfolio</title>
-<meta name="description" content="Thirteen end-to-end data and AI platforms, every metric traced to a real executed run.">
-<link rel="stylesheet" href="assets/css/style.css">
-<!-- Vendored, not CDN: the site has to keep working offline and after any CDN
-     outage or version pull. Same pinned build, MIT licensed. -->
+<title>Nikhil Sinha — Data &amp; AI Engineer</title>
+<meta name="description" content="Data and AI engineer. 15 production-grade projects where every claim is traceable to a report file in a public repository.">
+<meta property="og:title" content="Nikhil Sinha — Data &amp; AI Engineer">
+<meta property="og:description" content="15 projects. 78 measured results. Every number traceable to source.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/css/site.css">
 <script src="assets/vendor/plotly-2.35.2.min.js" charset="utf-8"></script>
 </head>
 <body>
 
-<header class="site">
-  <div class="inner">
-    <div class="brand">Nikhil Sinha <span>· Data &amp; AI</span></div>
-    <nav class="nav">
-      <a href="#projects">Projects</a>
-      <a href="#analytics">Analytics</a>
-      <a href="#findings">Findings</a>
-      <a href="#method">Method</a>
-      <span class="status" id="apiStatus"><span class="dot"></span><span class="label">Static mode</span></span>
-      <button class="icon-btn" id="themeBtn">☀️ Light</button>
-    </nav>
+<div class="grain" aria-hidden="true"></div>
+<div class="glow" aria-hidden="true"></div>
+
+<!-- ══════════════════════════════════════════════ NAV -->
+<nav class="nav" id="nav">
+  <a class="brand" href="#top"><span class="brand-mark">NS</span><span class="brand-name">Nikhil Sinha</span></a>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <div class="nav-links" id="nav-links">
+    <a href="#evidence">Evidence</a>
+    <a href="#findings">Findings</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#books">Books</a>
+    <a href="#about">About</a>
+    <button class="btn-theme" id="theme" aria-label="Toggle theme">◐</button>
   </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════ HERO -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-eyebrow"><span class="pin"></span> BENGALURU, INDIA · OPEN TO OPPORTUNITIES</div>
+    <h1 class="hero-name">Nikhil Sinha</h1>
+    <div class="hero-role" id="hero-role">Data &amp; AI Engineer</div>
+    <p class="hero-pitch">
+      I build data and AI systems that <em>measure whether they actually work</em>.
+      Fifteen end-to-end projects spanning analytics engineering, streaming platforms,
+      machine learning and test engineering — where every result is scored against a
+      known ground truth, and the findings that refuted my own hypotheses are reported
+      as prominently as the ones that confirmed them.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn primary" href="#projects">Explore the work</a>
+      <a class="btn" href="https://github.com/Nikhil201716" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="mailto:nikhil.sinha16022003@gmail.com">Email</a>
+      <a class="btn ghost" href="#books">Download the books</a>
+    </div>
+
+    <div class="hero-stats" id="hero-stats"></div>
+  </div>
+  <div class="scroll-cue" aria-hidden="true"><span></span></div>
 </header>
 
-<div class="wrap">
-
-  <section class="hero">
-    <h1>Data &amp; AI platforms, built end-to-end<br>and measured honestly.</h1>
-    <!-- The project count is written from the catalog at runtime rather than
-         hard-coded, so the prose can never drift out of sync with the data
-         (it briefly said "thirteen" while the catalog held twelve). -->
-    <p class="lede" id="lede"></p>
-    <div class="statbar" id="statbar"></div>
-  </section>
-
-  <section id="projects">
-    <h2 class="sec">Projects</h2>
-    <p class="sub">Filter by the role each project speaks to, or search across topics and stack.</p>
-    <div class="filters" id="filters">
-      <input class="search" id="search" type="search" placeholder="Search topics, tools, titles…">
-    </div>
-    <div class="grid" id="grid"></div>
-  </section>
-
-  <section id="analytics">
-    <h2 class="sec">Portfolio analytics</h2>
-    <p class="sub">The portfolio described by its own data — coverage by role, and the technologies
-      that recur across projects.</p>
-    <div class="chart-grid">
-      <div class="panel"><div class="chart" id="chartRoles"></div></div>
-      <div class="panel"><div class="chart" id="chartTopics"></div></div>
-    </div>
-  </section>
-
-  <section id="findings">
-    <h2 class="sec">Results that contradicted the hypothesis</h2>
-    <p class="sub">
-      A portfolio that only shows wins is not evidence of judgement. These are the findings where the
-      expected answer turned out to be wrong, and the evidence was kept rather than the story.
-    </p>
-    <div id="findings-list"></div>
-  </section>
-
-  <section id="method">
-    <h2 class="sec">How these were built</h2>
-    <div class="panel">
-      <table class="metrics">
-        <tr><td><strong>Every metric is traceable</strong></td>
-            <td class="v">no hand-typed numbers<span class="note">extracted from each project's own reports/*.json, or quoted from its README with the source labelled</span></td></tr>
-        <tr><td><strong>Reproducibility is verified, not asserted</strong></td>
-            <td class="v">checksummed<span class="note">after Project 10 shipped a fixed seed that turned out not to be reproducible</span></td></tr>
-        <tr><td><strong>Benchmarks get stress-tested first</strong></td>
-            <td class="v">rebuilt when wrong<span class="note">Project 12 rebuilt two benchmarks after they measured the wrong thing</span></td></tr>
-        <tr><td><strong>Negative results are kept</strong></td>
-            <td class="v">reported as-is<span class="note">local LLMs lost to simple baselines repeatedly; that comparison is the finding</span></td></tr>
-        <tr><td><strong>Runs free, forever, on modest hardware</strong></td>
-            <td class="v">no paid APIs<span class="note">all GenAI runs on a local Ollama model; ~6GB RAM target</span></td></tr>
-      </table>
-    </div>
-  </section>
-
-</div>
-
-<footer class="site">
+<!-- ══════════════════════════════════════════════ EVIDENCE -->
+<section class="section evidence" id="evidence">
   <div class="wrap">
-    <div id="footmeta"></div>
+    <div class="sec-head">
+      <div class="sec-kicker">01 — The difference</div>
+      <h2>Every number on this page is traceable to a file</h2>
+      <p class="sec-sub">
+        Most portfolios assert impact. This one cites it. Each figure below was
+        extracted programmatically from a <code>reports/*.json</code> produced by a
+        pipeline in a public repository — not typed by hand, and not rounded in my favour.
+      </p>
+    </div>
+
+    <div class="evidence-grid">
+      <article class="ev-card">
+        <div class="ev-num">01</div>
+        <h3>Ground truth is injected, then scored against</h3>
+        <p>Each project's data generator plants a known mechanism — a fraud ring, a
+        concept drift, a causal effect. The analysis is then graded against what was
+        actually planted. "It looks right" is never the standard.</p>
+      </article>
+      <article class="ev-card">
+        <div class="ev-num">02</div>
+        <h3>A suspiciously good number is treated as a bug report</h3>
+        <p>A 100% score triggers an investigation, not a celebration. Several projects
+        contain a fix and a re-measurement because the first result was too clean —
+        including a PII detector at 1.000 that turned out to be scoring its own
+        training distribution.</p>
+      </article>
+      <article class="ev-card">
+        <div class="ev-num">03</div>
+        <h3>Refuted hypotheses are reported as results</h3>
+        <p>Where the thing I set out to prove turned out false, the site says so.
+        Arrival-time windowing was supposed to be badly wrong; at realistic parameters
+        it isn't, and the honest finding is the crossover point instead.</p>
+      </article>
+      <article class="ev-card">
+        <div class="ev-num">04</div>
+        <h3>Reproducibility is measured, not claimed</h3>
+        <p>Datasets are verified byte-identical by SHA-256 checksum in a <em>fresh
+        process</em> — because two projects shipped fixed seeds that still weren't
+        deterministic, and only a new process can catch that.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ FINDINGS -->
+<section class="section" id="findings">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">02 — Signature findings</div>
+      <h2>Six results worth an interview conversation</h2>
+      <p class="sec-sub">Each links to the repository that produced it.</p>
+    </div>
+    <div class="findings" id="findings-grid"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ SKILLS -->
+<section class="section alt" id="skills">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">03 — Capability</div>
+      <h2>Five roles, and the projects that evidence each</h2>
+      <p class="sec-sub">
+        Click a role to filter the project explorer below to the work that demonstrates it.
+      </p>
+    </div>
+    <div class="role-grid" id="role-grid"></div>
+    <div class="skill-cloud">
+      <h3 class="cloud-title">Technologies used across the portfolio</h3>
+      <div class="chips" id="stack-chips"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ PROJECTS -->
+<section class="section" id="projects">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">04 — The work</div>
+      <h2>Fifteen projects, built end to end</h2>
+      <p class="sec-sub">
+        Filter by role or search by technique. Open any card for its measured results,
+        charts built from its own report files, and a link to the code.
+      </p>
+    </div>
+
+    <div class="filters">
+      <div class="filter-roles" id="filter-roles"></div>
+      <input class="search" id="search" type="search" placeholder="Search technique, stack or project…" aria-label="Search projects">
+      <div class="filter-count" id="filter-count"></div>
+    </div>
+
+    <div class="projects" id="projects-grid"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ BOOKS -->
+<section class="section alt" id="books">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">05 — Documentation</div>
+      <h2>A 60-page book for every project</h2>
+      <p class="sec-sub">
+        Each project ships a full technical notebook — the business problem, the
+        mathematics derived from first principles, a guided tour of the code, worked
+        numerical examples, exercises with solutions, and a complete step-by-step
+        runbook of terminal commands. Written so a reader learns the subject, not just
+        the project.
+      </p>
+    </div>
+    <div class="books" id="books-grid"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ ABOUT -->
+<section class="section" id="about">
+  <div class="wrap about-wrap">
+    <div>
+      <div class="sec-kicker">06 — Background</div>
+      <h2>About</h2>
+      <p>
+        I came to data engineering through customer support operations, which turned out
+        to be an unusually good apprenticeship. Working complaint queues teaches you that
+        a metric is a promise someone is accountable for, that an average hides the cases
+        that actually hurt, and that the number on the dashboard is only as good as the
+        definition nobody wrote down.
+      </p>
+      <p>
+        That shows up in how I build. Every project in this portfolio starts by asking
+        what would make the result <em>checkable</em> — and several of them exist because
+        the checkable version disagreed with the obvious one.
+      </p>
+      <p>
+        I work across the whole path: designing the data, modelling the warehouse,
+        building the pipeline, training and calibrating the model, testing it adversarially,
+        and shipping the interface a human actually uses.
+      </p>
+      <div class="about-links">
+        <a class="btn" href="https://github.com/Nikhil201716" target="_blank" rel="noopener">GitHub →</a>
+        <a class="btn" href="mailto:nikhil.sinha16022003@gmail.com">nikhil.sinha16022003@gmail.com</a>
+      </div>
+    </div>
+    <aside class="about-side">
+      <h3>Education</h3>
+      <div class="edu">
+        <div class="edu-school">CHRIST (Deemed to be University)</div>
+        <div class="edu-detail">Bengaluru, India</div>
+      </div>
+      <h3>Focus areas</h3>
+      <ul class="focus-list">
+        <li>Analytics engineering &amp; semantic layers</li>
+        <li>Streaming and event-time correctness</li>
+        <li>ML evaluation, calibration and fairness</li>
+        <li>LLM systems with measured guardrails</li>
+        <li>Test engineering and adversarial QA</li>
+      </ul>
+      <h3>Principle</h3>
+      <p class="principle">
+        “A result you cannot check is not a result.”
+      </p>
+    </aside>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap footer-in">
+    <div>
+      <strong>Nikhil Sinha</strong>
+      <span class="muted">Data &amp; AI Engineer · Bengaluru, India</span>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/Nikhil201716" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:nikhil.sinha16022003@gmail.com">Email</a>
+      <a href="#top">Back to top</a>
+    </div>
+    <div class="muted small" id="build-stamp"></div>
   </div>
 </footer>
 
-<script src="assets/js/app.js"></script>
-<script>
-let activeRole = null;
+<!-- ══════════════════════════════════════════════ PROJECT MODAL -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal-close" data-close aria-label="Close">✕</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
 
-function cardHtml(p) {
-  const kpis = p.metrics.filter(m => m.highlight).slice(0, 2).map(m => `
-    <div class="kpi"><div class="v">${esc(m.value)}</div><div class="k">${esc(m.label)}</div></div>`).join("");
-  return `
-    <a class="card" href="project.html?id=${encodeURIComponent(p.id)}">
-      <div class="num">Project ${esc(p.id)}</div>
-      <h3>${esc(p.title)}</h3>
-      <p class="pitch">${esc(p.pitch)}</p>
-      <div class="tags">${p.roles.map(r => `<span class="tag role">${esc(r)}</span>`).join("")}</div>
-      <div class="tags">${p.topics.slice(0, 4).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
-      <div class="kpis">${kpis}</div>
-    </a>`;
-}
-
-function applyFilters() {
-  const q = (document.getElementById("search").value || "").toLowerCase().trim();
-  const items = state.catalog.projects.filter(p => {
-    if (activeRole && !p.roles.includes(activeRole)) return false;
-    if (!q) return true;
-    const hay = [p.title, p.pitch, ...p.topics, ...p.stack, ...p.roles].join(" ").toLowerCase();
-    return hay.includes(q);
-  });
-  document.getElementById("grid").innerHTML = items.length
-    ? items.map(cardHtml).join("")
-    : '<p class="sub">No projects match that filter.</p>';
-}
-
-function buildFilters(cat) {
-  const box = document.getElementById("filters");
-  const search = document.getElementById("search");
-  cat.roles.forEach(role => {
-    const b = document.createElement("button");
-    b.className = "chip";
-    b.textContent = `${role} (${cat.role_counts[role]})`;
-    b.addEventListener("click", () => {
-      activeRole = activeRole === role ? null : role;
-      [...box.querySelectorAll(".chip")].forEach(c => c.classList.remove("on"));
-      if (activeRole) b.classList.add("on");
-      applyFilters();
-    });
-    box.insertBefore(b, search);
-  });
-  search.addEventListener("input", applyFilters);
-}
-
-function buildStats(cat) {
-  const stats = [
-    [cat.n_projects, "projects"],
-    [cat.n_topics, "distinct topics"],
-    [cat.n_technologies, "technologies"],
-    [cat.n_metrics_extracted, "metrics extracted"],
-    [cat.roles.length, "target roles"],
-  ];
-  document.getElementById("statbar").innerHTML = stats
-    .map(([v, k]) => `<div class="stat"><div class="v">${v}</div><div class="k">${esc(k)}</div></div>`)
-    .join("");
-}
-
-function buildAnalytics(cat) {
-  renderChart(document.getElementById("chartRoles"), {
-    type: "bar", title: "Projects covering each target role",
-    x: cat.roles, series: [{ name: "projects", y: cat.roles.map(r => cat.role_counts[r]) }],
-    yaxis: "projects",
-  });
-
-  const counts = {};
-  cat.projects.forEach(p => p.stack.forEach(s => { counts[s] = (counts[s] || 0) + 1; }));
-  const top = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 12);
-  renderChart(document.getElementById("chartTopics"), {
-    type: "bar", title: "Most-used technologies across the portfolio",
-    x: top.map(t => t[0]), series: [{ name: "projects", y: top.map(t => t[1]) }],
-    yaxis: "projects",
-  });
-}
-
-function buildFindings(cat) {
-  document.getElementById("findings-list").innerHTML = cat.projects
-    .filter(p => p.headline_finding)
-    .map(p => `<div class="panel"><div class="finding">
-        <strong>Project ${esc(p.id)} — ${esc(p.title)}.</strong> ${esc(p.headline_finding)}
-      </div></div>`).join("");
-}
-
-const WORDS = ["zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
-               "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
-               "Seventeen"];
-
-function buildLede(cat) {
-  const n = cat.n_projects;
-  document.getElementById("lede").textContent =
-    `${WORDS[n] || n} production-shaped projects spanning analytics, data engineering, ML, ` +
-    `applied AI and test engineering. Every number on this site is extracted from a report file ` +
-    `produced by a real executed run — including the results that came out badly, which are the ` +
-    `ones worth reading.`;
-}
-
-(async function () {
-  initTheme();
-  const cat = await loadCatalog();
-  buildLede(cat);
-  buildStats(cat);
-  buildFilters(cat);
-  applyFilters();
-  buildAnalytics(cat);
-  buildFindings(cat);
-  document.getElementById("footmeta").innerHTML =
-    `Catalog generated ${esc(cat.generated_at)} · ${cat.n_metrics_extracted} metrics and
-     ${cat.n_charts} charts extracted from project report files · built by ${esc(cat.owner)}`;
-  probeApi();
-})();
-</script>
+<script src="assets/js/site.js"></script>
 </body>
 </html>

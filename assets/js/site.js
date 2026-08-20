@@ -104,6 +104,9 @@ const BOOKS = [
   { id: "05", title: "AI-Augmented Data Quality & Validation",
     repo: "05-AI-Augmented-Data-Quality-Validation-Framework",
     file: "Project-05-Data-Quality-RAG-Copilot-Notebook.pdf", pages: 66 },
+  { id: "06", title: "Real-Time Transaction Streaming & Fraud Detection",
+    repo: "06-Realtime-Transaction-Streaming-Pipeline",
+    file: "Project-06-Realtime-Streaming-Fraud-Notebook.pdf", pages: 61 },
 ];
 
 /* ═══════════════════════════════════════════════════ boot */

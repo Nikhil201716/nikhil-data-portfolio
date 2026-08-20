@@ -101,6 +101,9 @@ const BOOKS = [
   { id: "04", title: "Multi-Source Sales ETL with Apache Airflow",
     repo: "04-Multi-Source-Sales-ETL-Pipeline-Airflow-AWS",
     file: "Project-04-Airflow-ETL-Pipeline-Notebook.pdf", pages: 69 },
+  { id: "05", title: "AI-Augmented Data Quality & Validation",
+    repo: "05-AI-Augmented-Data-Quality-Validation-Framework",
+    file: "Project-05-Data-Quality-RAG-Copilot-Notebook.pdf", pages: 66 },
 ];
 
 /* ═══════════════════════════════════════════════════ boot */

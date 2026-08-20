@@ -116,6 +116,9 @@ const BOOKS = [
   { id: "09", title: "Trust-Aware Experimentation Platform",
     repo: "09-Trust-Aware-Experimentation-Platform",
     file: "Project-09-Trust-Aware-Experimentation-Notebook.pdf", pages: 84 },
+  { id: "10", title: "Delivery Operations Intelligence Platform",
+    repo: "10-Delivery-Operations-Intelligence-Platform",
+    file: "Project-10-Delivery-Ops-Causal-Inference-Notebook.pdf", pages: 69 },
 ];
 
 /* ═══════════════════════════════════════════════════ boot */

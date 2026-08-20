@@ -113,6 +113,9 @@ const BOOKS = [
   { id: "08", title: "AutoClaim Intelligence Platform",
     repo: "08-AutoClaim-Intelligence-Platform",
     file: "Project-08-AutoClaim-Multimodal-AI-Notebook.pdf", pages: 64 },
+  { id: "09", title: "Trust-Aware Experimentation Platform",
+    repo: "09-Trust-Aware-Experimentation-Platform",
+    file: "Project-09-Trust-Aware-Experimentation-Notebook.pdf", pages: 84 },
 ];
 
 /* ═══════════════════════════════════════════════════ boot */

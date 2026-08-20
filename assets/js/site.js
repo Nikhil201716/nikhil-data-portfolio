@@ -95,6 +95,9 @@ const BOOKS = [
   { id: "02", title: "E-commerce Churn & RFM Segmentation",
     repo: "02-Ecommerce-Customer-Churn-RFM-Segmentation",
     file: "Project-02-Ecommerce-Churn-RFM-Notebook.pdf", pages: 61 },
+  { id: "03", title: "Retail Demand Forecasting & Inventory Planning",
+    repo: "03-Retail-Demand-Forecasting-Inventory-Dashboard",
+    file: "Project-03-Retail-Demand-Forecasting-Notebook.pdf", pages: 78 },
 ];
 
 /* ═══════════════════════════════════════════════════ boot */

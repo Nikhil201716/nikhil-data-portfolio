@@ -1,7 +1,7 @@
 """
 build_catalog.py
 -------------------
-Aggregates every project into site/data/catalog.json, which is the only
+Aggregates every project into data/catalog.json, which is the only
 data source the static website reads.
 
 The hard rule: this script NEVER invents a metric. For Projects 5-12 the
@@ -16,7 +16,7 @@ If an extractor cannot find its report file, the project is emitted with
 its curated description and an empty metric list - the site then shows
 "metrics unavailable" rather than a plausible-looking fabrication.
 
-Output: site/data/catalog.json
+Output: data/catalog.json
 """
 
 import json
@@ -31,7 +31,7 @@ sys.path.insert(0, str(HERE))
 
 from project_metadata import PROJECTS, ROLES  # noqa: E402
 
-OUT = ROOT / "site" / "data" / "catalog.json"
+OUT = ROOT / "data" / "catalog.json"
 OUT.parent.mkdir(parents=True, exist_ok=True)
 
 

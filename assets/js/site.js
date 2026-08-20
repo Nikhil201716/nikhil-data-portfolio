@@ -119,6 +119,9 @@ const BOOKS = [
   { id: "10", title: "Delivery Operations Intelligence Platform",
     repo: "10-Delivery-Operations-Intelligence-Platform",
     file: "Project-10-Delivery-Ops-Causal-Inference-Notebook.pdf", pages: 69 },
+  { id: "12", title: "Retail Intelligence Platform",
+    repo: "12-Retail-Intelligence-Platform",
+    file: "Project-12-Retail-Intelligence-OPE-Notebook.pdf", pages: 88 },
 ];
 
 /* ═══════════════════════════════════════════════════ boot */

@@ -98,6 +98,9 @@ const BOOKS = [
   { id: "03", title: "Retail Demand Forecasting & Inventory Planning",
     repo: "03-Retail-Demand-Forecasting-Inventory-Dashboard",
     file: "Project-03-Retail-Demand-Forecasting-Notebook.pdf", pages: 78 },
+  { id: "04", title: "Multi-Source Sales ETL with Apache Airflow",
+    repo: "04-Multi-Source-Sales-ETL-Pipeline-Airflow-AWS",
+    file: "Project-04-Airflow-ETL-Pipeline-Notebook.pdf", pages: 69 },
 ];
 
 /* ═══════════════════════════════════════════════════ boot */

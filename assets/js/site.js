@@ -110,6 +110,9 @@ const BOOKS = [
   { id: "07", title: "Autonomous AI Ops & Recommendation Platform",
     repo: "07-Autonomous-AI-Ops-Recommendation-Platform",
     file: "Project-07-Autonomous-AI-Ops-Recommender-Notebook.pdf", pages: 62 },
+  { id: "08", title: "AutoClaim Intelligence Platform",
+    repo: "08-AutoClaim-Intelligence-Platform",
+    file: "Project-08-AutoClaim-Multimodal-AI-Notebook.pdf", pages: 64 },
 ];
 
 /* ═══════════════════════════════════════════════════ boot */

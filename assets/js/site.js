@@ -125,6 +125,9 @@ const BOOKS = [
   { id: "12", title: "Retail Intelligence Platform",
     repo: "12-Retail-Intelligence-Platform",
     file: "Project-12-Retail-Intelligence-OPE-Notebook.pdf", pages: 88 },
+  { id: "13", title: "Meridian Operations Cloud",
+    repo: "13-Meridian-Operations-Cloud",
+    file: "Project-13-Meridian-Operations-Cloud-Notebook.pdf", pages: 71 },
 ];
 
 /* ═══════════════════════════════════════════════════ boot */

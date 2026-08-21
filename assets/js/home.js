@@ -1,8 +1,10 @@
 /* home.js — the landing page */
 
-const ROLE_WORDS = [
-  "Data Engineer", "Data Analyst", "ML Engineer",
-  "AI Engineer", "QA / SDET",
+const TAGLINES = [
+  "student · data & AI",
+  "learning by building",
+  "fifteen projects, measured",
+  "computer science, CHRIST University",
 ];
 
 function typewriter(el, words) {
@@ -56,8 +58,9 @@ function findings() {
   }).join("");
 }
 
-function roles(cat) {
-  const order = ["Data Analyst", "Data Engineer", "ML Engineer", "AI Engineer", "QA / SDET"];
+function areas(cat) {
+  const order = ["Data Analysis", "Data Engineering", "Machine Learning",
+                 "AI & LLM Systems", "Testing & QA"];
   $("#role-grid").innerHTML = order.map((r, i) => {
     const n = cat.projects.filter((p) => (p.roles || []).includes(r)).length;
     return `<div class="col-md-6 col-lg-4">
@@ -66,8 +69,8 @@ function roles(cat) {
           <h3 class="h6 mb-0">${esc(r)}</h3>
           <span class="stat-v" style="font-size:1.5rem">${n}</span>
         </div>
-        <p class="text-ink-2 small mt-2 mb-2">${esc(ROLE_BLURB[r] || "")}</p>
-        <span class="book-cta">See the ${n} projects →</span>
+        <p class="text-ink-2 small mt-2 mb-2">${esc(AREA_BLURB[r] || "")}</p>
+        <span class="book-cta">${n} projects →</span>
       </a>
     </div>`;
   }).join("");
@@ -95,12 +98,12 @@ function booksPreview() {
 }
 
 (async function boot() {
-  typewriter($("#role-type"), ROLE_WORDS);
+  typewriter($("#role-type"), TAGLINES);
   try {
     const cat = await getCatalog();
     heroStats(cat);
     findings();
-    roles(cat);
+    areas(cat);
     stackMarquee(cat);
     featured(cat);
     booksPreview();

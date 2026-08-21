@@ -29,7 +29,7 @@ ROOT = HERE.parent                      # 00-Portfolio-Website
 PROJECTS_ROOT = ROOT.parent             # Desktop/Projects
 sys.path.insert(0, str(HERE))
 
-from project_metadata import PROJECTS, ROLES  # noqa: E402
+from project_metadata import PROJECTS, AREAS as ROLES  # noqa: E402
 
 OUT = ROOT / "data" / "catalog.json"
 OUT.parent.mkdir(parents=True, exist_ok=True)

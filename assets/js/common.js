@@ -12,8 +12,8 @@ const EMAIL = "nikhil.sinha16022003@gmail.com";
    and on a laptop with none it silently does nothing. */
 const GMAIL = "https://mail.google.com/mail/?view=cm&fs=1"
   + "&to=" + encodeURIComponent(EMAIL)
-  + "&su=" + encodeURIComponent("Hello Nikhil - from your portfolio")
-  + "&body=" + encodeURIComponent("Hi Nikhil,\n\nI came across your data & AI portfolio and wanted to get in touch about ");
+  + "&su=" + encodeURIComponent("Hello Nikhil")
+  + "&body=" + encodeURIComponent("Hi Nikhil,\n\nI came across your project write-ups and wanted to get in touch about ");
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -26,7 +26,7 @@ const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const BOOKS = [
   ["01", "UPI Payments Complaint & SLA Analytics", "01-UPI-Payments-Complaint-SLA-Dashboard", "Project-01-UPI-Complaint-SLA-Analytics-Notebook.pdf", 60],
   ["02", "E-commerce Churn & RFM Segmentation", "02-Ecommerce-Customer-Churn-RFM-Segmentation", "Project-02-Ecommerce-Churn-RFM-Notebook.pdf", 61],
-  ["03", "Retail Demand Forecasting & Inventory Planning", "03-Retail-Demand-Forecasting-Inventory-Dashboard", "Project-03-Retail-Demand-Forecasting-Notebook.pdf", 78],
+  ["03", "Retail Demand Forecasting & Inventory Planning", "03-Retail-Demand-Forecasting-Inventory-Dashboard", "Project-03-Retail-Demand-Forecasting-Notebook.pdf", 81],
   ["04", "Multi-Source Sales ETL with Apache Airflow", "04-Multi-Source-Sales-ETL-Pipeline-Airflow-AWS", "Project-04-Airflow-ETL-Pipeline-Notebook.pdf", 69],
   ["05", "AI-Augmented Data Quality & Validation", "05-AI-Augmented-Data-Quality-Validation-Framework", "Project-05-Data-Quality-RAG-Copilot-Notebook.pdf", 66],
   ["06", "Real-Time Transaction Streaming & Fraud Detection", "06-Realtime-Transaction-Streaming-Pipeline", "Project-06-Realtime-Streaming-Fraud-Notebook.pdf", 61],
@@ -36,7 +36,7 @@ const BOOKS = [
   ["10", "Delivery Operations Intelligence Platform", "10-Delivery-Operations-Intelligence-Platform", "Project-10-Delivery-Ops-Causal-Inference-Notebook.pdf", 69],
   ["11", "Fair Lending Intelligence Platform", "11-Fair-Lending-Intelligence-Platform", "Project-11-Fair-Lending-Fairness-Audit-Notebook.pdf", 78],
   ["12", "Retail Intelligence Platform", "12-Retail-Intelligence-Platform", "Project-12-Retail-Intelligence-OPE-Notebook.pdf", 88],
-  ["13", "Meridian Operations Cloud", "13-Meridian-Operations-Cloud", "Project-13-Meridian-Operations-Cloud-Notebook.pdf", 71],
+  ["13", "Meridian Operations Cloud", "13-Meridian-Operations-Cloud", "Project-13-Meridian-Operations-Cloud-Notebook.pdf", 80],
   ["14", "Cascade Realtime Intelligence Platform", "14-Cascade-Realtime-Intelligence-Platform", "Project-14-Cascade-Realtime-Streaming-Notebook.pdf", 84],
   ["15", "Aegis Health Plan Intelligence Platform", "15-Aegis-Health-Plan-Platform", "Project-15-Aegis-Health-Plan-Notebook.pdf", 60],
 ].map(([id, title, repo, file, pages]) => ({ id, title, repo, file, pages }));
@@ -66,13 +66,13 @@ const FINDINGS = [
     id: "15", verify: "reports/metric_regression.json" },
 ];
 
-/* ------------------------------------------------------------ role blurbs */
-const ROLE_BLURB = {
-  "Data Analyst": "SQL, metric definitions, cohort analysis, dashboards and the discipline of saying what a number does not establish.",
-  "Data Engineer": "Orchestration, idempotency, data contracts, streaming semantics and warehouses that fail loudly rather than quietly.",
-  "QA / SDET": "Property-based, metamorphic and contract testing, mutation and injected-bug scoring, flakiness hunting, Playwright E2E.",
-  "AI Engineer": "RAG with calibrated refusal, agent evaluation against golden sets, prompt-injection defence, and grounding that puts correctness in code.",
-  "ML Engineer": "Model registries with gates that reject, drift monitoring, calibration, off-policy evaluation and adversarial robustness.",
+/* ---------------------------------------------------------- area blurbs */
+const AREA_BLURB = {
+  "Data Analysis": "SQL, metric definitions, cohort analysis, dashboards and the discipline of saying what a number does not establish.",
+  "Data Engineering": "Orchestration, idempotency, data contracts, streaming semantics and warehouses that fail loudly rather than quietly.",
+  "Testing & QA": "Property-based, metamorphic and contract testing, mutation and injected-bug scoring, flakiness hunting, Playwright E2E.",
+  "AI & LLM Systems": "RAG with calibrated refusal, agent evaluation against golden sets, prompt-injection defence, and grounding that puts correctness in code.",
+  "Machine Learning": "Model registries with gates that reject, drift monitoring, calibration, off-policy evaluation and adversarial robustness.",
 };
 
 /* ------------------------------------------------------------- catalog IO */

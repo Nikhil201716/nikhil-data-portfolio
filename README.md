@@ -1,6 +1,6 @@
-# Nikhil Sinha — Portfolio Website
+# Nikhil Sinha — Project Site
 
-A single static site covering all fifteen projects in the portfolio. No build step, no
+A static site covering the fifteen data and AI projects I built while learning the subject. No build step, no
 framework, no CDN, no hosting bill: three files plus a JSON catalog, deployed free on
 GitHub Pages.
 
@@ -20,7 +20,7 @@ from the results table in their README and tagged `readme` in the UI: the proven
 visible rather than implied. If an extractor cannot find its report, the project renders with
 "no machine-readable metrics" instead of a plausible-looking fabrication.
 
-That is also the site's argument. A portfolio that asserts "+35% efficiency" is asking to be
+That is also the site's argument. A write-up that asserts "+35% efficiency" is asking to be
 believed. This one links the claim to the repository, the report file and the line of code
 that produced it.
 
@@ -35,8 +35,8 @@ everything distinctive is hand-written CSS.
 
 | Path | What it is |
 |---|---|
-| `index.html` | Landing page — hero, evidence, findings, roles, featured projects |
-| `pages/projects.html` | The explorer: role filters, search, deep-linkable via `?role=` |
+| `index.html` | Landing page — hero, method, findings, subject areas, featured projects |
+| `pages/projects.html` | The explorer: subject-area filters, search, deep-linkable via `?role=` |
 | `pages/project.html` | Per-project page via `?id=NN` — metrics, charts, run button, notebook |
 | `pages/books.html` | All fifteen notebooks |
 | `pages/about.html` | Background, method, contact |
@@ -78,7 +78,7 @@ clear 503 if that project's artifacts are missing. The published site does not d
 ## Verified in a browser
 
 - All five routes return 200; 15 project pages render from the catalog
-- Role filter deep-links (`?role=QA / SDET` → 4 of 15) and free-text search work
+- Subject-area filter deep-links (`?role=Testing & QA` → 4 of 15) and free-text search work
 - Project pages draw all their charts from the catalog (P13: 7 metrics, 3/3 charts)
 - Run button points at the right Codespace and the URL resolves (301 → github.com/codespaces/new)
 - Light and dark themes both render; charts redraw on theme change

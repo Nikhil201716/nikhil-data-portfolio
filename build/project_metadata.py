@@ -7,7 +7,7 @@ The split matters. METRICS are never written here - they are read from
 each project's own reports/*.json by build_catalog.py, or (for Projects
 1-4, which predate that convention) quoted from the results table in that
 project's README with the source recorded. What lives here is only the
-material a machine cannot infer: the one-line pitch, which job roles the
+material a machine cannot infer: the one-line pitch, which subject areas the
 work speaks to, the stack, and the honest finding worth leading with.
 
 `headline_findings` are deliberately the UNFLATTERING ones where they
@@ -21,7 +21,7 @@ PROJECTS = [
         "dir": "01-UPI-Payments-Complaint-SLA-Dashboard",
         "title": "UPI Payments Complaint & SLA Dashboard",
         "pitch": "Where do payment complaints breach SLA, and what does that cost?",
-        "roles": ["Data Analyst"],
+        "roles": ["Data Analysis"],
         "topics": ["SQL", "SQLite star schema", "Excel reporting", "Streamlit", "Root-cause analysis"],
         "stack": ["Python", "Pandas", "SQLite", "Streamlit", "Plotly", "openpyxl"],
         "metrics_source": "readme",
@@ -41,7 +41,7 @@ PROJECTS = [
         "dir": "02-Ecommerce-Customer-Churn-RFM-Segmentation",
         "title": "E-commerce Churn & RFM Segmentation",
         "pitch": "Which customers are about to leave, and how much revenue walks with them?",
-        "roles": ["Data Analyst", "ML Engineer"],
+        "roles": ["Data Analysis", "Machine Learning"],
         "topics": ["RFM segmentation", "K-Means", "Churn modeling", "Time-based holdout", "SQL"],
         "stack": ["Python", "Pandas", "Scikit-learn", "SQLite", "Streamlit"],
         "metrics_source": "readme",
@@ -62,7 +62,7 @@ PROJECTS = [
         "dir": "03-Retail-Demand-Forecasting-Inventory-Dashboard",
         "title": "Retail Demand Forecasting & Inventory",
         "pitch": "What will sell next, and what should we reorder today?",
-        "roles": ["Data Analyst", "ML Engineer"],
+        "roles": ["Data Analysis", "Machine Learning"],
         "topics": ["Holt-Winters", "SARIMA", "Seasonal-naive baseline", "(s,S) inventory policy"],
         "stack": ["Python", "Statsmodels", "Pandas", "SQLite", "Streamlit"],
         "metrics_source": "readme",
@@ -82,7 +82,7 @@ PROJECTS = [
         "dir": "04-Multi-Source-Sales-ETL-Pipeline-Airflow-AWS",
         "title": "Multi-Source Sales ETL Pipeline (Airflow)",
         "pitch": "Three source systems, one warehouse, and proof the pipeline fails safely.",
-        "roles": ["Data Engineer"],
+        "roles": ["Data Engineering"],
         "topics": ["Airflow DAGs", "ETL orchestration", "Data quality gates", "Idempotency", "WSL"],
         "stack": ["Apache Airflow", "Python", "Pandas", "SQLite", "WSL Ubuntu"],
         "metrics_source": "readme",
@@ -102,7 +102,7 @@ PROJECTS = [
         "dir": "05-AI-Augmented-Data-Quality-Validation-Framework",
         "title": "AI-Augmented Data Quality Framework",
         "pitch": "dbt models, statistical validation, and a local-LLM copilot over the results.",
-        "roles": ["Data Engineer", "AI Engineer"],
+        "roles": ["Data Engineering", "AI & LLM Systems"],
         "topics": ["dbt", "DuckDB", "Pandera", "RAG", "Local LLM (Ollama)"],
         "stack": ["dbt", "DuckDB", "Pandera", "Ollama qwen2.5:0.5b", "Streamlit"],
         "metrics_source": "reports",
@@ -115,7 +115,7 @@ PROJECTS = [
         "dir": "06-Realtime-Transaction-Streaming-Pipeline",
         "title": "Real-Time Transaction Streaming Pipeline",
         "pitch": "Redis streams, live fraud scoring, and an explainable decision per transaction.",
-        "roles": ["Data Engineer", "ML Engineer"],
+        "roles": ["Data Engineering", "Machine Learning"],
         "topics": ["Redis Streams", "Real-time scoring", "Rules engine", "Explainability"],
         "stack": ["Redis (Memurai)", "Python", "Streamlit", "Plotly"],
         "metrics_source": "reports",
@@ -128,7 +128,7 @@ PROJECTS = [
         "dir": "07-Autonomous-AI-Ops-Recommendation-Platform",
         "title": "Autonomous AI-Ops & Recommendation Platform",
         "pitch": "A recommender that monitors, diagnoses and retrains itself - with a rollback.",
-        "roles": ["ML Engineer", "AI Engineer", "QA / SDET"],
+        "roles": ["Machine Learning", "AI & LLM Systems", "Testing & QA"],
         "topics": ["SVD recommender", "PSI drift", "Multi-agent loop", "FastAPI",
                     "AI-augmented QA", "Playwright", "Self-healing locators"],
         "stack": ["Scikit-learn", "FastAPI", "Ollama", "Playwright", "pytest", "Streamlit"],
@@ -143,7 +143,7 @@ PROJECTS = [
         "dir": "08-AutoClaim-Intelligence-Platform",
         "title": "AutoClaim Intelligence Platform",
         "pitch": "Read the claim PDF, look at the damage photo, and check whether they agree.",
-        "roles": ["AI Engineer", "ML Engineer", "Data Engineer"],
+        "roles": ["AI & LLM Systems", "Machine Learning", "Data Engineering"],
         "topics": ["Document AI", "OCR", "LLM extraction", "CNN from scratch", "Cross-modal agent",
                     "dbt semantic layer", "Data contracts"],
         "stack": ["pdfplumber", "PyTorch", "Ollama", "dbt", "DuckDB", "Streamlit"],
@@ -158,7 +158,7 @@ PROJECTS = [
         "dir": "09-Trust-Aware-Experimentation-Platform",
         "title": "Trust-Aware Experimentation Platform",
         "pitch": "Fraud rings quietly inflate your A/B test. Catch them before you ship the result.",
-        "roles": ["Data Analyst", "Data Engineer", "AI Engineer"],
+        "roles": ["Data Analysis", "Data Engineering", "AI & LLM Systems"],
         "topics": ["Graph fraud detection", "A/B testing", "Bayesian inference", "Sequential testing",
                     "PII detection", "k-anonymity", "Guardrailed NL-to-SQL"],
         "stack": ["NetworkX", "SciPy", "DuckDB", "Ollama", "Streamlit"],
@@ -173,7 +173,7 @@ PROJECTS = [
         "dir": "10-Delivery-Operations-Intelligence-Platform",
         "title": "Delivery Operations Intelligence Platform",
         "pitch": "Speech, optimization, causal inference and MLOps for a delivery operator.",
-        "roles": ["ML Engineer", "AI Engineer", "Data Analyst"],
+        "roles": ["Machine Learning", "AI & LLM Systems", "Data Analysis"],
         "topics": ["Whisper ASR", "Offline TTS", "Linear programming", "Propensity score matching",
                     "Difference-in-differences", "Model registry", "Canary deployment"],
         "stack": ["OpenAI Whisper", "pyttsx3", "PuLP/CBC", "Scikit-learn", "FastAPI", "Docker"],
@@ -188,7 +188,7 @@ PROJECTS = [
         "dir": "11-Fair-Lending-Intelligence-Platform",
         "title": "Fair Lending Intelligence Platform",
         "pitch": "Spark at scale, SHAP explanations, and a fairness audit scored against ground truth.",
-        "roles": ["Data Engineer", "ML Engineer", "AI Engineer"],
+        "roles": ["Data Engineering", "Machine Learning", "AI & LLM Systems"],
         "topics": ["PySpark", "SHAP", "Disparate impact", "Equalized odds", "H3 geospatial",
                     "Hybrid retrieval", "Red-teaming", "Bootstrap CIs"],
         "stack": ["PySpark 4.2", "SHAP", "H3", "sentence-transformers", "Ollama", "Streamlit"],
@@ -203,7 +203,7 @@ PROJECTS = [
         "dir": "12-Retail-Intelligence-Platform",
         "title": "Retail Intelligence Platform",
         "pitch": "A fine-tuned transformer, a knowledge graph, a pricing bandit - and tests with teeth.",
-        "roles": ["AI Engineer", "ML Engineer", "QA / SDET"],
+        "roles": ["AI & LLM Systems", "Machine Learning", "Testing & QA"],
         "topics": ["Transformer fine-tuning", "int8 quantization", "Knowledge graph", "GraphRAG",
                     "Contextual bandits", "Off-policy evaluation", "Property-based testing",
                     "Metamorphic testing", "Mutation testing", "Load testing"],
@@ -220,7 +220,7 @@ PROJECTS = [
         "title": "Meridian Operations Cloud",
         "pitch": "A product, not a portfolio piece: one 7-workspace application over a single "
                   "warehouse, absorbing every skill from Projects 1-12.",
-        "roles": ["Data Engineer", "ML Engineer", "AI Engineer", "Data Analyst"],
+        "roles": ["Data Engineering", "Machine Learning", "AI & LLM Systems", "Data Analysis"],
         "topics": ["Star schema + declared grain", "Data quality SLAs", "Lineage & blast radius",
                     "Fault injection", "Point-in-time feature store", "Training-serving skew",
                     "Concept drift", "Anomaly shapes", "Model registry + canary gate",
@@ -243,7 +243,7 @@ PROJECTS = [
         "title": "Cascade Realtime Intelligence Platform",
         "pitch": "Event-time stream processing scored against an answer key, an LLM judge that "
                   "inflated a failing agent to 100%, and a test suite measured by what it catches.",
-        "roles": ["Data Engineer", "AI Engineer", "QA / SDET", "ML Engineer"],
+        "roles": ["Data Engineering", "AI & LLM Systems", "Testing & QA", "Machine Learning"],
         "topics": ["Event time vs processing time", "Watermarks", "Late-data policy",
                     "Clock skew", "At-least-once delivery", "Idempotent sinks",
                     "Exactly-once semantics", "CDC", "Slowly changing dimensions",
@@ -267,7 +267,7 @@ PROJECTS = [
         "pitch": "A payer's analytics platform where every number compiles from one governed "
                   "definition - and a 'clarifying' definition change silently restates 33 "
                   "published historical figures.",
-        "roles": ["Data Analyst", "Data Engineer", "ML Engineer", "AI Engineer", "QA / SDET"],
+        "roles": ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"],
         "topics": ["Semantic layer / metrics as code", "Metric regression testing",
                     "Survival analysis", "Right-censoring", "Competing risks",
                     "Cox proportional hazards", "Discrete-time hazard",
@@ -288,4 +288,4 @@ PROJECTS = [
     },
 ]
 
-ROLES = ["Data Analyst", "Data Engineer", "ML Engineer", "AI Engineer", "QA / SDET"]
+AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

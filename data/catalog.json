@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-08-20T11:39:19+00:00",
+  "generated_at": "2026-08-21T08:04:05+00:00",
   "owner": "Nikhil Sinha",
   "n_projects": 15,
   "roles": [
-    "Data Analyst",
-    "Data Engineer",
-    "ML Engineer",
-    "AI Engineer",
-    "QA / SDET"
+    "Data Analysis",
+    "Data Engineering",
+    "Machine Learning",
+    "AI & LLM Systems",
+    "Testing & QA"
   ],
   "role_counts": {
-    "Data Analyst": 7,
-    "Data Engineer": 9,
-    "ML Engineer": 11,
-    "AI Engineer": 10,
-    "QA / SDET": 4
+    "Data Analysis": 7,
+    "Data Engineering": 9,
+    "Machine Learning": 11,
+    "AI & LLM Systems": 10,
+    "Testing & QA": 4
   },
   "all_topics": [
     "(s,S) inventory policy",
@@ -189,7 +189,7 @@
       "title": "UPI Payments Complaint & SLA Dashboard",
       "pitch": "Where do payment complaints breach SLA, and what does that cost?",
       "roles": [
-        "Data Analyst"
+        "Data Analysis"
       ],
       "topics": [
         "SQL",
@@ -249,8 +249,8 @@
       "title": "E-commerce Churn & RFM Segmentation",
       "pitch": "Which customers are about to leave, and how much revenue walks with them?",
       "roles": [
-        "Data Analyst",
-        "ML Engineer"
+        "Data Analysis",
+        "Machine Learning"
       ],
       "topics": [
         "RFM segmentation",
@@ -310,8 +310,8 @@
       "title": "Retail Demand Forecasting & Inventory",
       "pitch": "What will sell next, and what should we reorder today?",
       "roles": [
-        "Data Analyst",
-        "ML Engineer"
+        "Data Analysis",
+        "Machine Learning"
       ],
       "topics": [
         "Holt-Winters",
@@ -370,7 +370,7 @@
       "title": "Multi-Source Sales ETL Pipeline (Airflow)",
       "pitch": "Three source systems, one warehouse, and proof the pipeline fails safely.",
       "roles": [
-        "Data Engineer"
+        "Data Engineering"
       ],
       "topics": [
         "Airflow DAGs",
@@ -429,8 +429,8 @@
       "title": "AI-Augmented Data Quality Framework",
       "pitch": "dbt models, statistical validation, and a local-LLM copilot over the results.",
       "roles": [
-        "Data Engineer",
-        "AI Engineer"
+        "Data Engineering",
+        "AI & LLM Systems"
       ],
       "topics": [
         "dbt",
@@ -498,8 +498,8 @@
       "title": "Real-Time Transaction Streaming Pipeline",
       "pitch": "Redis streams, live fraud scoring, and an explainable decision per transaction.",
       "roles": [
-        "Data Engineer",
-        "ML Engineer"
+        "Data Engineering",
+        "Machine Learning"
       ],
       "topics": [
         "Redis Streams",
@@ -581,9 +581,9 @@
       "title": "Autonomous AI-Ops & Recommendation Platform",
       "pitch": "A recommender that monitors, diagnoses and retrains itself - with a rollback.",
       "roles": [
-        "ML Engineer",
-        "AI Engineer",
-        "QA / SDET"
+        "Machine Learning",
+        "AI & LLM Systems",
+        "Testing & QA"
       ],
       "topics": [
         "SVD recommender",
@@ -669,9 +669,9 @@
       "title": "AutoClaim Intelligence Platform",
       "pitch": "Read the claim PDF, look at the damage photo, and check whether they agree.",
       "roles": [
-        "AI Engineer",
-        "ML Engineer",
-        "Data Engineer"
+        "AI & LLM Systems",
+        "Machine Learning",
+        "Data Engineering"
       ],
       "topics": [
         "Document AI",
@@ -774,9 +774,9 @@
       "title": "Trust-Aware Experimentation Platform",
       "pitch": "Fraud rings quietly inflate your A/B test. Catch them before you ship the result.",
       "roles": [
-        "Data Analyst",
-        "Data Engineer",
-        "AI Engineer"
+        "Data Analysis",
+        "Data Engineering",
+        "AI & LLM Systems"
       ],
       "topics": [
         "Graph fraud detection",
@@ -934,9 +934,9 @@
       "title": "Delivery Operations Intelligence Platform",
       "pitch": "Speech, optimization, causal inference and MLOps for a delivery operator.",
       "roles": [
-        "ML Engineer",
-        "AI Engineer",
-        "Data Analyst"
+        "Machine Learning",
+        "AI & LLM Systems",
+        "Data Analysis"
       ],
       "topics": [
         "Whisper ASR",
@@ -1036,9 +1036,9 @@
       "title": "Fair Lending Intelligence Platform",
       "pitch": "Spark at scale, SHAP explanations, and a fairness audit scored against ground truth.",
       "roles": [
-        "Data Engineer",
-        "ML Engineer",
-        "AI Engineer"
+        "Data Engineering",
+        "Machine Learning",
+        "AI & LLM Systems"
       ],
       "topics": [
         "PySpark",
@@ -1153,9 +1153,9 @@
       "title": "Retail Intelligence Platform",
       "pitch": "A fine-tuned transformer, a knowledge graph, a pricing bandit - and tests with teeth.",
       "roles": [
-        "AI Engineer",
-        "ML Engineer",
-        "QA / SDET"
+        "AI & LLM Systems",
+        "Machine Learning",
+        "Testing & QA"
       ],
       "topics": [
         "Transformer fine-tuning",
@@ -1367,10 +1367,10 @@
       "title": "Meridian Operations Cloud",
       "pitch": "A product, not a portfolio piece: one 7-workspace application over a single warehouse, absorbing every skill from Projects 1-12.",
       "roles": [
-        "Data Engineer",
-        "ML Engineer",
-        "AI Engineer",
-        "Data Analyst"
+        "Data Engineering",
+        "Machine Learning",
+        "AI & LLM Systems",
+        "Data Analysis"
       ],
       "topics": [
         "Star schema + declared grain",
@@ -1522,10 +1522,10 @@
       "title": "Cascade Realtime Intelligence Platform",
       "pitch": "Event-time stream processing scored against an answer key, an LLM judge that inflated a failing agent to 100%, and a test suite measured by what it catches.",
       "roles": [
-        "Data Engineer",
-        "AI Engineer",
-        "QA / SDET",
-        "ML Engineer"
+        "Data Engineering",
+        "AI & LLM Systems",
+        "Testing & QA",
+        "Machine Learning"
       ],
       "topics": [
         "Event time vs processing time",
@@ -1709,11 +1709,11 @@
       "title": "Aegis Health Plan Intelligence Platform",
       "pitch": "A payer's analytics platform where every number compiles from one governed definition - and a 'clarifying' definition change silently restates 33 published historical figures.",
       "roles": [
-        "Data Analyst",
-        "Data Engineer",
-        "ML Engineer",
-        "AI Engineer",
-        "QA / SDET"
+        "Data Analysis",
+        "Data Engineering",
+        "Machine Learning",
+        "AI & LLM Systems",
+        "Testing & QA"
       ],
       "topics": [
         "Semantic layer / metrics as code",

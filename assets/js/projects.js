@@ -1,6 +1,7 @@
 /* projects.js — the explorer page */
 
-const ROLES = ["All", "Data Analyst", "Data Engineer", "ML Engineer", "AI Engineer", "QA / SDET"];
+const AREAS = ["All", "Data Analysis", "Data Engineering", "Machine Learning",
+               "AI & LLM Systems", "Testing & QA"];
 const state = { role: "All", q: "", projects: [] };
 
 function matches(p) {
@@ -27,7 +28,7 @@ function render() {
 }
 
 function renderFilters() {
-  $("#filter-roles").innerHTML = ROLES.map((r) =>
+  $("#filter-roles").innerHTML = AREAS.map((r) =>
     `<button class="fbtn${r === state.role ? " on" : ""}" data-role="${esc(r)}">${esc(r)}</button>`).join("");
   $$("#filter-roles .fbtn").forEach((b) =>
     b.addEventListener("click", () => {
@@ -46,7 +47,7 @@ function renderFilters() {
     state.projects = cat.projects;
 
     const wanted = new URL(location.href).searchParams.get("role");
-    if (wanted && ROLES.includes(wanted)) state.role = wanted;
+    if (wanted && AREAS.includes(wanted)) state.role = wanted;
 
     renderFilters();
     render();

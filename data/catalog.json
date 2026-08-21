@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-21T08:04:05+00:00",
+  "generated_at": "2026-08-21T08:21:30+00:00",
   "owner": "Nikhil Sinha",
   "n_projects": 15,
   "roles": [
@@ -1365,7 +1365,7 @@
       "slug": "meridian-operations-cloud",
       "dir": "13-Meridian-Operations-Cloud",
       "title": "Meridian Operations Cloud",
-      "pitch": "A product, not a portfolio piece: one 7-workspace application over a single warehouse, absorbing every skill from Projects 1-12.",
+      "pitch": "A product rather than another standalone script: one 7-workspace application over a single warehouse, absorbing every skill from Projects 1-12.",
       "roles": [
         "Data Engineering",
         "Machine Learning",

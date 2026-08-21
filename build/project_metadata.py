@@ -218,7 +218,7 @@ PROJECTS = [
         "slug": "meridian-operations-cloud",
         "dir": "13-Meridian-Operations-Cloud",
         "title": "Meridian Operations Cloud",
-        "pitch": "A product, not a portfolio piece: one 7-workspace application over a single "
+        "pitch": "A product rather than another standalone script: one 7-workspace application over a single "
                   "warehouse, absorbing every skill from Projects 1-12.",
         "roles": ["Data Engineering", "Machine Learning", "AI & LLM Systems", "Data Analysis"],
         "topics": ["Star schema + declared grain", "Data quality SLAs", "Lineage & blast radius",

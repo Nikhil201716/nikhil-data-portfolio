@@ -128,6 +128,9 @@ const BOOKS = [
   { id: "13", title: "Meridian Operations Cloud",
     repo: "13-Meridian-Operations-Cloud",
     file: "Project-13-Meridian-Operations-Cloud-Notebook.pdf", pages: 71 },
+  { id: "14", title: "Cascade Realtime Intelligence Platform",
+    repo: "14-Cascade-Realtime-Intelligence-Platform",
+    file: "Project-14-Cascade-Realtime-Streaming-Notebook.pdf", pages: 84 },
 ];
 
 /* ═══════════════════════════════════════════════════ boot */

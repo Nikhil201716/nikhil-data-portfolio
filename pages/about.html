@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About — Nikhil Sinha</title>
+<meta name="description" content="Data and AI engineer in Bengaluru. Background, method and contact.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="scroll-bar"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="mesh" aria-hidden="true"><span></span><span></span><span></span></div>
+<div class="spot" aria-hidden="true"></div>
+
+<nav class="site-nav">
+  <div class="wrap d-flex align-items-center justify-content-between w-100">
+    <a class="brand" href="../index.html"><span class="brand-mark">NS</span><span class="d-none d-sm-inline">Nikhil Sinha</span></a>
+    <div class="d-none d-lg-flex align-items-center gap-4">
+      <a class="nav-link-x" href="../index.html">Home</a>
+      <a class="nav-link-x" href="projects.html">Projects</a>
+      <a class="nav-link-x" href="books.html">Books</a>
+      <a class="nav-link-x" href="about.html">About</a>
+      <a class="btn-x primary py-2 px-3" data-gmail href="#">Email me</a>
+      <button class="icon-btn" id="theme" aria-label="Toggle theme">◐</button>
+    </div>
+    <div class="d-flex d-lg-none align-items-center gap-2">
+      <button class="icon-btn" id="theme" aria-label="Toggle theme">◐</button>
+      <button class="icon-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#mnav" aria-label="Menu">☰</button>
+    </div>
+  </div>
+</nav>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="mnav" style="background:var(--panel);color:var(--ink);">
+  <div class="offcanvas-header"><span class="brand"><span class="brand-mark">NS</span>Nikhil Sinha</span>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button></div>
+  <div class="offcanvas-body d-flex flex-column gap-3">
+    <a class="nav-link-x fs-5" href="../index.html">Home</a>
+    <a class="nav-link-x fs-5" href="projects.html">Projects</a>
+    <a class="nav-link-x fs-5" href="books.html">Books</a>
+    <a class="nav-link-x fs-5" href="about.html">About</a>
+    <a class="btn-x primary mt-2" data-gmail href="#">Email me</a>
+  </div>
+</div>
+
+<main>
+
+<section class="section" style="padding-top:3rem">
+  <div class="wrap">
+    <div class="row g-5">
+      <div class="col-lg-7">
+        <div class="reveal">
+          <div class="kicker">Background</div>
+          <h2>About</h2>
+          <p class="sec-sub">
+            I came to data engineering through customer support operations, which turned
+            out to be an unusually good apprenticeship. Working complaint queues teaches
+            you that a metric is a promise someone is accountable for, that an average
+            hides the cases that actually hurt, and that the number on the dashboard is
+            only as good as the definition nobody wrote down.
+          </p>
+          <p class="sec-sub">
+            That shows up in how I build. Every project in this portfolio starts by asking
+            what would make the result <em>checkable</em> &mdash; and several of them exist
+            because the checkable version disagreed with the obvious one.
+          </p>
+          <p class="sec-sub">
+            I work across the whole path: designing the data, modelling the warehouse,
+            building the pipeline, training and calibrating the model, testing it
+            adversarially, and shipping the interface a human actually uses.
+          </p>
+        </div>
+
+        <div class="card-x reveal d1 mt-4">
+          <div class="kicker mb-2">The method, after fifteen projects</div>
+          <p class="text-ink-2 small">
+            None of these checks needed more data, a better model or more compute. Each
+            cost an afternoon, and each changed what the project was entitled to claim.
+          </p>
+          <div class="metric-row"><span class="metric-k">Build the trivial baseline first</span><span class="metric-v">5 of 15 beat the sophisticated method</span></div>
+          <div class="metric-row"><span class="metric-k">Treat a perfect score as a bug report</span><span class="metric-v">1.000 &rarr; 0.20 held out</span></div>
+          <div class="metric-row"><span class="metric-k">Stratify before concluding</span><span class="metric-v">a fix that harmed thin files</span></div>
+          <div class="metric-row"><span class="metric-k">Split on time, not at random</span><span class="metric-v">24x PR-AUC difference</span></div>
+          <div class="metric-row"><span class="metric-k">Grade the grader</span><span class="metric-v">+77.8pt inflation</span></div>
+          <div class="metric-row"><span class="metric-k">Let an adversary adapt</span><span class="metric-v">0.9545 &rarr; 0.1818</span></div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="card-x reveal d1">
+          <div class="kicker mb-2">Education</div>
+          <div class="fw-bold">CHRIST (Deemed to be University)</div>
+          <div class="text-ink-3 small">Bengaluru, India</div>
+
+          <div class="divider my-4"></div>
+
+          <div class="kicker mb-2">Focus areas</div>
+          <ul class="text-ink-2 small mb-0" style="padding-left:1.1rem">
+            <li>Analytics engineering &amp; semantic layers</li>
+            <li>Streaming and event-time correctness</li>
+            <li>ML evaluation, calibration and fairness</li>
+            <li>LLM systems with measured guardrails</li>
+            <li>Test engineering and adversarial QA</li>
+          </ul>
+
+          <div class="divider my-4"></div>
+
+          <div class="kicker mb-2">Principle</div>
+          <p class="mb-0" style="font-size:1.05rem">&ldquo;A result you cannot check is not a result.&rdquo;</p>
+        </div>
+
+        <div class="card-x reveal d2 mt-4 text-center">
+          <div class="kicker mb-2">Get in touch</div>
+          <p class="text-ink-2 small">Open to Data Analyst, Data Engineer, QA / SDET, AI Engineer and ML Engineer roles.</p>
+          <div class="d-flex flex-column gap-2">
+            <a class="btn-x primary" data-gmail href="#">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5Z"/></svg>
+              Email me
+            </a>
+            <a class="btn-x" href="https://github.com/Nikhil201716" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap d-flex flex-wrap justify-content-between align-items-center gap-3">
+    <div><strong class="text-ink">Nikhil Sinha</strong> <span class="ms-2">Data &amp; AI Engineer · Bengaluru</span></div>
+    <div class="d-flex gap-3">
+      <a href="../index.html">Home</a><a href="books.html">Books</a><a href="about.html">About</a>
+      <a href="https://github.com/Nikhil201716" target="_blank" rel="noopener">GitHub</a>
+      <a data-gmail href="#">Email</a>
+    </div>
+    <div class="small" id="build-stamp"></div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/common.js"></script>
+<script src="../assets/js/about.js"></script>
+</body>
+</html>

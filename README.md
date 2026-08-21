@@ -30,20 +30,43 @@ python build/build_catalog.py     # regenerate after any project reruns
 
 ## Structure
 
+Multi-page, static, no build step. Bootstrap 5 handles the grid and components;
+everything distinctive is hand-written CSS.
+
 | Path | What it is |
 |---|---|
-| `index.html` | The whole page. Static shell; every list is rendered by JS from the catalog. |
-| `assets/js/site.js` | Rendering, filtering, the project modal, and chart drawing. |
-| `assets/css/site.css` | Theme tokens for dark/light, layout, motion. |
-| `data/catalog.json` | The extracted evidence — projects, metrics, charts, provenance tags. |
-| `assets/vendor/plotly-2.35.2.min.js` | Vendored Plotly (MIT). No CDN request is ever made. |
+| `index.html` | Landing page — hero, evidence, findings, roles, featured projects |
+| `pages/projects.html` | The explorer: role filters, search, deep-linkable via `?role=` |
+| `pages/project.html` | Per-project page via `?id=NN` — metrics, charts, run button, notebook |
+| `pages/books.html` | All fifteen notebooks |
+| `pages/about.html` | Background, method, contact |
+| `assets/css/site.css` | Design tokens, ambient layers, motion system, card effects |
+| `assets/js/common.js` | Catalog loading, theme, nav, reveal/tilt/spotlight/counters, shared cards |
+| `assets/js/{home,projects,project,books,about}.js` | One module per page |
+| `data/catalog.json` | The extracted evidence — projects, metrics, charts, provenance |
+| `assets/vendor/plotly-2.35.2.min.js` | Vendored Plotly (MIT). No CDN request for charts. |
 | `build/` | The catalog generator. Not served. |
-| `api/main.py` | Optional local FastAPI backend (see below). Not needed by the site. |
 
-Sections: hero → **Evidence** (why the numbers are checkable) → **Findings** (six results worth
-an interview conversation) → **Skills** (five roles, each filtering the project grid) →
-**Projects** (15 cards, searchable, each opening a modal with its measured metrics and charts) →
-**Books** (the 60-page technical notebook per project) → About.
+## Running a project from the site
+
+Every project page has a **Run this project** button. It opens the repository in a
+free GitHub Codespace, and a `.devcontainer/` in each repo installs the dependencies
+and runs the full pipeline automatically — real output, real terminal, in the browser.
+
+Static hosting cannot execute Python, so this is genuinely running on GitHub's
+infrastructure rather than here. A free GitHub account is required and the compute
+bills to that account's monthly allowance, not to the site owner. The exact commands
+are also printed on the page for anyone who would rather run it locally.
+
+Two projects benefit especially: Project 4 needs Airflow and Project 6 needs Redis,
+neither of which runs natively on Windows — but both run fine in a Codespace.
+
+## Contact
+
+The email buttons open a **Gmail compose window** rather than a `mailto:` link.
+`mailto:` only works when the visitor has a desktop mail client configured; on a
+laptop with none it silently does nothing, which is the common case for a recruiter
+clicking from a browser.
 
 ## Optional live backend
 
@@ -54,12 +77,15 @@ clear 503 if that project's artifacts are missing. The published site does not d
 
 ## Verified in a browser
 
-- 15 project cards, 6 findings, 5 role filters, 39 stack chips, 15 book entries, **0 JS errors**
-- Role filter (QA / SDET → 4 of 15) and free-text search ("survival" → 1 of 15) both correct
-- Project modal opens with its metrics and draws **all** its charts from the catalog (P14: 8 metrics, 3/3 charts)
-- Light and dark themes both render; charts are redrawn on theme change
-- **Mobile, 375×812:** no horizontal overflow, hamburger menu opens, hero fits the viewport
-- Plotly is vendored: zero requests to `cdn.plot.ly`
+- All five routes return 200; 15 project pages render from the catalog
+- Role filter deep-links (`?role=QA / SDET` → 4 of 15) and free-text search work
+- Project pages draw all their charts from the catalog (P13: 7 metrics, 3/3 charts)
+- Run button points at the right Codespace and the URL resolves (301 → github.com/codespaces/new)
+- Light and dark themes both render; charts redraw on theme change
+- **Mobile, 375x812:** no horizontal overflow, hamburger opens, terminal panel fits,
+  charts render, cursor spotlight correctly disabled
+- Zero JS errors on every page
+- Plotly is vendored: no CDN request for charts
 
 ### Known limitation
 

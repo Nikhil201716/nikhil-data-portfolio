@@ -4,40 +4,66 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nikhil Sinha — Data &amp; AI Engineer</title>
-<meta name="description" content="Data and AI engineer. 15 production-grade projects where every claim is traceable to a report file in a public repository.">
+<meta name="description" content="Fifteen production-grade data and AI projects where every claim is traceable to a report file in a public repository. Run any of them in one click.">
 <meta property="og:title" content="Nikhil Sinha — Data &amp; AI Engineer">
-<meta property="og:description" content="15 projects. 78 measured results. Every number traceable to source.">
+<meta property="og:description" content="15 projects · 78 measured results · 15 technical books · every number traceable to source.">
 <meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/site.css">
-<script src="assets/vendor/plotly-2.35.2.min.js" charset="utf-8"></script>
 </head>
 <body>
 
+<div class="scroll-bar"></div>
 <div class="grain" aria-hidden="true"></div>
-<div class="glow" aria-hidden="true"></div>
+<div class="mesh" aria-hidden="true"><span></span><span></span><span></span></div>
+<div class="spot" aria-hidden="true"></div>
 
-<!-- ══════════════════════════════════════════════ NAV -->
-<nav class="nav" id="nav">
-  <a class="brand" href="#top"><span class="brand-mark">NS</span><span class="brand-name">Nikhil Sinha</span></a>
-  <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false">☰</button>
-  <div class="nav-links" id="nav-links">
-    <a href="#evidence">Evidence</a>
-    <a href="#findings">Findings</a>
-    <a href="#skills">Skills</a>
-    <a href="#projects">Projects</a>
-    <a href="#books">Books</a>
-    <a href="#about">About</a>
-    <button class="btn-theme" id="theme" aria-label="Toggle theme">◐</button>
+<!-- ══════════════════════════════════════════════════════════════ NAV -->
+<nav class="site-nav">
+  <div class="wrap d-flex align-items-center justify-content-between w-100">
+    <a class="brand" href="index.html"><span class="brand-mark">NS</span><span class="d-none d-sm-inline">Nikhil Sinha</span></a>
+    <div class="d-none d-lg-flex align-items-center gap-4">
+      <a class="nav-link-x" href="index.html">Home</a>
+      <a class="nav-link-x" href="pages/projects.html">Projects</a>
+      <a class="nav-link-x" href="pages/books.html">Books</a>
+      <a class="nav-link-x" href="pages/about.html">About</a>
+      <a class="btn-x primary py-2 px-3" data-gmail href="#">Email me</a>
+      <button class="icon-btn" id="theme" aria-label="Toggle theme">◐</button>
+    </div>
+    <div class="d-flex d-lg-none align-items-center gap-2">
+      <button class="icon-btn" id="theme" aria-label="Toggle theme">◐</button>
+      <button class="icon-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#mnav" aria-label="Menu">☰</button>
+    </div>
   </div>
 </nav>
 
-<!-- ══════════════════════════════════════════════ HERO -->
-<header class="hero" id="top">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="mnav" style="background:var(--panel);color:var(--ink);">
+  <div class="offcanvas-header"><span class="brand"><span class="brand-mark">NS</span>Nikhil Sinha</span>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button></div>
+  <div class="offcanvas-body d-flex flex-column gap-3">
+    <a class="nav-link-x fs-5" href="index.html">Home</a>
+    <a class="nav-link-x fs-5" href="pages/projects.html">Projects</a>
+    <a class="nav-link-x fs-5" href="pages/books.html">Books</a>
+    <a class="nav-link-x fs-5" href="pages/about.html">About</a>
+    <a class="btn-x primary mt-2" data-gmail href="#">Email me</a>
+    <a class="btn-x" href="https://github.com/Nikhil201716" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div>
+
+<main>
+
+<!-- ═════════════════════════════════════════════════════════════ HERO -->
+<header class="hero">
   <div class="wrap">
-    <div class="hero-eyebrow"><span class="pin"></span> BENGALURU, INDIA · OPEN TO OPPORTUNITIES</div>
-    <h1 class="hero-name">Nikhil Sinha</h1>
-    <div class="hero-role" id="hero-role">Data &amp; AI Engineer</div>
-    <p class="hero-pitch">
+    <div class="reveal">
+      <span class="eyebrow"><span class="pin"></span> Bengaluru, India · open to opportunities</span>
+    </div>
+    <h1 class="hero-name reveal d1">Nikhil Sinha</h1>
+    <div class="hero-role reveal d1"><span id="role-type"></span><span class="caret"></span></div>
+    <p class="hero-pitch reveal d2">
       I build data and AI systems that <em>measure whether they actually work</em>.
       Fifteen end-to-end projects spanning analytics engineering, streaming platforms,
       machine learning and test engineering — where every result is scored against a
@@ -45,210 +71,165 @@
       as prominently as the ones that confirmed them.
     </p>
 
-    <div class="hero-actions">
-      <a class="btn primary" href="#projects">Explore the work</a>
-      <a class="btn" href="https://github.com/Nikhil201716" target="_blank" rel="noopener">GitHub</a>
-      <a class="btn" href="mailto:nikhil.sinha16022003@gmail.com">Email</a>
-      <a class="btn ghost" href="#books">Download the books</a>
+    <div class="d-flex flex-wrap gap-2 mt-4 reveal d3">
+      <a class="btn-x primary" href="pages/projects.html">Explore the work →</a>
+      <a class="btn-x" href="pages/books.html">Read the books</a>
+      <a class="btn-x" data-gmail href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5Z"/></svg>
+        Email me
+      </a>
+      <a class="btn-x" href="https://github.com/Nikhil201716" target="_blank" rel="noopener">GitHub</a>
     </div>
 
-    <div class="hero-stats" id="hero-stats"></div>
+    <div class="row g-3 mt-4" id="hero-stats"></div>
   </div>
-  <div class="scroll-cue" aria-hidden="true"><span></span></div>
 </header>
 
-<!-- ══════════════════════════════════════════════ EVIDENCE -->
-<section class="section evidence" id="evidence">
+<!-- ════════════════════════════════════════════════════════ EVIDENCE -->
+<section class="section alt" id="evidence">
   <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-kicker">01 — The difference</div>
-      <h2>Every number on this page is traceable to a file</h2>
+    <div class="reveal">
+      <div class="kicker">01 — The difference</div>
+      <h2>Every number on this site is traceable to a file</h2>
       <p class="sec-sub">
         Most portfolios assert impact. This one cites it. Each figure below was
         extracted programmatically from a <code>reports/*.json</code> produced by a
         pipeline in a public repository — not typed by hand, and not rounded in my favour.
       </p>
     </div>
-
-    <div class="evidence-grid">
-      <article class="ev-card">
-        <div class="ev-num">01</div>
-        <h3>Ground truth is injected, then scored against</h3>
-        <p>Each project's data generator plants a known mechanism — a fraud ring, a
-        concept drift, a causal effect. The analysis is then graded against what was
-        actually planted. "It looks right" is never the standard.</p>
-      </article>
-      <article class="ev-card">
-        <div class="ev-num">02</div>
-        <h3>A suspiciously good number is treated as a bug report</h3>
-        <p>A 100% score triggers an investigation, not a celebration. Several projects
-        contain a fix and a re-measurement because the first result was too clean —
-        including a PII detector at 1.000 that turned out to be scoring its own
-        training distribution.</p>
-      </article>
-      <article class="ev-card">
-        <div class="ev-num">03</div>
-        <h3>Refuted hypotheses are reported as results</h3>
-        <p>Where the thing I set out to prove turned out false, the site says so.
-        Arrival-time windowing was supposed to be badly wrong; at realistic parameters
-        it isn't, and the honest finding is the crossover point instead.</p>
-      </article>
-      <article class="ev-card">
-        <div class="ev-num">04</div>
-        <h3>Reproducibility is measured, not claimed</h3>
-        <p>Datasets are verified byte-identical by SHA-256 checksum in a <em>fresh
-        process</em> — because two projects shipped fixed seeds that still weren't
-        deterministic, and only a new process can catch that.</p>
-      </article>
+    <div class="row g-3 g-lg-4 mt-2">
+      <div class="col-md-6 col-lg-3"><div class="card-x tilt reveal">
+        <div class="num-badge">01</div>
+        <h3 class="h6 mt-2">Ground truth is injected, then scored against</h3>
+        <p class="text-ink-2 mb-0 small">Each generator plants a known mechanism — a fraud ring, a concept drift, a causal effect. The analysis is graded against what was actually planted. "It looks right" is never the standard.</p>
+      </div></div>
+      <div class="col-md-6 col-lg-3"><div class="card-x tilt reveal d1">
+        <div class="num-badge">02</div>
+        <h3 class="h6 mt-2">A suspiciously good number is a bug report</h3>
+        <p class="text-ink-2 mb-0 small">A 100% score triggers an investigation. A PII detector scoring 1.000 fell to 0.20 on ten hand-written cases — and the honest figure is the one that ships.</p>
+      </div></div>
+      <div class="col-md-6 col-lg-3"><div class="card-x tilt reveal d2">
+        <div class="num-badge">03</div>
+        <h3 class="h6 mt-2">Refuted hypotheses are reported as results</h3>
+        <p class="text-ink-2 mb-0 small">Event-time windowing was supposed to beat processing time. It discarded 95.7% of the stream. The measurement is the finding, not the hypothesis.</p>
+      </div></div>
+      <div class="col-md-6 col-lg-3"><div class="card-x tilt reveal d3">
+        <div class="num-badge">04</div>
+        <h3 class="h6 mt-2">Reproducibility is measured, not claimed</h3>
+        <p class="text-ink-2 mb-0 small">Datasets are verified byte-identical by SHA-256 in a <em>fresh process</em> — because two projects shipped fixed seeds that still weren't deterministic.</p>
+      </div></div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════ FINDINGS -->
+<!-- ════════════════════════════════════════════════════════ FINDINGS -->
 <section class="section" id="findings">
   <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-kicker">02 — Signature findings</div>
+    <div class="reveal">
+      <div class="kicker">02 — Signature findings</div>
       <h2>Six results worth an interview conversation</h2>
-      <p class="sec-sub">Each links to the repository that produced it.</p>
+      <p class="sec-sub">Each links to the project that produced it, and names the file it came from.</p>
     </div>
-    <div class="findings" id="findings-grid"></div>
+    <div class="row g-3 g-lg-4 mt-2" id="findings-grid"></div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════ SKILLS -->
+<!-- ═══════════════════════════════════════════════════════════ ROLES -->
 <section class="section alt" id="skills">
   <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-kicker">03 — Capability</div>
+    <div class="reveal">
+      <div class="kicker">03 — Capability</div>
       <h2>Five roles, and the projects that evidence each</h2>
-      <p class="sec-sub">
-        Click a role to filter the project explorer below to the work that demonstrates it.
-      </p>
+      <p class="sec-sub">Every role links through to the projects that demonstrate it.</p>
     </div>
-    <div class="role-grid" id="role-grid"></div>
-    <div class="skill-cloud">
-      <h3 class="cloud-title">Technologies used across the portfolio</h3>
-      <div class="chips" id="stack-chips"></div>
+    <div class="row g-3 g-lg-4 mt-2" id="role-grid"></div>
+
+    <div class="mt-5 reveal">
+      <div class="text-ink-3 small mb-2 mono">TECHNOLOGIES USED ACROSS THE PORTFOLIO</div>
+      <div class="marquee"><div class="marquee-track" id="stack-track"></div></div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════ PROJECTS -->
-<section class="section" id="projects">
+<!-- ════════════════════════════════════════════════════════ FEATURED -->
+<section class="section" id="featured">
   <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-kicker">04 — The work</div>
-      <h2>Fifteen projects, built end to end</h2>
-      <p class="sec-sub">
-        Filter by role or search by technique. Open any card for its measured results,
-        charts built from its own report files, and a link to the code.
-      </p>
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 reveal">
+      <div>
+        <div class="kicker">04 — The work</div>
+        <h2>Featured projects</h2>
+        <p class="sec-sub mb-0">Every project can be run in one click, in a real terminal, from your browser.</p>
+      </div>
+      <a class="btn-x" href="pages/projects.html">All 15 projects →</a>
     </div>
-
-    <div class="filters">
-      <div class="filter-roles" id="filter-roles"></div>
-      <input class="search" id="search" type="search" placeholder="Search technique, stack or project…" aria-label="Search projects">
-      <div class="filter-count" id="filter-count"></div>
-    </div>
-
-    <div class="projects" id="projects-grid"></div>
+    <div class="row g-3 g-lg-4 mt-2" id="featured-grid"></div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════ BOOKS -->
-<section class="section alt" id="books">
+<!-- ═══════════════════════════════════════════════════════════ BOOKS -->
+<section class="section alt">
   <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-kicker">05 — Documentation</div>
-      <h2>Fifteen books, 1,055 pages</h2>
-      <p class="sec-sub">
-        Every project ships a full technical notebook — the business problem, the
-        mathematics derived from first principles, a guided tour of the code, worked
-        numerical examples, exercises with solutions, and a complete step-by-step
-        runbook of terminal commands. Written so a reader learns the subject, not just
-        the project. Every code listing is extracted from the repository at build time,
-        so a book cannot drift from the code it describes.
-      </p>
-    </div>
-    <div class="books" id="books-grid"></div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════ ABOUT -->
-<section class="section" id="about">
-  <div class="wrap about-wrap">
-    <div>
-      <div class="sec-kicker">06 — Background</div>
-      <h2>About</h2>
-      <p>
-        I came to data engineering through customer support operations, which turned out
-        to be an unusually good apprenticeship. Working complaint queues teaches you that
-        a metric is a promise someone is accountable for, that an average hides the cases
-        that actually hurt, and that the number on the dashboard is only as good as the
-        definition nobody wrote down.
-      </p>
-      <p>
-        That shows up in how I build. Every project in this portfolio starts by asking
-        what would make the result <em>checkable</em> — and several of them exist because
-        the checkable version disagreed with the obvious one.
-      </p>
-      <p>
-        I work across the whole path: designing the data, modelling the warehouse,
-        building the pipeline, training and calibrating the model, testing it adversarially,
-        and shipping the interface a human actually uses.
-      </p>
-      <div class="about-links">
-        <a class="btn" href="https://github.com/Nikhil201716" target="_blank" rel="noopener">GitHub →</a>
-        <a class="btn" href="mailto:nikhil.sinha16022003@gmail.com">nikhil.sinha16022003@gmail.com</a>
+    <div class="row align-items-center g-4">
+      <div class="col-lg-5 reveal">
+        <div class="kicker">05 — Documentation</div>
+        <h2>Fifteen books, <span class="text-grad" id="pages-total">1,055</span> pages</h2>
+        <p class="sec-sub">
+          Every project ships a full technical notebook — the business problem, the
+          mathematics derived from first principles, a guided tour of the code, worked
+          numerical examples, exercises with solutions, and a complete step-by-step
+          runbook of terminal commands.
+        </p>
+        <p class="sec-sub">
+          Every code listing is extracted from the repository at build time, so a book
+          cannot drift from the code it describes.
+        </p>
+        <a class="btn-x primary mt-2" href="pages/books.html">Browse all 15 →</a>
+      </div>
+      <div class="col-lg-7">
+        <div class="row g-3" id="books-preview"></div>
       </div>
     </div>
-    <aside class="about-side">
-      <h3>Education</h3>
-      <div class="edu">
-        <div class="edu-school">CHRIST (Deemed to be University)</div>
-        <div class="edu-detail">Bengaluru, India</div>
-      </div>
-      <h3>Focus areas</h3>
-      <ul class="focus-list">
-        <li>Analytics engineering &amp; semantic layers</li>
-        <li>Streaming and event-time correctness</li>
-        <li>ML evaluation, calibration and fairness</li>
-        <li>LLM systems with measured guardrails</li>
-        <li>Test engineering and adversarial QA</li>
-      </ul>
-      <h3>Principle</h3>
-      <p class="principle">
-        “A result you cannot check is not a result.”
-      </p>
-    </aside>
   </div>
 </section>
 
-<footer class="footer">
-  <div class="wrap footer-in">
-    <div>
-      <strong>Nikhil Sinha</strong>
-      <span class="muted">Data &amp; AI Engineer · Bengaluru, India</span>
+<!-- ═════════════════════════════════════════════════════════════ CTA -->
+<section class="section">
+  <div class="wrap">
+    <div class="card-x reveal text-center py-5">
+      <h2 class="mb-3">Let's talk</h2>
+      <p class="sec-sub mx-auto mb-4">
+        I'm looking for Data Analyst, Data Engineer, QA / SDET, AI Engineer or
+        ML Engineer roles. The fastest way to reach me is email.
+      </p>
+      <div class="d-flex flex-wrap gap-2 justify-content-center">
+        <a class="btn-x primary" data-gmail href="#">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5Z"/></svg>
+          nikhil.sinha16022003@gmail.com
+        </a>
+        <a class="btn-x" href="https://github.com/Nikhil201716" target="_blank" rel="noopener">GitHub</a>
+      </div>
     </div>
-    <div class="footer-links">
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap d-flex flex-wrap justify-content-between align-items-center gap-3">
+    <div><strong class="text-ink">Nikhil Sinha</strong> <span class="ms-2">Data &amp; AI Engineer · Bengaluru</span></div>
+    <div class="d-flex gap-3">
+      <a href="pages/projects.html">Projects</a>
+      <a href="pages/books.html">Books</a>
+      <a href="pages/about.html">About</a>
       <a href="https://github.com/Nikhil201716" target="_blank" rel="noopener">GitHub</a>
-      <a href="mailto:nikhil.sinha16022003@gmail.com">Email</a>
-      <a href="#top">Back to top</a>
+      <a data-gmail href="#">Email</a>
     </div>
-    <div class="muted small" id="build-stamp"></div>
+    <div class="small" id="build-stamp"></div>
   </div>
 </footer>
 
-<!-- ══════════════════════════════════════════════ PROJECT MODAL -->
-<div class="modal" id="modal" hidden>
-  <div class="modal-backdrop" data-close></div>
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <button class="modal-close" data-close aria-label="Close">✕</button>
-    <div id="modal-body"></div>
-  </div>
-</div>
-
-<script src="assets/js/site.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/common.js"></script>
+<script src="assets/js/home.js"></script>
 </body>
 </html>

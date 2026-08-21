@@ -131,6 +131,9 @@ const BOOKS = [
   { id: "14", title: "Cascade Realtime Intelligence Platform",
     repo: "14-Cascade-Realtime-Intelligence-Platform",
     file: "Project-14-Cascade-Realtime-Streaming-Notebook.pdf", pages: 84 },
+  { id: "15", title: "Aegis Health Plan Intelligence Platform",
+    repo: "15-Aegis-Health-Plan-Platform",
+    file: "Project-15-Aegis-Health-Plan-Notebook.pdf", pages: 60 },
 ];
 
 /* ═══════════════════════════════════════════════════ boot */

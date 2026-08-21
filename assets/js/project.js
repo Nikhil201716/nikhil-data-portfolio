@@ -82,8 +82,16 @@ function runPanel(p) {
     <div class="d-flex flex-wrap gap-2 mt-3">
       <button class="btn-x py-2 px-3" style="font-size:.85rem" id="copy-cmd">Copy the commands</button>
       <a class="btn-x py-2 px-3" style="font-size:.85rem"
+         href="https://github.com/Nikhil201716/${esc(p.dir)}/blob/main/RUN.md"
+         target="_blank" rel="noopener">Full run instructions →</a>
+      <a class="btn-x py-2 px-3" style="font-size:.85rem"
          href="https://github.com/Nikhil201716/${esc(p.dir)}" target="_blank" rel="noopener">View the code →</a>
     </div>
+
+    <p class="text-ink-3 small mt-2 mb-0">
+      <code>RUN.md</code> in the repository has the full VS Code terminal reference —
+      PowerShell and bash setup, every stage individually, and a troubleshooting table.
+    </p>
 
     <p class="text-ink-3 small mt-3 mb-0">
       A free GitHub account is needed to open a Codespace, and the compute is billed

@@ -19,6 +19,16 @@ const RUN_CMD = {
   "13": "python run_all.py",
   "14": "python run_all.py",
   "15": "python run_all.py",
+  "16": "./build.sh all",
+  "17": "./build.sh all",
+};
+
+/* What has to be installed before the command above will run. The Java
+   projects have no dependencies at all, so showing a pip line for them would
+   be showing a step that does not exist. */
+const INSTALL_CMD = {
+  "16": null,
+  "17": null,
 };
 
 /* Roughly how long a full run takes in a 2-core Codespace, so nobody is
@@ -27,6 +37,7 @@ const RUN_MINUTES = {
   "01": "1-2", "02": "1-2", "03": "3-5", "04": "3-5", "05": "2-4",
   "06": "3-4", "07": "2-4", "08": "4-7", "09": "2-4", "10": "3-6",
   "11": "5-9", "12": "25-35", "13": "4-8", "14": "3-6", "15": "3-6",
+  "16": "1-2", "17": "3-5",
 };
 
 const NEEDS_OLLAMA = new Set(["05", "06", "07", "08", "09", "10", "11", "13", "14", "15"]);
@@ -44,6 +55,9 @@ function runPanel(p) {
   const cmd = RUN_CMD[p.id] || "python scripts/run_pipeline.py";
   const mins = RUN_MINUTES[p.id] || "2-5";
   const ollama = NEEDS_OLLAMA.has(p.id);
+  const install = p.id in INSTALL_CMD
+    ? INSTALL_CMD[p.id]
+    : "pip install -r requirements.txt";
 
   return `
   <div class="card-x reveal" id="run">
@@ -52,8 +66,9 @@ function runPanel(p) {
         <div class="kicker">Run it</div>
         <h3 class="h5 mt-1 mb-1">Run this project in your browser</h3>
         <p class="text-ink-2 small mb-0" style="max-width:60ch">
-          Opens the repository in a free GitHub Codespace. It installs the
-          dependencies and runs the full pipeline automatically — you watch the real
+          Opens the repository in a free GitHub Codespace. It ${install
+            ? "installs the dependencies and runs"
+            : "runs"} the full pipeline automatically — you watch the real
           output stream into a real terminal. Takes about <strong>${mins} minutes</strong>.
         </p>
       </div>
@@ -72,8 +87,7 @@ function runPanel(p) {
       </div>
       <div class="term-body"><pre><span class="c-dim">$</span> <span class="c-key">git clone</span> https://github.com/Nikhil201716/${esc(p.dir)}.git
 <span class="c-dim">$</span> <span class="c-key">cd</span> ${esc(p.dir)}
-<span class="c-dim">$</span> pip install -r requirements.txt
-<span class="c-dim">$</span> ${esc(cmd)}
+${install ? `<span class="c-dim">$</span> ${esc(install)}\n` : ""}<span class="c-dim">$</span> ${esc(cmd)}
 
 <span class="c-dim"># the pipeline writes everything it measures into reports/,
 # which is where every number on this page comes from.</span></pre></div>
@@ -170,7 +184,7 @@ function render(p, cat) {
                    <span class="metric-v${m.highlight ? " hi" : ""}">${esc(m.value)}</span>
                  </div>`).join("")
               : `<p class="text-ink-2 mb-0">No machine-readable metrics for this project.</p>`}
-            ${p.n_report_files ? `<div class="text-ink-3 small mono mt-3">${p.n_report_files} report files in the repository</div>` : ""}
+            ${p.n_report_files ? `<div class="text-ink-3 small mono mt-3">${p.n_report_files} report file${p.n_report_files === 1 ? "" : "s"} in the repository</div>` : ""}
           </div>
         </div>
         <div class="col-lg-7">
@@ -192,7 +206,7 @@ function render(p, cat) {
         <div class="kicker">Keep going</div>
         <h3 class="h5 mt-1 mb-0">Other projects</h3>
       </div>
-      <a class="btn-x" href="projects.html">All 15 →</a>
+      <a class="btn-x" href="projects.html">All 17 →</a>
     </div>
     <div class="row g-3 g-lg-4 mt-1" id="more"></div>
   </div></section>`;
@@ -218,8 +232,11 @@ function render(p, cat) {
   // copy button
   $("#copy-cmd")?.addEventListener("click", async (e) => {
     const cmd = RUN_CMD[p.id] || "python scripts/run_pipeline.py";
+    const inst = p.id in INSTALL_CMD
+      ? INSTALL_CMD[p.id]
+      : "pip install -r requirements.txt";
     const text = `git clone https://github.com/Nikhil201716/${p.dir}.git\n`
-      + `cd ${p.dir}\npip install -r requirements.txt\n${cmd}`;
+      + `cd ${p.dir}\n` + (inst ? `${inst}\n` : "") + cmd;
     try {
       await navigator.clipboard.writeText(text);
       const b = e.currentTarget, old = b.textContent;

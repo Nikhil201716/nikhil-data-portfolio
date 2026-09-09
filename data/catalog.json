@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-09T11:21:48+00:00",
+  "generated_at": "2026-09-09T16:30:54+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 16,
+  "n_projects": 17,
   "roles": [
     "Data Analysis",
     "Data Engineering",
@@ -11,10 +11,10 @@
   ],
   "role_counts": {
     "Data Analysis": 7,
-    "Data Engineering": 10,
+    "Data Engineering": 11,
     "Machine Learning": 11,
     "AI & LLM Systems": 10,
-    "Testing & QA": 5
+    "Testing & QA": 6
   },
   "all_topics": [
     "(s,S) inventory policy",
@@ -25,10 +25,13 @@
     "Airflow DAGs",
     "Anomaly shapes",
     "At-least-once delivery",
+    "B+ trees with leaf chaining",
     "Bayesian inference",
     "Bootstrap CIs",
+    "Break-even analysis",
     "CDC",
     "CNN from scratch",
+    "Cache locality and dependent loads",
     "Canary deployment",
     "Churn modeling",
     "Clock skew",
@@ -66,6 +69,7 @@
     "Grounded LLM generation",
     "Guardrailed NL-to-SQL",
     "H3 geospatial",
+    "Hash tables with separate chaining",
     "Hash-chained audit trail",
     "Hierarchical forecasting",
     "Holt-Winters",
@@ -74,7 +78,9 @@
     "Idempotent sinks",
     "Injected-break scoring",
     "Injected-defect scoring",
+    "Inverted indexes and posting-list merges",
     "JDBC transactions and rollback",
+    "JVM microbenchmarking traps",
     "K-Means",
     "Knowledge graph",
     "LLM extraction",
@@ -96,6 +102,7 @@
     "OCR",
     "Off-policy evaluation",
     "Offline TTS",
+    "Oracle-based correctness testing",
     "PII detection",
     "PII governance",
     "PSI drift",
@@ -126,11 +133,15 @@
     "SQLite star schema",
     "SVD recommender",
     "Seasonal-naive baseline",
+    "Selectivity",
     "Self-healing locators",
     "Semantic layer / metrics as code",
     "Sequential testing",
     "Servlet lifecycle without a container",
+    "Shunting-yard parsing",
+    "Skip lists and probabilistic balance",
     "Slowly changing dimensions",
+    "Sorted arrays and binary search",
     "Star schema + declared grain",
     "Streamlit",
     "Subset-sum batch matching",
@@ -183,6 +194,7 @@
     "dbt",
     "javac only - no build tool",
     "mutmut",
+    "no dependencies",
     "openpyxl",
     "pandas",
     "pdfplumber",
@@ -192,10 +204,10 @@
     "sentence-transformers",
     "transformers"
   ],
-  "n_topics": 129,
-  "n_technologies": 43,
-  "n_metrics_extracted": 84,
-  "n_charts": 23,
+  "n_topics": 140,
+  "n_technologies": 44,
+  "n_metrics_extracted": 88,
+  "n_charts": 24,
   "projects": [
     {
       "id": "01",
@@ -1973,7 +1985,7 @@
           "type": "bar",
           "title": "False positives by matching configuration",
           "note": "N normalise references, A amount+date fallback, B batch matching. Zero breaks were injected; every bar is spurious work.",
-          "labels": [
+          "x": [
             "---",
             "N--",
             "-A-",
@@ -1983,19 +1995,114 @@
             "-AB",
             "NAB"
           ],
-          "values": [
-            690,
-            490,
-            320,
-            320,
-            332,
-            229,
-            136,
-            136
-          ]
+          "series": [
+            {
+              "name": "false positives",
+              "y": [
+                690,
+                490,
+                320,
+                320,
+                332,
+                229,
+                136,
+                136
+              ]
+            }
+          ],
+          "yaxis": "false positives"
         }
       ],
       "n_report_files": 3,
+      "screenshots": []
+    },
+    {
+      "id": "17",
+      "slug": "sift",
+      "dir": "Sift-Log-Search-Engine",
+      "title": "Sift - Log Search Engine and Index Benchmark",
+      "pitch": "A hash index answers a point query 72,000x faster than scanning. On a prefix query, the B+ tree is 17% slower than having no index at all.",
+      "roles": [
+        "Data Engineering",
+        "Testing & QA"
+      ],
+      "topics": [
+        "Hash tables with separate chaining",
+        "Sorted arrays and binary search",
+        "B+ trees with leaf chaining",
+        "Skip lists and probabilistic balance",
+        "Inverted indexes and posting-list merges",
+        "Shunting-yard parsing",
+        "Selectivity",
+        "Break-even analysis",
+        "Cache locality and dependent loads",
+        "JVM microbenchmarking traps",
+        "Oracle-based correctness testing"
+      ],
+      "stack": [
+        "Java 17",
+        "javac only - no build tool",
+        "no dependencies"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "Asymptotics predict the hash index winning point queries by five orders of magnitude, and it does. They also predict tree structures winning prefix queries, and there the B+ tree and the skip list both lose to the scan they were built to replace - a prefix matching half the data leaves almost nothing to skip, so they pay for pointer-chasing and get nothing back. The sorted array, doing the same work in contiguous memory, stays ahead. Selectivity and memory layout, not complexity class, decide whether an index is worth building.",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "Point query, hash vs scan (1M records)",
+          "value": "72,852x faster",
+          "highlight": true,
+          "note": "0.2us against 14,570us",
+          "source": "reports"
+        },
+        {
+          "label": "Prefix query, B+ tree vs no index (1M records)",
+          "value": "1.17x slower",
+          "highlight": true,
+          "note": "BPlusTree(f=64), and the skip list loses by the same margin",
+          "source": "reports"
+        },
+        {
+          "label": "Skip list memory, against the data itself",
+          "value": "24x",
+          "highlight": false,
+          "note": "183MB of structure for 7.6MB of records",
+          "source": "reports"
+        },
+        {
+          "label": "Queries needed to repay the build",
+          "value": "11,955",
+          "highlight": false,
+          "note": "SkipList, point queries at n=1,000",
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "bar",
+          "title": "Prefix query latency at one million records (us)",
+          "note": "Lower is better, and the leftmost bar is no index at all. The two pointer-based structures lose to it; the sorted array, doing the same work in contiguous memory, does not.",
+          "x": [
+            "LinearScan",
+            "SortedArray",
+            "BPlusTree(f=64)",
+            "SkipList"
+          ],
+          "series": [
+            {
+              "name": "prefix latency",
+              "y": [
+                31078.1,
+                23453.5,
+                36425.5,
+                36349.3
+              ]
+            }
+          ],
+          "yaxis": "microseconds"
+        }
+      ],
+      "n_report_files": 1,
       "screenshots": []
     }
   ]

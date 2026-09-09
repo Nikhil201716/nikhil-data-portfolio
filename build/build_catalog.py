@@ -659,8 +659,80 @@ def extract_16(d: Path):
             "title": "False positives by matching configuration",
             "note": "N normalise references, A amount+date fallback, B batch matching. "
                     "Zero breaks were injected; every bar is spurious work.",
-            "labels": [c["config"] for c in abl["configurations"]],
-            "values": [c["false_positives"] for c in abl["configurations"]],
+            "x": [c["config"] for c in abl["configurations"]],
+            "series": [{"name": "false positives",
+                        "y": [c["false_positives"] for c in abl["configurations"]]}],
+            "yaxis": "false positives",
+        })
+    return metrics, charts
+
+
+def extract_17(d: Path):
+    """Sift - index structures against a linear scan.
+
+    Both directions are surfaced deliberately. The hash index winning by five
+    orders of magnitude is the expected result; the ordered structures losing
+    to the scan they were built to beat is the one worth reading, and quoting
+    only the first would be the more flattering half of one experiment.
+    """
+    metrics, charts = [], []
+
+    b = read_json(d, "benchmark.json")
+    if not b:
+        return metrics, charts
+
+    rows = {r["structure"]: r for r in b["measurements"] if r["n"] == 1_000_000}
+    scan = rows.get("LinearScan")
+
+    if scan and rows.get("HashIndex"):
+        speedup = scan["point_us"] / rows["HashIndex"]["point_us"]
+        metrics.append(m("Point query, hash vs scan (1M records)",
+                         f"{speedup:,.0f}x faster", True,
+                         f"{rows['HashIndex']['point_us']}us against "
+                         f"{scan['point_us']:,.0f}us"))
+
+    # Pinned to the largest size on purpose. The penalty happens to be widest at
+    # n=1,000 - a size at which nothing matters - and quoting that number would
+    # be picking the most flattering row of a negative finding.
+    penalties = [a for a in b["analysis"]
+                 if a["kind"] == "slower_than_no_index"
+                 and a["query"] == "prefix" and a["n"] == 1_000_000]
+    if penalties:
+        worst = max(penalties, key=lambda a: a["penalty_x"])
+        others = len(penalties) - 1
+        metrics.append(m("Prefix query, B+ tree vs no index (1M records)",
+                         f"{worst['penalty_x']:.2f}x slower", True,
+                         f"{worst['structure']}"
+                         + (f", and the skip list loses by the same margin" if others else "")))
+
+    if scan and rows.get("SkipList"):
+        ratio = rows["SkipList"]["memory_mb"] / scan["memory_mb"]
+        metrics.append(m("Skip list memory, against the data itself",
+                         f"{ratio:.0f}x", False,
+                         f"{rows['SkipList']['memory_mb']:.0f}MB of structure for "
+                         f"{scan['memory_mb']:.1f}MB of records"))
+
+    breakeven = [a for a in b["analysis"] if a["kind"] == "break_even"]
+    if breakeven:
+        worst = max(breakeven, key=lambda a: a["break_even_queries"])
+        metrics.append(m("Queries needed to repay the build",
+                         f"{worst['break_even_queries']:,}", False,
+                         f"{worst['structure']}, {worst['query']} queries at "
+                         f"n={worst['n']:,}"))
+
+    if scan:
+        ordered = ["LinearScan", "HashIndex", "SortedArray", "BPlusTree(f=64)", "SkipList"]
+        present = [s for s in ordered if s in rows and rows[s].get("prefix_us")]
+        charts.append({
+            "type": "bar",
+            "title": "Prefix query latency at one million records (us)",
+            "note": "Lower is better, and the leftmost bar is no index at all. "
+                    "The two pointer-based structures lose to it; the sorted array, "
+                    "doing the same work in contiguous memory, does not.",
+            "x": present,
+            "series": [{"name": "prefix latency",
+                        "y": [rows[s]["prefix_us"] for s in present]}],
+            "yaxis": "microseconds",
         })
     return metrics, charts
 
@@ -672,6 +744,7 @@ EXTRACTORS = {
     "14": extract_14,
     "15": extract_15,
     "16": extract_16,
+    "17": extract_17,
 }
 
 

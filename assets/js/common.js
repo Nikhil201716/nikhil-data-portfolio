@@ -39,6 +39,8 @@ const BOOKS = [
   ["13", "Meridian Operations Cloud", "13-Meridian-Operations-Cloud", "Project-13-Meridian-Operations-Cloud-Notebook.pdf", 80],
   ["14", "Cascade Realtime Intelligence Platform", "14-Cascade-Realtime-Intelligence-Platform", "Project-14-Cascade-Realtime-Streaming-Notebook.pdf", 84],
   ["15", "Aegis Health Plan Intelligence Platform", "15-Aegis-Health-Plan-Platform", "Project-15-Aegis-Health-Plan-Notebook.pdf", 60],
+  ["16", "Concord, a Double-Entry Reconciliation Engine", "Concord-Reconciliation-Engine", "Concord-Notebook.pdf", 60],
+  ["17", "Sift, a Log Search Engine & Index Benchmark", "Sift-Log-Search-Engine", "Sift-Notebook.pdf", 60],
 ].map(([id, title, repo, file, pages]) => ({ id, title, repo, file, pages }));
 
 const BOOK_BY_ID = Object.fromEntries(BOOKS.map((b) => [b.id, b]));

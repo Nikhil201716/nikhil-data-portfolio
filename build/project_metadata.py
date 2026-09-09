@@ -311,6 +311,32 @@ PROJECTS = [
                              "only NP-complete component was failing because of which 24 "
                              "candidates it was handed, not because of its search.",
     },
+    {
+        "id": "17",
+        "slug": "sift",
+        "dir": "Sift-Log-Search-Engine",
+        "title": "Sift - Log Search Engine and Index Benchmark",
+        "pitch": "A hash index answers a point query 72,000x faster than scanning. On a "
+                  "prefix query, the B+ tree is 17% slower than having no index at all.",
+        "roles": ["Data Engineering", "Testing & QA"],
+        "topics": ["Hash tables with separate chaining", "Sorted arrays and binary search",
+                    "B+ trees with leaf chaining", "Skip lists and probabilistic balance",
+                    "Inverted indexes and posting-list merges",
+                    "Shunting-yard parsing", "Selectivity", "Break-even analysis",
+                    "Cache locality and dependent loads",
+                    "JVM microbenchmarking traps", "Oracle-based correctness testing"],
+        "stack": ["Java 17", "javac only - no build tool", "no dependencies"],
+        "metrics_source": "reports",
+        "headline_finding": "Asymptotics predict the hash index winning point queries by five "
+                             "orders of magnitude, and it does. They also predict tree "
+                             "structures winning prefix queries, and there the B+ tree and the "
+                             "skip list both lose to the scan they were built to replace - a "
+                             "prefix matching half the data leaves almost nothing to skip, so "
+                             "they pay for pointer-chasing and get nothing back. The sorted "
+                             "array, doing the same work in contiguous memory, stays ahead. "
+                             "Selectivity and memory layout, not complexity class, decide "
+                             "whether an index is worth building.",
+    },
 ]
 
 AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

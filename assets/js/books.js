@@ -5,7 +5,7 @@
     { v: BOOKS.length, k: "Books" },
     { v: TOTAL_PAGES, k: "Pages" },
     { v: Math.round(TOTAL_PAGES / BOOKS.length), k: "Average length" },
-    { v: 15, k: "Public repositories" },
+    { v: 17, k: "Public repositories" },
   ];
   $("#book-stats").innerHTML = stats.map((s, i) => `
     <div class="col-6 col-lg-3"><div class="stat reveal d${i}">

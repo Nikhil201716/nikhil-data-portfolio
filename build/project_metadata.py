@@ -317,7 +317,8 @@ PROJECTS = [
         "dir": "Sift-Log-Search-Engine",
         "title": "Sift - Log Search Engine and Index Benchmark",
         "pitch": "A hash index answers a point query 72,000x faster than scanning. On a "
-                  "prefix query, the B+ tree is 17% slower than having no index at all.",
+                  "low-selectivity prefix query, the B+ tree and the skip list are both "
+                  "slower than having no index at all - in two independent runs.",
         "roles": ["Data Engineering", "Testing & QA"],
         "topics": ["Hash tables with separate chaining", "Sorted arrays and binary search",
                     "B+ trees with leaf chaining", "Skip lists and probabilistic balance",
@@ -332,10 +333,12 @@ PROJECTS = [
                              "structures winning prefix queries, and there the B+ tree and the "
                              "skip list both lose to the scan they were built to replace - a "
                              "prefix matching half the data leaves almost nothing to skip, so "
-                             "they pay for pointer-chasing and get nothing back. The sorted "
-                             "array, doing the same work in contiguous memory, stays ahead. "
-                             "Selectivity and memory layout, not complexity class, decide "
-                             "whether an index is worth building.",
+                             "they pay for pointer-chasing and get nothing back. Running the "
+                             "whole benchmark a second time before publishing cost one claim: "
+                             "the sorted array beat the scan by 33% in the first run and lost "
+                             "to it by 3% in the second, so it sits at parity rather than "
+                             "ahead. The direction of the finding held both times; the "
+                             "magnitude moved by a third.",
     },
 ]
 

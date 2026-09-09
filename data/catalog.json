@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-21T08:21:30+00:00",
+  "generated_at": "2026-09-09T11:21:48+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 15,
+  "n_projects": 16,
   "roles": [
     "Data Analysis",
     "Data Engineering",
@@ -11,10 +11,10 @@
   ],
   "role_counts": {
     "Data Analysis": 7,
-    "Data Engineering": 9,
+    "Data Engineering": 10,
     "Machine Learning": 11,
     "AI & LLM Systems": 10,
-    "Testing & QA": 4
+    "Testing & QA": 5
   },
   "all_topics": [
     "(s,S) inventory policy",
@@ -34,6 +34,7 @@
     "Clock skew",
     "Competing risks",
     "Concept drift",
+    "Constructor-enforced invariants",
     "Contextual bandits",
     "Cox proportional hazards",
     "Cross-modal agent",
@@ -44,18 +45,22 @@
     "Discrete-time hazard",
     "Disparate impact",
     "Document AI",
+    "Double-entry bookkeeping",
     "DuckDB",
     "ETL orchestration",
     "Equalized odds",
     "Event time vs processing time",
+    "Exact decimal arithmetic",
     "Exactly-once semantics",
     "Excel reporting",
     "Explainability",
     "Fairness audit",
+    "False-positive measurement",
     "FastAPI",
     "Fault injection",
     "Flaky-test detection",
     "Forecast reconciliation (MinT)",
+    "Full factorial ablation",
     "Graph fraud detection",
     "GraphRAG",
     "Grounded LLM generation",
@@ -67,7 +72,9 @@
     "Hybrid retrieval",
     "Idempotency",
     "Idempotent sinks",
+    "Injected-break scoring",
     "Injected-defect scoring",
+    "JDBC transactions and rollback",
     "K-Means",
     "Knowledge graph",
     "LLM extraction",
@@ -105,8 +112,10 @@
     "Real-time scoring",
     "Red-teaming",
     "Redis Streams",
+    "Reference normalisation",
     "Replay determinism",
     "Requirement traceability",
+    "Revalidation on load",
     "Right-censoring",
     "Risk adjustment",
     "Root-cause analysis",
@@ -120,9 +129,11 @@
     "Self-healing locators",
     "Semantic layer / metrics as code",
     "Sequential testing",
+    "Servlet lifecycle without a container",
     "Slowly changing dimensions",
     "Star schema + declared grain",
     "Streamlit",
+    "Subset-sum batch matching",
     "Survival analysis",
     "Time-based holdout",
     "Training-serving skew",
@@ -143,6 +154,7 @@
     "FastAPI",
     "H3",
     "Hypothesis",
+    "Java 17",
     "Locust",
     "NetworkX",
     "NumPy",
@@ -161,12 +173,15 @@
     "Redis Streams",
     "SHAP",
     "SQLite",
+    "SQLite (JDBC)",
     "SciPy",
     "Scikit-learn",
     "Statsmodels",
     "Streamlit",
     "WSL Ubuntu",
+    "com.sun.net.httpserver",
     "dbt",
+    "javac only - no build tool",
     "mutmut",
     "openpyxl",
     "pandas",
@@ -177,10 +192,10 @@
     "sentence-transformers",
     "transformers"
   ],
-  "n_topics": 118,
-  "n_technologies": 39,
-  "n_metrics_extracted": 78,
-  "n_charts": 22,
+  "n_topics": 129,
+  "n_technologies": 43,
+  "n_metrics_extracted": 84,
+  "n_charts": 23,
   "projects": [
     {
       "id": "01",
@@ -1881,6 +1896,106 @@
         }
       ],
       "n_report_files": 8,
+      "screenshots": []
+    },
+    {
+      "id": "16",
+      "slug": "concord",
+      "dir": "Concord-Reconciliation-Engine",
+      "title": "Concord - Double-Entry Reconciliation Engine",
+      "pitch": "It detects 175 of 175 injected breaks. On a statement file with no breaks at all, it reports 690 of them.",
+      "roles": [
+        "Data Engineering",
+        "Testing & QA"
+      ],
+      "topics": [
+        "Double-entry bookkeeping",
+        "Exact decimal arithmetic",
+        "Constructor-enforced invariants",
+        "JDBC transactions and rollback",
+        "Revalidation on load",
+        "Reference normalisation",
+        "Subset-sum batch matching",
+        "Injected-break scoring",
+        "False-positive measurement",
+        "Full factorial ablation",
+        "Servlet lifecycle without a container"
+      ],
+      "stack": [
+        "Java 17",
+        "SQLite (JDBC)",
+        "javac only - no build tool",
+        "com.sun.net.httpserver"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "A perfect 175/175 detection score, produced by a test whose injector and engine shared an author, hid a 36.5% false positive rate on a statement file containing no breaks at all. Fixing it as a full factorial showed reference normalisation contributes exactly zero once amount-and-date matching exists, and that the only NP-complete component was failing because of which 24 candidates it was handed, not because of its search.",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "Injected breaks detected",
+          "value": "175 of 175",
+          "highlight": true,
+          "source": "reports"
+        },
+        {
+          "label": "False positives on that test",
+          "value": "50",
+          "highlight": false,
+          "source": "reports"
+        },
+        {
+          "label": "Breaks injected into the realistic file",
+          "value": "0",
+          "highlight": false,
+          "source": "reports"
+        },
+        {
+          "label": "False positives it reported anyway",
+          "value": "690 (36.5%)",
+          "highlight": true,
+          "source": "reports"
+        },
+        {
+          "label": "False positive rate, baseline to best",
+          "value": "36.5% -> 7.2%",
+          "highlight": true,
+          "source": "reports"
+        },
+        {
+          "label": "Detection across all 8 configurations",
+          "value": "175/175, unchanged",
+          "highlight": false,
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "bar",
+          "title": "False positives by matching configuration",
+          "note": "N normalise references, A amount+date fallback, B batch matching. Zero breaks were injected; every bar is spurious work.",
+          "labels": [
+            "---",
+            "N--",
+            "-A-",
+            "NA-",
+            "--B",
+            "N-B",
+            "-AB",
+            "NAB"
+          ],
+          "values": [
+            690,
+            490,
+            320,
+            320,
+            332,
+            229,
+            136,
+            136
+          ]
+        }
+      ],
+      "n_report_files": 3,
       "screenshots": []
     }
   ]

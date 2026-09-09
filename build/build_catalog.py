@@ -621,12 +621,57 @@ def extract_15(d: Path):
     return metrics, charts
 
 
+def extract_16(d: Path):
+    """Concord - reconciliation engine.
+
+    The pair of numbers is the whole point, so both are surfaced: a perfect
+    detection score, and the false positive rate that score concealed.
+    """
+    metrics, charts = [], []
+
+    det = read_json(d, "detection.json")
+    if det:
+        metrics.append(m("Injected breaks detected",
+                         f"{det['total_detected']} of {det['total_injected']}", True))
+        metrics.append(m("False positives on that test", str(det["false_positives"])))
+
+    real = read_json(d, "realistic.json")
+    if real:
+        metrics.append(m("Breaks injected into the realistic file",
+                         str(real["injected_breaks"])))
+        metrics.append(m("False positives it reported anyway",
+                         f"{real['false_positives']:,} "
+                         f"({real['false_positive_rate'] * 100:.1f}%)", True))
+
+    abl = read_json(d, "ablation.json")
+    if abl:
+        cfg = {c["config"]: c for c in abl["configurations"]}
+        base, best = cfg.get("---"), cfg.get("NAB")
+        if base and best:
+            metrics.append(m("False positive rate, baseline to best",
+                             f"{base['false_positive_rate'] * 100:.1f}% -> "
+                             f"{best['false_positive_rate'] * 100:.1f}%", True))
+            metrics.append(m("Detection across all 8 configurations",
+                             f"{best['injected_detected']}/{best['injected_total']}, "
+                             "unchanged"))
+        charts.append({
+            "type": "bar",
+            "title": "False positives by matching configuration",
+            "note": "N normalise references, A amount+date fallback, B batch matching. "
+                    "Zero breaks were injected; every bar is spurious work.",
+            "labels": [c["config"] for c in abl["configurations"]],
+            "values": [c["false_positives"] for c in abl["configurations"]],
+        })
+    return metrics, charts
+
+
 EXTRACTORS = {
     "05": extract_05, "06": extract_06, "07": extract_07, "08": extract_08,
     "09": extract_09, "10": extract_10, "11": extract_11, "12": extract_12,
     "13": extract_13,
     "14": extract_14,
     "15": extract_15,
+    "16": extract_16,
 }
 
 

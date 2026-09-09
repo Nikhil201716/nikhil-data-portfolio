@@ -286,6 +286,31 @@ PROJECTS = [
                              "default choice, is 13x worse than the model that matches how the "
                              "data actually arrive.",
     },
+    {
+        "id": "16",
+        "slug": "concord",
+        "dir": "Concord-Reconciliation-Engine",
+        "title": "Concord - Double-Entry Reconciliation Engine",
+        "pitch": "It detects 175 of 175 injected breaks. On a statement file with no breaks "
+                  "at all, it reports 690 of them.",
+        "roles": ["Data Engineering", "Testing & QA"],
+        "topics": ["Double-entry bookkeeping", "Exact decimal arithmetic",
+                    "Constructor-enforced invariants", "JDBC transactions and rollback",
+                    "Revalidation on load", "Reference normalisation",
+                    "Subset-sum batch matching", "Injected-break scoring",
+                    "False-positive measurement", "Full factorial ablation",
+                    "Servlet lifecycle without a container"],
+        "stack": ["Java 17", "SQLite (JDBC)", "javac only - no build tool",
+                   "com.sun.net.httpserver"],
+        "metrics_source": "reports",
+        "headline_finding": "A perfect 175/175 detection score, produced by a test whose "
+                             "injector and engine shared an author, hid a 36.5% false positive "
+                             "rate on a statement file containing no breaks at all. Fixing it "
+                             "as a full factorial showed reference normalisation contributes "
+                             "exactly zero once amount-and-date matching exists, and that the "
+                             "only NP-complete component was failing because of which 24 "
+                             "candidates it was handed, not because of its search.",
+    },
 ]
 
 AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

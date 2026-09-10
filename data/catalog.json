@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-09T16:57:21+00:00",
+  "generated_at": "2026-09-10T18:19:31+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 17,
+  "n_projects": 18,
   "roles": [
     "Data Analysis",
     "Data Engineering",
@@ -11,14 +11,15 @@
   ],
   "role_counts": {
     "Data Analysis": 7,
-    "Data Engineering": 11,
+    "Data Engineering": 12,
     "Machine Learning": 11,
     "AI & LLM Systems": 10,
-    "Testing & QA": 6
+    "Testing & QA": 7
   },
   "all_topics": [
     "(s,S) inventory policy",
     "A/B testing",
+    "AES-128 from FIPS-197",
     "AI-augmented QA",
     "Adversarial red-teaming",
     "Agent trajectories",
@@ -51,6 +52,7 @@
     "Double-entry bookkeeping",
     "DuckDB",
     "ETL orchestration",
+    "Encrypt-then-MAC",
     "Equalized odds",
     "Event time vs processing time",
     "Exact decimal arithmetic",
@@ -64,11 +66,14 @@
     "Flaky-test detection",
     "Forecast reconciliation (MinT)",
     "Full factorial ablation",
+    "GF(2^8) and the derived S-box",
     "Graph fraud detection",
     "GraphRAG",
     "Grounded LLM generation",
     "Guardrailed NL-to-SQL",
     "H3 geospatial",
+    "HMAC and RFC 2104",
+    "Hamming(7,4) FEC",
     "Hash tables with separate chaining",
     "Hash-chained audit trail",
     "Hierarchical forecasting",
@@ -86,6 +91,7 @@
     "LLM extraction",
     "LLM-as-judge calibration",
     "Late-data policy",
+    "Length-extension forgery",
     "Lineage & blast radius",
     "Linear programming",
     "Load testing",
@@ -98,6 +104,7 @@
     "Multi-agent loop",
     "Mutation / injected-bug testing",
     "Mutation testing",
+    "NIST/RFC known-answer testing",
     "NL-to-governed-metrics",
     "OCR",
     "Off-policy evaluation",
@@ -116,6 +123,7 @@
     "PySpark",
     "RAG",
     "RFM segmentation",
+    "RSA, Miller-Rabin, PKCS#1 v1.5",
     "Real-time scoring",
     "Red-teaming",
     "Redis Streams",
@@ -128,6 +136,7 @@
     "Root-cause analysis",
     "Rules engine",
     "SARIMA",
+    "SHA-256 from FIPS 180-4",
     "SHAP",
     "SQL",
     "SQLite star schema",
@@ -140,6 +149,7 @@
     "Servlet lifecycle without a container",
     "Shunting-yard parsing",
     "Skip lists and probabilistic balance",
+    "Sliding-window ARQ with AIMD",
     "Slowly changing dimensions",
     "Sorted arrays and binary search",
     "Star schema + declared grain",
@@ -147,11 +157,13 @@
     "Subset-sum batch matching",
     "Survival analysis",
     "Time-based holdout",
+    "Timing side channels",
     "Training-serving skew",
     "Transformer fine-tuning",
     "Upcoding detection",
     "WSL",
     "Watermarks",
+    "Welch's t-test and Cohen's d",
     "Whisper ASR",
     "dbt",
     "dbt semantic layer",
@@ -180,6 +192,7 @@
     "PySpark 4.2",
     "PyTorch",
     "Python",
+    "Python 3.11+",
     "Redis (Memurai)",
     "Redis Streams",
     "SHAP",
@@ -202,12 +215,13 @@
     "pyttsx3",
     "scikit-learn",
     "sentence-transformers",
+    "stdlib statistics only",
     "transformers"
   ],
-  "n_topics": 140,
-  "n_technologies": 44,
-  "n_metrics_extracted": 88,
-  "n_charts": 24,
+  "n_topics": 152,
+  "n_technologies": 46,
+  "n_metrics_extracted": 93,
+  "n_charts": 25,
   "projects": [
     {
       "id": "01",
@@ -2103,6 +2117,159 @@
         }
       ],
       "n_report_files": 1,
+      "screenshots": []
+    },
+    {
+      "id": "18",
+      "slug": "ironclad",
+      "dir": "Ironclad-Secure-Channel",
+      "title": "Ironclad - Verified Cryptography and a Secure Channel",
+      "pitch": "A MAC comparison that returns on the first wrong byte leaks how many matched. Timing alone recovers 14 of 32 tag bytes with no key; the one-line constant-time fix yields 0.",
+      "roles": [
+        "Testing & QA",
+        "Data Engineering"
+      ],
+      "topics": [
+        "AES-128 from FIPS-197",
+        "SHA-256 from FIPS 180-4",
+        "HMAC and RFC 2104",
+        "RSA, Miller-Rabin, PKCS#1 v1.5",
+        "GF(2^8) and the derived S-box",
+        "Timing side channels",
+        "Welch's t-test and Cohen's d",
+        "Length-extension forgery",
+        "Encrypt-then-MAC",
+        "Hamming(7,4) FEC",
+        "Sliding-window ARQ with AIMD",
+        "NIST/RFC known-answer testing"
+      ],
+      "stack": [
+        "Python 3.11+",
+        "no dependencies",
+        "stdlib statistics only"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "The primitives are written from their specifications and checked against published NIST and RFC vectors - external ground truth, not self-agreement - and then the project attacks its own code. A byte-by-byte timing attack against a naive MAC comparison recovers 14 of 32 tag bytes with no knowledge of the key, degrading with depth as the base comparison time grows; the one-line constant-time comparison, run as a control, recovers 0 of 10 and leaks nothing significant at any position. A length-extension forgery breaks H(key||m) at all 32 guessed key lengths while HMAC stays immune. The timing magnitudes are machine-dependent by nature; the direction - naive leaks and is exploitable, constant-time does neither - reproduces, and is what the channel is built on.",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "MAC bytes recovered by timing, no key",
+          "value": "14 / 32",
+          "highlight": true,
+          "note": "byte-at-a-time, against a naive comparison",
+          "source": "reports"
+        },
+        {
+          "label": "Same attack against the constant-time fix",
+          "value": "0 / 10",
+          "highlight": true,
+          "note": "the one-line fix, used as a control",
+          "source": "reports"
+        },
+        {
+          "label": "H(key\u2016m) forged, key length guessed",
+          "value": "32/32",
+          "highlight": false,
+          "note": "HMAC is immune to the identical attack",
+          "source": "reports"
+        },
+        {
+          "label": "Single-bit line errors corrected (Hamming)",
+          "value": "20,000 / 20,000",
+          "highlight": false,
+          "note": "each one a retransmission that never happened",
+          "source": "reports"
+        },
+        {
+          "label": "Sliding window vs stop-and-wait",
+          "value": "10x fewer rounds",
+          "highlight": false,
+          "note": "200 messages on a clean link",
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "line",
+          "title": "AIMD congestion window over a 15%-loss link",
+          "note": "Additive increase, multiplicative decrease: the window climbs by one per clean round and halves on a loss - TCP's control law in miniature, and every message still arrives.",
+          "x": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32
+          ],
+          "series": [
+            {
+              "name": "congestion window",
+              "y": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21
+              ]
+            }
+          ],
+          "yaxis": "frames in flight"
+        }
+      ],
+      "n_report_files": 4,
       "screenshots": []
     }
   ]

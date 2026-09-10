@@ -340,6 +340,37 @@ PROJECTS = [
                              "ahead. The direction of the finding held both times; the "
                              "magnitude moved by a third.",
     },
+    {
+        "id": "18",
+        "slug": "ironclad",
+        "dir": "Ironclad-Secure-Channel",
+        "title": "Ironclad - Verified Cryptography and a Secure Channel",
+        "pitch": "A MAC comparison that returns on the first wrong byte leaks how many "
+                  "matched. Timing alone recovers 14 of 32 tag bytes with no key; the "
+                  "one-line constant-time fix yields 0.",
+        "roles": ["Testing & QA", "Data Engineering"],
+        "topics": ["AES-128 from FIPS-197", "SHA-256 from FIPS 180-4",
+                    "HMAC and RFC 2104", "RSA, Miller-Rabin, PKCS#1 v1.5",
+                    "GF(2^8) and the derived S-box", "Timing side channels",
+                    "Welch's t-test and Cohen's d", "Length-extension forgery",
+                    "Encrypt-then-MAC", "Hamming(7,4) FEC",
+                    "Sliding-window ARQ with AIMD", "NIST/RFC known-answer testing"],
+        "stack": ["Python 3.11+", "no dependencies", "stdlib statistics only"],
+        "metrics_source": "reports",
+        "headline_finding": "The primitives are written from their specifications and checked "
+                             "against published NIST and RFC vectors - external ground truth, "
+                             "not self-agreement - and then the project attacks its own code. A "
+                             "byte-by-byte timing attack against a naive MAC comparison recovers "
+                             "14 of 32 tag bytes with no knowledge of the key, degrading with "
+                             "depth as the base comparison time grows; the one-line "
+                             "constant-time comparison, run as a control, recovers 0 of 10 and "
+                             "leaks nothing significant at any position. A length-extension "
+                             "forgery breaks H(key||m) at all 32 guessed key lengths while HMAC "
+                             "stays immune. The timing magnitudes are machine-dependent by "
+                             "nature; the direction - naive leaks and is exploitable, "
+                             "constant-time does neither - reproduces, and is what the channel "
+                             "is built on.",
+    },
 ]
 
 AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

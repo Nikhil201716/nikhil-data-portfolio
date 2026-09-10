@@ -737,6 +737,58 @@ def extract_17(d: Path):
     return metrics, charts
 
 
+def extract_18(d: Path):
+    """Ironclad - cryptography from spec, and an attack on it.
+
+    The metric that matters is the pair: bytes recovered by timing against the
+    naive comparison, and against the constant-time fix. Surfacing only the
+    first would be the exploit without the lesson; only the second would be the
+    fix with nothing to fix. The chart is the AIMD window sawtooth, which is the
+    channel's most legible single figure.
+    """
+    metrics, charts = [], []
+
+    rec = read_json(d, "timing_recovery.json")
+    if rec:
+        s = rec["summary"]
+        metrics.append(m("MAC bytes recovered by timing, no key",
+                         f"{s['naive_bytes_recovered']} / {s['naive_of']}", True,
+                         "byte-at-a-time, against a naive comparison"))
+        metrics.append(m("Same attack against the constant-time fix",
+                         f"{s['control_bytes_recovered']} / {s['control_of']}", True,
+                         "the one-line fix, used as a control"))
+
+    lx = read_json(d, "length_extension.json")
+    if lx:
+        metrics.append(m("H(key‖m) forged, key length guessed",
+                         lx["naive_mac_key_lengths_forged"], False,
+                         "HMAC is immune to the identical attack"))
+
+    ch = read_json(d, "channel.json")
+    if ch:
+        fec = ch["forward_error_correction"]
+        metrics.append(m("Single-bit line errors corrected (Hamming)",
+                         f"{fec['single_bit_errors_rescued']:,} / {fec['trials']:,}",
+                         False, "each one a retransmission that never happened"))
+        tp = ch["throughput_vs_stop_and_wait"]
+        metrics.append(m("Sliding window vs stop-and-wait",
+                         f"{tp['speedup']:.0f}x fewer rounds", False,
+                         f"{tp['messages']} messages on a clean link"))
+        aimd = ch["aimd_over_lossy_link"]
+        trace = aimd["cwnd_trace"]
+        charts.append({
+            "type": "line",
+            "title": "AIMD congestion window over a 15%-loss link",
+            "note": "Additive increase, multiplicative decrease: the window "
+                    "climbs by one per clean round and halves on a loss - TCP's "
+                    "control law in miniature, and every message still arrives.",
+            "x": list(range(1, len(trace) + 1)),
+            "series": [{"name": "congestion window", "y": trace}],
+            "yaxis": "frames in flight",
+        })
+    return metrics, charts
+
+
 EXTRACTORS = {
     "05": extract_05, "06": extract_06, "07": extract_07, "08": extract_08,
     "09": extract_09, "10": extract_10, "11": extract_11, "12": extract_12,
@@ -745,6 +797,7 @@ EXTRACTORS = {
     "15": extract_15,
     "16": extract_16,
     "17": extract_17,
+    "18": extract_18,
 }
 
 

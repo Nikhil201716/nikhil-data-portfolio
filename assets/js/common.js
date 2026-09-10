@@ -41,6 +41,7 @@ const BOOKS = [
   ["15", "Aegis Health Plan Intelligence Platform", "15-Aegis-Health-Plan-Platform", "Project-15-Aegis-Health-Plan-Notebook.pdf", 60],
   ["16", "Concord, a Double-Entry Reconciliation Engine", "Concord-Reconciliation-Engine", "Concord-Notebook.pdf", 60],
   ["17", "Sift, a Log Search Engine & Index Benchmark", "Sift-Log-Search-Engine", "Sift-Notebook.pdf", 60],
+  ["18", "Ironclad, Verified Cryptography & a Secure Channel", "Ironclad-Secure-Channel", "Ironclad-Notebook.pdf", 60],
 ].map(([id, title, repo, file, pages]) => ({ id, title, repo, file, pages }));
 
 const BOOK_BY_ID = Object.fromEntries(BOOKS.map((b) => [b.id, b]));

@@ -3,7 +3,7 @@
 const TAGLINES = [
   "student · data & AI",
   "learning by building",
-  "eighteen projects, measured",
+  "nineteen projects, measured",
   "computer science, CHRIST University",
 ];
 

@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-10T18:19:31+00:00",
+  "generated_at": "2026-09-10T20:01:39+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 18,
+  "n_projects": 19,
   "roles": [
     "Data Analysis",
     "Data Engineering",
@@ -11,13 +11,14 @@
   ],
   "role_counts": {
     "Data Analysis": 7,
-    "Data Engineering": 12,
+    "Data Engineering": 13,
     "Machine Learning": 11,
     "AI & LLM Systems": 10,
-    "Testing & QA": 7
+    "Testing & QA": 8
   },
   "all_topics": [
     "(s,S) inventory policy",
+    "A no-wallet local DApp",
     "A/B testing",
     "AES-128 from FIPS-197",
     "AI-augmented QA",
@@ -34,6 +35,7 @@
     "CNN from scratch",
     "Cache locality and dependent loads",
     "Canary deployment",
+    "Checks-Effects-Interactions",
     "Churn modeling",
     "Clock skew",
     "Competing risks",
@@ -54,6 +56,7 @@
     "ETL orchestration",
     "Encrypt-then-MAC",
     "Equalized odds",
+    "Escrow and dispute windows",
     "Event time vs processing time",
     "Exact decimal arithmetic",
     "Exactly-once semantics",
@@ -65,8 +68,10 @@
     "Fault injection",
     "Flaky-test detection",
     "Forecast reconciliation (MinT)",
+    "Front-running and MEV",
     "Full factorial ablation",
     "GF(2^8) and the derived S-box",
+    "Gas measurement",
     "Graph fraud detection",
     "GraphRAG",
     "Grounded LLM generation",
@@ -74,6 +79,7 @@
     "H3 geospatial",
     "HMAC and RFC 2104",
     "Hamming(7,4) FEC",
+    "Hardhat",
     "Hash tables with separate chaining",
     "Hash-chained audit trail",
     "Hierarchical forecasting",
@@ -106,6 +112,7 @@
     "Mutation testing",
     "NIST/RFC known-answer testing",
     "NL-to-governed-metrics",
+    "Nakamoto double-spend probability",
     "OCR",
     "Off-policy evaluation",
     "Offline TTS",
@@ -118,6 +125,7 @@
     "Playwright E2E",
     "Point-in-time feature store",
     "Prompt injection",
+    "Proof-of-work vs proof-of-stake finality",
     "Propensity score matching",
     "Property-based testing",
     "PySpark",
@@ -127,6 +135,7 @@
     "Real-time scoring",
     "Red-teaming",
     "Redis Streams",
+    "Reentrancy and the guard/CEI fix",
     "Reference normalisation",
     "Replay determinism",
     "Requirement traceability",
@@ -151,15 +160,18 @@
     "Skip lists and probabilistic balance",
     "Sliding-window ARQ with AIMD",
     "Slowly changing dimensions",
+    "Solidity 0.8.24",
     "Sorted arrays and binary search",
     "Star schema + declared grain",
     "Streamlit",
     "Subset-sum batch matching",
+    "Supply-chain provenance",
     "Survival analysis",
     "Time-based holdout",
     "Timing side channels",
     "Training-serving skew",
     "Transformer fine-tuning",
+    "Unchecked arithmetic and overflow",
     "Upcoding detection",
     "WSL",
     "Watermarks",
@@ -176,6 +188,7 @@
     "DuckDB",
     "FastAPI",
     "H3",
+    "Hardhat",
     "Hypothesis",
     "Java 17",
     "Locust",
@@ -200,14 +213,17 @@
     "SQLite (JDBC)",
     "SciPy",
     "Scikit-learn",
+    "Solidity 0.8.24",
     "Statsmodels",
     "Streamlit",
     "WSL Ubuntu",
     "com.sun.net.httpserver",
     "dbt",
+    "ethers v6",
     "javac only - no build tool",
     "mutmut",
     "no dependencies",
+    "no testnet - local EVM only",
     "openpyxl",
     "pandas",
     "pdfplumber",
@@ -218,10 +234,10 @@
     "stdlib statistics only",
     "transformers"
   ],
-  "n_topics": 152,
-  "n_technologies": 46,
-  "n_metrics_extracted": 93,
-  "n_charts": 25,
+  "n_topics": 164,
+  "n_technologies": 50,
+  "n_metrics_extracted": 97,
+  "n_charts": 26,
   "projects": [
     {
       "id": "01",
@@ -2270,6 +2286,101 @@
         }
       ],
       "n_report_files": 4,
+      "screenshots": []
+    },
+    {
+      "id": "19",
+      "slug": "attest",
+      "dir": "Attest-Onchain-Provenance",
+      "title": "Attest - On-Chain Provenance and Escrow",
+      "pitch": "A deliberately vulnerable escrow contract and three working exploits that drain it - reentrancy, unchecked-arithmetic over-withdrawal, front-running - then the hardened version where each exploit is run again and stopped.",
+      "roles": [
+        "Testing & QA",
+        "Data Engineering"
+      ],
+      "topics": [
+        "Solidity 0.8.24",
+        "Hardhat",
+        "Reentrancy and the guard/CEI fix",
+        "Unchecked arithmetic and overflow",
+        "Front-running and MEV",
+        "Checks-Effects-Interactions",
+        "Escrow and dispute windows",
+        "Supply-chain provenance",
+        "Gas measurement",
+        "Proof-of-work vs proof-of-stake finality",
+        "Nakamoto double-spend probability",
+        "A no-wallet local DApp"
+      ],
+      "stack": [
+        "Solidity 0.8.24",
+        "Hardhat",
+        "ethers v6",
+        "no testnet - local EVM only"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "Security is demonstrated, not asserted. A supply-chain escrow contract is built twice - vulnerable and hardened - and three exploits are run against both. Reentrancy turns a 1 ETH deposit into an 11 ETH drain of the whole pool; unchecked arithmetic turns 1 wei into ~10 ETH; a seller front-runs the buyer's dispute by paying a higher fee. Each is blocked by the hardened contract - a reentrancy guard with checks-effects-interactions, a bounds check with checked math, and a mandatory dispute window. Gas is measured per operation from real receipts, and a consensus simulator reproduces the Bitcoin whitepaper's double-spend figures exactly (5/5), with a seeded Monte Carlo showing the formula is a mild lower bound. 18 tests, all passing; runs entirely on a local EVM.",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "Reentrancy: deposited vs drained",
+          "value": "1 ETH in, 11 ETH out",
+          "highlight": true,
+          "note": "the whole pool; the hardened contract blocks it",
+          "source": "reports"
+        },
+        {
+          "label": "Over-withdrawal via unchecked math",
+          "value": "1 wei in, ~10 ETH out",
+          "highlight": true,
+          "note": "no bounds check; the hardened contract reverts",
+          "source": "reports"
+        },
+        {
+          "label": "Front-running the dispute",
+          "value": "seller shuts the buyer out",
+          "highlight": false,
+          "note": "no time-lock; the hardened window makes ordering moot",
+          "source": "reports"
+        },
+        {
+          "label": "Bitcoin-whitepaper cross-check",
+          "value": "5/5 exact",
+          "highlight": false,
+          "note": "the double-spend formula, matched to seven decimals",
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "bar",
+          "title": "Gas cost per operation (hardened contract)",
+          "note": "Measured from real transaction receipts at solc 0.8.24, optimizer on. createShipment dominates because it writes fresh storage; the rest update existing slots.",
+          "x": [
+            "createShipment",
+            "recordHandoff",
+            "attestDelivery",
+            "resolveDispute",
+            "withdraw",
+            "raiseDispute"
+          ],
+          "series": [
+            {
+              "name": "gas",
+              "y": [
+                182001,
+                58600,
+                49935,
+                44464,
+                41319,
+                30652
+              ]
+            }
+          ],
+          "yaxis": "gas units"
+        }
+      ],
+      "n_report_files": 3,
       "screenshots": []
     }
   ]

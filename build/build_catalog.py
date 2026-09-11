@@ -789,6 +789,59 @@ def extract_18(d: Path):
     return metrics, charts
 
 
+def extract_19(d: Path):
+    """Attest - on-chain provenance and escrow, exploited then hardened.
+
+    The metrics that carry the project are the three exploits stated as
+    before/after: what each drained from the vulnerable contract, and that the
+    hardened one blocked it. The chart is gas per operation, since on-chain cost
+    is the constraint that decides whether the design is usable at all.
+    """
+    metrics, charts = [], []
+
+    ex = read_json(d, "exploits.json")
+    if ex:
+        r = ex["reentrancy"]["vulnerable"]
+        metrics.append(m("Reentrancy: deposited vs drained",
+                         f"1 ETH in, {r['drained_eth']:.0f} ETH out", True,
+                         "the whole pool; the hardened contract blocks it"))
+        ow = ex["over_withdrawal"]["vulnerable"]
+        metrics.append(m("Over-withdrawal via unchecked math",
+                         f"1 wei in, ~{ow['net_gain_eth']:.0f} ETH out", True,
+                         "no bounds check; the hardened contract reverts"))
+        fr = ex["front_running"]["vulnerable"]
+        metrics.append(m("Front-running the dispute",
+                         "seller shuts the buyer out" if fr["front_run_succeeded"]
+                         else "—", False,
+                         "no time-lock; the hardened window makes ordering moot"))
+
+    con = read_json(d, "consensus.json")
+    if con:
+        checks = con["proof_of_work"]["whitepaper_checks"]
+        passed = sum(1 for c in checks if c["matches"])
+        metrics.append(m("Bitcoin-whitepaper cross-check",
+                         f"{passed}/{len(checks)} exact", False,
+                         "the double-spend formula, matched to seven decimals"))
+
+    gas = read_json(d, "gas.json")
+    if gas:
+        ops = gas["operations"]
+        order = ["createShipment", "recordHandoff", "attestDelivery",
+                 "resolveDispute", "withdraw", "raiseDispute"]
+        present = [o for o in order if o in ops]
+        charts.append({
+            "type": "bar",
+            "title": "Gas cost per operation (hardened contract)",
+            "note": "Measured from real transaction receipts at solc 0.8.24, "
+                    "optimizer on. createShipment dominates because it writes "
+                    "fresh storage; the rest update existing slots.",
+            "x": present,
+            "series": [{"name": "gas", "y": [ops[o] for o in present]}],
+            "yaxis": "gas units",
+        })
+    return metrics, charts
+
+
 EXTRACTORS = {
     "05": extract_05, "06": extract_06, "07": extract_07, "08": extract_08,
     "09": extract_09, "10": extract_10, "11": extract_11, "12": extract_12,
@@ -798,6 +851,7 @@ EXTRACTORS = {
     "16": extract_16,
     "17": extract_17,
     "18": extract_18,
+    "19": extract_19,
 }
 
 

@@ -22,6 +22,7 @@ const RUN_CMD = {
   "16": "./build.sh all",
   "17": "./build.sh all",
   "18": "python run.py --quick",
+  "19": "npx hardhat test",
 };
 
 /* What has to be installed before the command above will run. The Java
@@ -31,6 +32,7 @@ const INSTALL_CMD = {
   "16": null,
   "17": null,
   "18": null,
+  "19": "npm install",
 };
 
 /* Roughly how long a full run takes in a 2-core Codespace, so nobody is
@@ -39,7 +41,7 @@ const RUN_MINUTES = {
   "01": "1-2", "02": "1-2", "03": "3-5", "04": "3-5", "05": "2-4",
   "06": "3-4", "07": "2-4", "08": "4-7", "09": "2-4", "10": "3-6",
   "11": "5-9", "12": "25-35", "13": "4-8", "14": "3-6", "15": "3-6",
-  "16": "1-2", "17": "3-5", "18": "2-3",
+  "16": "1-2", "17": "3-5", "18": "2-3", "19": "2-3",
 };
 
 const NEEDS_OLLAMA = new Set(["05", "06", "07", "08", "09", "10", "11", "13", "14", "15"]);
@@ -208,7 +210,7 @@ function render(p, cat) {
         <div class="kicker">Keep going</div>
         <h3 class="h5 mt-1 mb-0">Other projects</h3>
       </div>
-      <a class="btn-x" href="projects.html">All 18 →</a>
+      <a class="btn-x" href="projects.html">All 19 →</a>
     </div>
     <div class="row g-3 g-lg-4 mt-1" id="more"></div>
   </div></section>`;

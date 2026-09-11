@@ -371,6 +371,36 @@ PROJECTS = [
                              "constant-time does neither - reproduces, and is what the channel "
                              "is built on.",
     },
+    {
+        "id": "19",
+        "slug": "attest",
+        "dir": "Attest-Onchain-Provenance",
+        "title": "Attest - On-Chain Provenance and Escrow",
+        "pitch": "A deliberately vulnerable escrow contract and three working exploits that "
+                  "drain it - reentrancy, unchecked-arithmetic over-withdrawal, front-running "
+                  "- then the hardened version where each exploit is run again and stopped.",
+        "roles": ["Testing & QA", "Data Engineering"],
+        "topics": ["Solidity 0.8.24", "Hardhat", "Reentrancy and the guard/CEI fix",
+                    "Unchecked arithmetic and overflow", "Front-running and MEV",
+                    "Checks-Effects-Interactions", "Escrow and dispute windows",
+                    "Supply-chain provenance", "Gas measurement",
+                    "Proof-of-work vs proof-of-stake finality",
+                    "Nakamoto double-spend probability", "A no-wallet local DApp"],
+        "stack": ["Solidity 0.8.24", "Hardhat", "ethers v6", "no testnet - local EVM only"],
+        "metrics_source": "reports",
+        "headline_finding": "Security is demonstrated, not asserted. A supply-chain escrow "
+                             "contract is built twice - vulnerable and hardened - and three "
+                             "exploits are run against both. Reentrancy turns a 1 ETH deposit "
+                             "into an 11 ETH drain of the whole pool; unchecked arithmetic turns "
+                             "1 wei into ~10 ETH; a seller front-runs the buyer's dispute by "
+                             "paying a higher fee. Each is blocked by the hardened contract - a "
+                             "reentrancy guard with checks-effects-interactions, a bounds check "
+                             "with checked math, and a mandatory dispute window. Gas is measured "
+                             "per operation from real receipts, and a consensus simulator "
+                             "reproduces the Bitcoin whitepaper's double-spend figures exactly "
+                             "(5/5), with a seeded Monte Carlo showing the formula is a mild "
+                             "lower bound. 18 tests, all passing; runs entirely on a local EVM.",
+    },
 ]
 
 AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

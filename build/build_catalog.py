@@ -842,6 +842,56 @@ def extract_19(d: Path):
     return metrics, charts
 
 
+def extract_20(d: Path):
+    """Timeslice - a measurable operating-systems laboratory.
+
+    The headline metric and the chart are both Belady's anomaly, because a
+    fault curve that goes UP as memory grows is the most striking single thing
+    in the lab. The rest surface the scheduling and deadlock findings.
+    """
+    metrics, charts = [], []
+
+    pg = read_json(d, "paging.json")
+    if pg:
+        anom = pg["belady_classic"]["anomaly"]
+        metrics.append(m("Belady's anomaly (FIFO)",
+                         f"{anom['faults_from']} -> {anom['faults_to']} faults", True,
+                         f"more memory ({anom['frames_from']} -> {anom['frames_to']} frames), "
+                         "more faults"))
+        srch = pg["belady_search"]
+        metrics.append(m("FIFO anomalies vs LRU/Optimal",
+                         f"{srch['strings_with_fifo_anomaly']} vs "
+                         f"{srch['lru_anomalies']}/{srch['optimal_anomalies']}", False,
+                         f"over {srch['trials']:,} random strings - the stack property"))
+        # distance from the unbeatable Optimal at 5 frames, high locality
+        row = pg["optimal_bound"]["locality_0.8"]["5"]["faults"]
+        metrics.append(m("LRU's gap to Optimal (5 frames)",
+                         f"+{row['LRU'] - row['Optimal']} faults", False,
+                         f"Optimal {row['Optimal']}, LRU {row['LRU']} - the bound made a number"))
+        curve = pg["belady_classic"]["fifo_faults_by_frames"]
+        charts.append({
+            "type": "line",
+            "title": "Belady's anomaly: FIFO page faults versus frames",
+            "note": "More frames should mean fewer faults. FIFO breaks that - "
+                    "the climb from 3 to 4 frames is the anomaly. LRU and "
+                    "Optimal never do, because they have the stack property.",
+            "x": [int(k) for k in curve.keys()],
+            "series": [{"name": "FIFO faults", "y": list(curve.values())}],
+            "yaxis": "page faults",
+        })
+
+    co = read_json(d, "concurrency.json")
+    if co:
+        naive = co["dining_philosophers"]["naive"]
+        ordered = co["dining_philosophers"]["ordered"]
+        metrics.append(m("Dining philosophers: naive vs ordered",
+                         f"{naive['deadlocked']}/{naive['runs']} vs "
+                         f"{ordered['deadlocked']}/{ordered['runs']} deadlock", False,
+                         "a live wait-for-graph detector catches the naive one"))
+
+    return metrics, charts
+
+
 EXTRACTORS = {
     "05": extract_05, "06": extract_06, "07": extract_07, "08": extract_08,
     "09": extract_09, "10": extract_10, "11": extract_11, "12": extract_12,
@@ -852,6 +902,7 @@ EXTRACTORS = {
     "17": extract_17,
     "18": extract_18,
     "19": extract_19,
+    "20": extract_20,
 }
 
 

@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-10T20:01:39+00:00",
+  "generated_at": "2026-09-11T17:52:17+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 19,
+  "n_projects": 20,
   "roles": [
     "Data Analysis",
     "Data Engineering",
@@ -11,10 +11,10 @@
   ],
   "role_counts": {
     "Data Analysis": 7,
-    "Data Engineering": 13,
+    "Data Engineering": 14,
     "Machine Learning": 11,
     "AI & LLM Systems": 10,
-    "Testing & QA": 8
+    "Testing & QA": 9
   },
   "all_topics": [
     "(s,S) inventory policy",
@@ -29,10 +29,12 @@
     "At-least-once delivery",
     "B+ trees with leaf chaining",
     "Bayesian inference",
+    "Belady's anomaly",
     "Bootstrap CIs",
     "Break-even analysis",
     "CDC",
     "CNN from scratch",
+    "CPU scheduling (FCFS/SJF/SRTF/RR/MLFQ)",
     "Cache locality and dependent loads",
     "Canary deployment",
     "Checks-Effects-Interactions",
@@ -47,7 +49,9 @@
     "Data contracts",
     "Data quality SLAs",
     "Data quality gates",
+    "Deadlock detection (wait-for graph)",
     "Difference-in-differences",
+    "Dining philosophers",
     "Discrete-time hazard",
     "Disparate impact",
     "Document AI",
@@ -66,6 +70,7 @@
     "False-positive measurement",
     "FastAPI",
     "Fault injection",
+    "File allocation and fragmentation",
     "Flaky-test detection",
     "Forecast reconciliation (MinT)",
     "Front-running and MEV",
@@ -92,6 +97,7 @@
     "Inverted indexes and posting-list merges",
     "JDBC transactions and rollback",
     "JVM microbenchmarking traps",
+    "Jain's fairness index",
     "K-Means",
     "Knowledge graph",
     "LLM extraction",
@@ -116,14 +122,17 @@
     "OCR",
     "Off-policy evaluation",
     "Offline TTS",
+    "Optimal as an unbeatable bound",
     "Oracle-based correctness testing",
     "PII detection",
     "PII governance",
     "PSI drift",
+    "Page replacement (FIFO/LRU/Clock/Optimal)",
     "Pandera",
     "Playwright",
     "Playwright E2E",
     "Point-in-time feature store",
+    "Producer/consumer",
     "Prompt injection",
     "Proof-of-work vs proof-of-stake finality",
     "Propensity score matching",
@@ -167,6 +176,7 @@
     "Subset-sum batch matching",
     "Supply-chain provenance",
     "Survival analysis",
+    "The stack property",
     "Time-based holdout",
     "Timing side channels",
     "Training-serving skew",
@@ -179,6 +189,8 @@
     "Whisper ASR",
     "dbt",
     "dbt semantic layer",
+    "fork/exec/pipe and Unix sockets",
+    "getrusage kernel accounting",
     "int8 quantization",
     "k-anonymity"
   ],
@@ -225,6 +237,7 @@
     "no dependencies",
     "no testnet - local EVM only",
     "openpyxl",
+    "os.fork (Linux/WSL)",
     "pandas",
     "pdfplumber",
     "pytest",
@@ -232,12 +245,13 @@
     "scikit-learn",
     "sentence-transformers",
     "stdlib statistics only",
+    "threading",
     "transformers"
   ],
-  "n_topics": 164,
-  "n_technologies": 50,
-  "n_metrics_extracted": 97,
-  "n_charts": 26,
+  "n_topics": 176,
+  "n_technologies": 52,
+  "n_metrics_extracted": 101,
+  "n_charts": 27,
   "projects": [
     {
       "id": "01",
@@ -2381,6 +2395,99 @@
         }
       ],
       "n_report_files": 3,
+      "screenshots": []
+    },
+    {
+      "id": "20",
+      "slug": "timeslice",
+      "dir": "Timeslice-OS-Lab",
+      "title": "Timeslice - A Measurable Operating-Systems Laboratory",
+      "pitch": "Belady's anomaly, demonstrated not recited: FIFO page replacement faults MORE with more memory - 9 on three frames, 10 on four - while LRU and Optimal never do, across 5,000 random strings.",
+      "roles": [
+        "Testing & QA",
+        "Data Engineering"
+      ],
+      "topics": [
+        "CPU scheduling (FCFS/SJF/SRTF/RR/MLFQ)",
+        "Page replacement (FIFO/LRU/Clock/Optimal)",
+        "Belady's anomaly",
+        "The stack property",
+        "Optimal as an unbeatable bound",
+        "Deadlock detection (wait-for graph)",
+        "Dining philosophers",
+        "Producer/consumer",
+        "File allocation and fragmentation",
+        "fork/exec/pipe and Unix sockets",
+        "getrusage kernel accounting",
+        "Jain's fairness index"
+      ],
+      "stack": [
+        "Python 3.11+",
+        "no dependencies",
+        "threading",
+        "os.fork (Linux/WSL)"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "Five operating-systems areas, each a comparison of algorithms on identical seeded workloads, with the textbook claims measured rather than recited. Belady's anomaly is reproduced (FIFO faults 9 then 10 as frames go 3 then 4) and found in 13 of 5,000 random strings for FIFO and 0 for LRU and Optimal - the stack property. SRTF minimises average waiting time but has the worst fairness, because it starves long jobs to rush short ones. A live wait-for graph detector catches the dining philosophers deadlocking (10 of 10 naive runs) while ordered acquisition never does (0 of 10). Contiguous file allocation fails on a fragmented disk with free space to spare. And a genuinely native component - a fork/exec/pipe shell, a Unix-domain socket, kernel resource accounting - runs on real syscalls. Pure standard library; 61 tests pass.",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "Belady's anomaly (FIFO)",
+          "value": "9 -> 10 faults",
+          "highlight": true,
+          "note": "more memory (3 -> 4 frames), more faults",
+          "source": "reports"
+        },
+        {
+          "label": "FIFO anomalies vs LRU/Optimal",
+          "value": "13 vs 0/0",
+          "highlight": false,
+          "note": "over 5,000 random strings - the stack property",
+          "source": "reports"
+        },
+        {
+          "label": "LRU's gap to Optimal (5 frames)",
+          "value": "+85 faults",
+          "highlight": false,
+          "note": "Optimal 150, LRU 235 - the bound made a number",
+          "source": "reports"
+        },
+        {
+          "label": "Dining philosophers: naive vs ordered",
+          "value": "10/10 vs 0/10 deadlock",
+          "highlight": false,
+          "note": "a live wait-for-graph detector catches the naive one",
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "line",
+          "title": "Belady's anomaly: FIFO page faults versus frames",
+          "note": "More frames should mean fewer faults. FIFO breaks that - the climb from 3 to 4 frames is the anomaly. LRU and Optimal never do, because they have the stack property.",
+          "x": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "series": [
+            {
+              "name": "FIFO faults",
+              "y": [
+                12,
+                12,
+                9,
+                10,
+                5
+              ]
+            }
+          ],
+          "yaxis": "page faults"
+        }
+      ],
+      "n_report_files": 5,
       "screenshots": []
     }
   ]

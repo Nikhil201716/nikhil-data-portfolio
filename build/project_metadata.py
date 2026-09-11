@@ -401,6 +401,38 @@ PROJECTS = [
                              "(5/5), with a seeded Monte Carlo showing the formula is a mild "
                              "lower bound. 18 tests, all passing; runs entirely on a local EVM.",
     },
+    {
+        "id": "20",
+        "slug": "timeslice",
+        "dir": "Timeslice-OS-Lab",
+        "title": "Timeslice - A Measurable Operating-Systems Laboratory",
+        "pitch": "Belady's anomaly, demonstrated not recited: FIFO page replacement faults "
+                  "MORE with more memory - 9 on three frames, 10 on four - while LRU and "
+                  "Optimal never do, across 5,000 random strings.",
+        "roles": ["Testing & QA", "Data Engineering"],
+        "topics": ["CPU scheduling (FCFS/SJF/SRTF/RR/MLFQ)",
+                    "Page replacement (FIFO/LRU/Clock/Optimal)", "Belady's anomaly",
+                    "The stack property", "Optimal as an unbeatable bound",
+                    "Deadlock detection (wait-for graph)", "Dining philosophers",
+                    "Producer/consumer", "File allocation and fragmentation",
+                    "fork/exec/pipe and Unix sockets", "getrusage kernel accounting",
+                    "Jain's fairness index"],
+        "stack": ["Python 3.11+", "no dependencies", "threading", "os.fork (Linux/WSL)"],
+        "metrics_source": "reports",
+        "headline_finding": "Five operating-systems areas, each a comparison of algorithms on "
+                             "identical seeded workloads, with the textbook claims measured "
+                             "rather than recited. Belady's anomaly is reproduced (FIFO faults "
+                             "9 then 10 as frames go 3 then 4) and found in 13 of 5,000 random "
+                             "strings for FIFO and 0 for LRU and Optimal - the stack property. "
+                             "SRTF minimises average waiting time but has the worst fairness, "
+                             "because it starves long jobs to rush short ones. A live wait-for "
+                             "graph detector catches the dining philosophers deadlocking (10 of "
+                             "10 naive runs) while ordered acquisition never does (0 of 10). "
+                             "Contiguous file allocation fails on a fragmented disk with free "
+                             "space to spare. And a genuinely native component - a fork/exec/pipe "
+                             "shell, a Unix-domain socket, kernel resource accounting - runs on "
+                             "real syscalls. Pure standard library; 61 tests pass.",
+    },
 ]
 
 AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

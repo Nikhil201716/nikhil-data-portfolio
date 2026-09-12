@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-11T17:52:17+00:00",
+  "generated_at": "2026-09-12T16:27:42+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 20,
+  "n_projects": 21,
   "roles": [
     "Data Analysis",
     "Data Engineering",
@@ -12,14 +12,15 @@
   "role_counts": {
     "Data Analysis": 7,
     "Data Engineering": 14,
-    "Machine Learning": 11,
+    "Machine Learning": 12,
     "AI & LLM Systems": 10,
-    "Testing & QA": 9
+    "Testing & QA": 10
   },
   "all_topics": [
     "(s,S) inventory policy",
     "A no-wallet local DApp",
     "A/B testing",
+    "ADALINE / delta rule",
     "AES-128 from FIPS-197",
     "AI-augmented QA",
     "Adversarial red-teaming",
@@ -37,6 +38,8 @@
     "CPU scheduling (FCFS/SJF/SRTF/RR/MLFQ)",
     "Cache locality and dependent loads",
     "Canary deployment",
+    "Capacity cliff (0.138 N)",
+    "Centroid defuzzification",
     "Checks-Effects-Interactions",
     "Churn modeling",
     "Clock skew",
@@ -58,6 +61,7 @@
     "Double-entry bookkeeping",
     "DuckDB",
     "ETL orchestration",
+    "Elitism",
     "Encrypt-then-MAC",
     "Equalized odds",
     "Escrow and dispute windows",
@@ -65,6 +69,7 @@
     "Exact decimal arithmetic",
     "Exactly-once semantics",
     "Excel reporting",
+    "Exhaustive grid search baseline",
     "Explainability",
     "Fairness audit",
     "False-positive measurement",
@@ -77,8 +82,10 @@
     "Full factorial ablation",
     "GF(2^8) and the derived S-box",
     "Gas measurement",
+    "Genetic algorithm",
     "Graph fraud detection",
     "GraphRAG",
+    "Green-wave progression",
     "Grounded LLM generation",
     "Guardrailed NL-to-SQL",
     "H3 geospatial",
@@ -87,8 +94,10 @@
     "Hardhat",
     "Hash tables with separate chaining",
     "Hash-chained audit trail",
+    "Hebbian storage",
     "Hierarchical forecasting",
     "Holt-Winters",
+    "Hopfield associative memory",
     "Hybrid retrieval",
     "Idempotency",
     "Idempotent sinks",
@@ -108,6 +117,7 @@
     "Linear programming",
     "Load testing",
     "Local LLM (Ollama)",
+    "Mamdani fuzzy inference",
     "Metamorphic testing",
     "Metric regression testing",
     "Model calibration",
@@ -129,6 +139,7 @@
     "PSI drift",
     "Page replacement (FIFO/LRU/Clock/Optimal)",
     "Pandera",
+    "Perceptron",
     "Playwright",
     "Playwright E2E",
     "Point-in-time feature store",
@@ -172,16 +183,21 @@
     "Solidity 0.8.24",
     "Sorted arrays and binary search",
     "Star schema + declared grain",
+    "Store-and-forward traffic model",
     "Streamlit",
     "Subset-sum batch matching",
     "Supply-chain provenance",
     "Survival analysis",
+    "The XOR wall",
     "The stack property",
     "Time-based holdout",
     "Timing side channels",
+    "Tournament selection",
     "Training-serving skew",
     "Transformer fine-tuning",
+    "Triangular/shoulder membership",
     "Unchecked arithmetic and overflow",
+    "Uniform crossover",
     "Upcoding detection",
     "WSL",
     "Watermarks",
@@ -206,6 +222,7 @@
     "Locust",
     "NetworkX",
     "NumPy",
+    "NumPy only",
     "Ollama",
     "Ollama qwen2.5:0.5b",
     "OpenAI Whisper",
@@ -232,6 +249,7 @@
     "com.sun.net.httpserver",
     "dbt",
     "ethers v6",
+    "from scratch",
     "javac only - no build tool",
     "mutmut",
     "no dependencies",
@@ -248,10 +266,10 @@
     "threading",
     "transformers"
   ],
-  "n_topics": 176,
-  "n_technologies": 52,
-  "n_metrics_extracted": 101,
-  "n_charts": 27,
+  "n_topics": 192,
+  "n_technologies": 54,
+  "n_metrics_extracted": 106,
+  "n_charts": 28,
   "projects": [
     {
       "id": "01",
@@ -2488,6 +2506,111 @@
         }
       ],
       "n_report_files": 5,
+      "screenshots": []
+    },
+    {
+      "id": "21",
+      "slug": "cadence",
+      "dir": "Cadence-Traffic-Control",
+      "title": "Cadence - Soft-Computing Traffic Signal Control",
+      "pitch": "Does a genetic algorithm beat exhaustive grid search at coordinating traffic signals? On a four-intersection arterial it finds the SAME optimum in 177 simulations against the grid's 1,728 - a tie on quality, a win on time that widens with the network.",
+      "roles": [
+        "Machine Learning",
+        "Testing & QA"
+      ],
+      "topics": [
+        "Mamdani fuzzy inference",
+        "Triangular/shoulder membership",
+        "Centroid defuzzification",
+        "Genetic algorithm",
+        "Tournament selection",
+        "Uniform crossover",
+        "Elitism",
+        "Exhaustive grid search baseline",
+        "Hopfield associative memory",
+        "Hebbian storage",
+        "Capacity cliff (0.138 N)",
+        "Perceptron",
+        "ADALINE / delta rule",
+        "The XOR wall",
+        "Store-and-forward traffic model",
+        "Green-wave progression"
+      ],
+      "stack": [
+        "Python 3.11+",
+        "NumPy only",
+        "from scratch"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "Five soft-computing methods, each written from scratch on NumPy and measured against an honest baseline on a deterministic traffic simulator. The genetic algorithm reaches grid search's exact offset optimum (a green wave, delay 24,480) in 177 simulations versus 1,728 - it does not beat the baseline on quality, it ties, and the README says so; the win is on time-to-solution and it widens with the network (at six intersections the grid would be 248,832 simulations, the GA used 825). A Mamdani fuzzy controller cuts delay 58% against the BEST-tuned fixed split (the green was swept so the baseline is fair, not a strawman). A Hopfield network recovers corrupted detector readings until the capacity cliff, measured at load 0.156 on 64 neurons against the 0.138 N theory. And a perceptron converges in 4 epochs on separable data while neither it nor ADALINE crosses XOR - the 1969 result reproduced, not recounted. NumPy only; 31 tests pass.",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "GA vs grid search (4 intersections)",
+          "value": "177 vs 1728 sims",
+          "highlight": true,
+          "note": "same optimum (delay 24,480), 90% fewer simulations",
+          "source": "reports"
+        },
+        {
+          "label": "GA scaling win (6 intersections)",
+          "value": "825 vs 248,832 sims",
+          "highlight": false,
+          "note": "where the exhaustive grid becomes intractable",
+          "source": "reports"
+        },
+        {
+          "label": "Fuzzy vs best-tuned fixed split",
+          "value": "58% less delay",
+          "highlight": true,
+          "note": "fuzzy 3,917 vs best fixed 9,392 veh*s (green swept for fairness)",
+          "source": "reports"
+        },
+        {
+          "label": "Hopfield capacity cliff",
+          "value": "load 0.156",
+          "highlight": false,
+          "note": "measured on 64 neurons vs the 0.138 N theory",
+          "source": "reports"
+        },
+        {
+          "label": "Perceptron, and the XOR wall",
+          "value": "4 epochs vs 25% on XOR",
+          "highlight": false,
+          "note": "converges on separable data; neither it nor ADALINE crosses XOR - the 1969 result, reproduced",
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "bar",
+          "title": "Simulations to solve: genetic algorithm vs exhaustive grid",
+          "note": "A tie on quality; the win is on time, and it widens with the network. At six intersections the grid would be 248,832 simulations; the GA used 825.",
+          "x": [
+            "4 intersections",
+            "6 intersections"
+          ],
+          "series": [
+            {
+              "name": "grid search",
+              "y": [
+                1728,
+                248832
+              ]
+            },
+            {
+              "name": "genetic algorithm",
+              "y": [
+                177,
+                825
+              ]
+            }
+          ],
+          "yaxis": "simulations (log scale)",
+          "log_y": true
+        }
+      ],
+      "n_report_files": 4,
       "screenshots": []
     }
   ]

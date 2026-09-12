@@ -433,6 +433,41 @@ PROJECTS = [
                              "shell, a Unix-domain socket, kernel resource accounting - runs on "
                              "real syscalls. Pure standard library; 61 tests pass.",
     },
+    {
+        "id": "21",
+        "slug": "cadence",
+        "dir": "Cadence-Traffic-Control",
+        "title": "Cadence - Soft-Computing Traffic Signal Control",
+        "pitch": "Does a genetic algorithm beat exhaustive grid search at coordinating "
+                  "traffic signals? On a four-intersection arterial it finds the SAME "
+                  "optimum in 177 simulations against the grid's 1,728 - a tie on quality, "
+                  "a win on time that widens with the network.",
+        "roles": ["Machine Learning", "Testing & QA"],
+        "topics": ["Mamdani fuzzy inference", "Triangular/shoulder membership",
+                    "Centroid defuzzification", "Genetic algorithm",
+                    "Tournament selection", "Uniform crossover", "Elitism",
+                    "Exhaustive grid search baseline", "Hopfield associative memory",
+                    "Hebbian storage", "Capacity cliff (0.138 N)", "Perceptron",
+                    "ADALINE / delta rule", "The XOR wall",
+                    "Store-and-forward traffic model", "Green-wave progression"],
+        "stack": ["Python 3.11+", "NumPy only", "from scratch"],
+        "metrics_source": "reports",
+        "headline_finding": "Five soft-computing methods, each written from scratch on NumPy "
+                             "and measured against an honest baseline on a deterministic traffic "
+                             "simulator. The genetic algorithm reaches grid search's exact "
+                             "offset optimum (a green wave, delay 24,480) in 177 simulations "
+                             "versus 1,728 - it does not beat the baseline on quality, it ties, "
+                             "and the README says so; the win is on time-to-solution and it "
+                             "widens with the network (at six intersections the grid would be "
+                             "248,832 simulations, the GA used 825). A Mamdani fuzzy controller "
+                             "cuts delay 58% against the BEST-tuned fixed split (the green was "
+                             "swept so the baseline is fair, not a strawman). A Hopfield network "
+                             "recovers corrupted detector readings until the capacity cliff, "
+                             "measured at load 0.156 on 64 neurons against the 0.138 N theory. "
+                             "And a perceptron converges in 4 epochs on separable data while "
+                             "neither it nor ADALINE crosses XOR - the 1969 result reproduced, "
+                             "not recounted. NumPy only; 31 tests pass.",
+    },
 ]
 
 AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

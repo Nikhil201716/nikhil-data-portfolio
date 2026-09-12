@@ -892,6 +892,73 @@ def extract_20(d: Path):
     return metrics, charts
 
 
+def extract_21(d: Path):
+    """Cadence - soft-computing traffic signal control.
+
+    The headline is the honest GA-versus-exhaustive comparison: a tie on
+    quality, a win on time that widens with the network. The chart makes the
+    grid's combinatorial explosion visible against the GA's flat cost.
+    """
+    metrics, charts = [], []
+
+    off = read_json(d, "offsets.json")
+    if off:
+        grid = off["grid_search"]
+        ga = off["genetic_algorithm"]
+        sc = off["scaling"]
+        metrics.append(m("GA vs grid search (4 intersections)",
+                         f"{ga['evaluations']} vs {grid['evaluations']} sims", True,
+                         f"same optimum (delay {ga['best_delay']:,.0f}), "
+                         f"{off['ga_evaluation_saving'] * 100:.0f}% fewer simulations"))
+        metrics.append(m("GA scaling win (6 intersections)",
+                         f"{sc['ga_evaluations_used']} vs "
+                         f"{sc['grid_points_that_would_be_needed']:,} sims", False,
+                         "where the exhaustive grid becomes intractable"))
+        charts.append({
+            "type": "bar",
+            "title": "Simulations to solve: genetic algorithm vs exhaustive grid",
+            "note": "A tie on quality; the win is on time, and it widens with "
+                    "the network. At six intersections the grid would be "
+                    "248,832 simulations; the GA used 825.",
+            "x": ["4 intersections", "6 intersections"],
+            "series": [
+                {"name": "grid search",
+                 "y": [grid["evaluations"], sc["grid_points_that_would_be_needed"]]},
+                {"name": "genetic algorithm",
+                 "y": [ga["evaluations"], sc["ga_evaluations_used"]]},
+            ],
+            "yaxis": "simulations (log scale)",
+            "log_y": True,
+        })
+
+    fz = read_json(d, "fuzzy.json")
+    if fz:
+        metrics.append(m("Fuzzy vs best-tuned fixed split",
+                         f"{fz['delay_reduction_vs_best_fixed'] * 100:.0f}% less delay",
+                         True,
+                         f"fuzzy {fz['fuzzy']['total_delay']:,.0f} vs best fixed "
+                         f"{fz['best_fixed_delay']:,.0f} veh*s (green swept for fairness)"))
+
+    hop = read_json(d, "hopfield.json")
+    if hop:
+        metrics.append(m("Hopfield capacity cliff",
+                         f"load {hop['measured_capacity_cliff_ratio']}", False,
+                         f"measured on {hop['network_size']} neurons vs the "
+                         f"{hop['theoretical_capacity_ratio']} N theory"))
+
+    nz = read_json(d, "neurons.json")
+    if nz:
+        sep = nz["linearly_separable"]["perceptron"]
+        xor = nz["xor"]
+        metrics.append(m("Perceptron, and the XOR wall",
+                         f"{sep['converged_epoch']} epochs vs "
+                         f"{xor['perceptron_accuracy']:.0%} on XOR", False,
+                         "converges on separable data; neither it nor ADALINE "
+                         "crosses XOR - the 1969 result, reproduced"))
+
+    return metrics, charts
+
+
 EXTRACTORS = {
     "05": extract_05, "06": extract_06, "07": extract_07, "08": extract_08,
     "09": extract_09, "10": extract_10, "11": extract_11, "12": extract_12,
@@ -903,6 +970,7 @@ EXTRACTORS = {
     "18": extract_18,
     "19": extract_19,
     "20": extract_20,
+    "21": extract_21,
 }
 
 

@@ -959,6 +959,67 @@ def extract_21(d: Path):
     return metrics, charts
 
 
+def extract_22(d: Path):
+    """Turnstile - event ticketing under contention.
+
+    The headline is that the same reservation logic is correct in a monolith
+    and broken across services. The chart makes oversell scale with contention
+    for the naive services while the atomic reserve holds the hardened ones flat
+    at zero.
+    """
+    metrics, charts = [], []
+
+    rel = read_json(d, "reliability.json")
+    if rel:
+        mono, naive, hard = rel["monolith"], rel["naive"], rel["hardened"]
+        metrics.append(m("Oversold seats: monolith vs naive vs hardened",
+                         f"{mono['oversold_seats']} vs {naive['oversold_seats']} vs "
+                         f"{hard['oversold_seats']}", True,
+                         "same check-then-act logic; the distribution is the bug, not the algorithm"))
+        metrics.append(m("Naive overcharge",
+                         f"₹{naive['overcharged_paise'] // 100:,} on "
+                         f"₹{naive['correct_charged_paise'] // 100:,} of real sales",
+                         False,
+                         f"{naive['double_charges']} double charges, "
+                         f"{naive['ghost_charges']} charges with no ticket"))
+        metrics.append(m("Hardened, same fault load",
+                         f"{hard['oversold_seats']} oversold / {hard['double_charges']} double / "
+                         f"{hard['ghost_charges']} ghost", False,
+                         f"matches the monolith on safety; honest cost is "
+                         f"{hard['lost_seats']} sales lost to message drops"))
+
+    dfn = read_json(d, "defences.json")
+    if dfn:
+        rows = {c["defences"]: c for c in dfn["cases"]}
+        none = rows["none"]
+        full = rows["atomic_hold+idempotency+compensation"]
+        metrics.append(m("Each defence removes one failure class",
+                         f"{none['oversold_seats'] + none['double_charges'] + none['ghost_charges']}"
+                         f" → 0 safety violations", False,
+                         "atomic reserve kills oversell, idempotency kills double "
+                         "charges, saga compensation kills ghost charges"))
+
+    sc = read_json(d, "scaling.json")
+    if sc:
+        charts.append({
+            "type": "line",
+            "title": "Oversold seats versus contention: naive versus hardened",
+            "note": "Oversell is a concurrency bug: with one buyer per seat even "
+                    "the naive services oversell nothing; as the crowd grows they "
+                    "oversell every seat. The atomic compare-and-set reserve holds "
+                    "the hardened services flat at zero throughout.",
+            "x": [str(b) for b in sc["buyers_per_seat"]],
+            "series": [
+                {"name": "naive", "y": sc["naive_oversold_seats"]},
+                {"name": "hardened", "y": sc["hardened_oversold_seats"]},
+            ],
+            "yaxis": "oversold seats (of 20)",
+            "xaxis": "buyers per seat",
+        })
+
+    return metrics, charts
+
+
 EXTRACTORS = {
     "05": extract_05, "06": extract_06, "07": extract_07, "08": extract_08,
     "09": extract_09, "10": extract_10, "11": extract_11, "12": extract_12,
@@ -971,6 +1032,7 @@ EXTRACTORS = {
     "19": extract_19,
     "20": extract_20,
     "21": extract_21,
+    "22": extract_22,
 }
 
 

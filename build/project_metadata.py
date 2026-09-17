@@ -468,6 +468,47 @@ PROJECTS = [
                              "neither it nor ADALINE crosses XOR - the 1969 result reproduced, "
                              "not recounted. NumPy only; 31 tests pass.",
     },
+    {
+        "id": "22",
+        "slug": "turnstile",
+        "dir": "Turnstile-Event-Ticketing",
+        "title": "Turnstile - Event Ticketing Under Contention",
+        "pitch": "The SAME reservation logic sells every seat once in a monolith and "
+                  "oversells 15 of 20 the moment you split it across four microservices - "
+                  "overcharging ₹16,000 on ₹10,000 of real sales. The bug is the "
+                  "distribution, not the algorithm.",
+        "roles": ["Testing & QA", "Data Engineering"],
+        "topics": ["Microservices", "Distributed transactions", "Saga pattern",
+                    "Event sourcing", "CQRS", "Idempotency keys",
+                    "Compare-and-set reservation", "At-least-once delivery",
+                    "Message reordering", "Partial failure & compensation",
+                    "Fault injection", "Deterministic simulation",
+                    "Spring Boot", "Apache Kafka", "Docker Compose",
+                    "Safety vs liveness"],
+        "stack": ["Java 17", "no dependencies (measured core)",
+                   "Spring Boot + Kafka reference stack"],
+        "metrics_source": "reports",
+        "headline_finding": "Four services - inventory, order, payment, notification - "
+                             "coordinating a purchase saga with event sourcing and CQRS, "
+                             "measured against a known answer key under a deterministic, seeded "
+                             "fault bus that duplicates, drops and reorders messages. The "
+                             "headline is an honest indictment of distribution, not of "
+                             "microservices: the identical check-then-act reservation sells "
+                             "every seat exactly once in a monolith and oversells 15 of 20 "
+                             "seats across four services, overcharging ₹16,000 on ₹10,000 "
+                             "of real sales with 9 double charges and 2 ghost charges. Three "
+                             "defences each remove exactly one failure class - an atomic "
+                             "compare-and-set reserve kills oversell, idempotency keys kill "
+                             "double charges, saga compensation kills ghost charges - and "
+                             "together they match the monolith on every safety measure. The "
+                             "unflattering parts are kept: hardening guarantees safety but not "
+                             "liveness (2 of 20 sales lost to message drops that more retries "
+                             "would recover), and the naive system oversells MORE with a perfect "
+                             "network (20/20) than with faults (15/20), because dropped messages "
+                             "accidentally prevent some double-confirmations. 45 tests pass; a "
+                             "real Spring Boot + Kafka + Docker Compose stack implements the same "
+                             "architecture (not required to reproduce any finding).",
+    },
 ]
 
 AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

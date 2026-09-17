@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-12T16:27:42+00:00",
+  "generated_at": "2026-09-17T18:04:04+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 21,
+  "n_projects": 22,
   "roles": [
     "Data Analysis",
     "Data Engineering",
@@ -11,10 +11,10 @@
   ],
   "role_counts": {
     "Data Analysis": 7,
-    "Data Engineering": 14,
+    "Data Engineering": 15,
     "Machine Learning": 12,
     "AI & LLM Systems": 10,
-    "Testing & QA": 10
+    "Testing & QA": 11
   },
   "all_topics": [
     "(s,S) inventory policy",
@@ -27,6 +27,7 @@
     "Agent trajectories",
     "Airflow DAGs",
     "Anomaly shapes",
+    "Apache Kafka",
     "At-least-once delivery",
     "B+ trees with leaf chaining",
     "Bayesian inference",
@@ -36,6 +37,7 @@
     "CDC",
     "CNN from scratch",
     "CPU scheduling (FCFS/SJF/SRTF/RR/MLFQ)",
+    "CQRS",
     "Cache locality and dependent loads",
     "Canary deployment",
     "Capacity cliff (0.138 N)",
@@ -43,6 +45,7 @@
     "Checks-Effects-Interactions",
     "Churn modeling",
     "Clock skew",
+    "Compare-and-set reservation",
     "Competing risks",
     "Concept drift",
     "Constructor-enforced invariants",
@@ -53,10 +56,13 @@
     "Data quality SLAs",
     "Data quality gates",
     "Deadlock detection (wait-for graph)",
+    "Deterministic simulation",
     "Difference-in-differences",
     "Dining philosophers",
     "Discrete-time hazard",
     "Disparate impact",
+    "Distributed transactions",
+    "Docker Compose",
     "Document AI",
     "Double-entry bookkeeping",
     "DuckDB",
@@ -65,6 +71,7 @@
     "Encrypt-then-MAC",
     "Equalized odds",
     "Escrow and dispute windows",
+    "Event sourcing",
     "Event time vs processing time",
     "Exact decimal arithmetic",
     "Exactly-once semantics",
@@ -100,6 +107,7 @@
     "Hopfield associative memory",
     "Hybrid retrieval",
     "Idempotency",
+    "Idempotency keys",
     "Idempotent sinks",
     "Injected-break scoring",
     "Injected-defect scoring",
@@ -118,8 +126,10 @@
     "Load testing",
     "Local LLM (Ollama)",
     "Mamdani fuzzy inference",
+    "Message reordering",
     "Metamorphic testing",
     "Metric regression testing",
+    "Microservices",
     "Model calibration",
     "Model registry",
     "Model registry + canary gate",
@@ -139,6 +149,7 @@
     "PSI drift",
     "Page replacement (FIFO/LRU/Clock/Optimal)",
     "Pandera",
+    "Partial failure & compensation",
     "Perceptron",
     "Playwright",
     "Playwright E2E",
@@ -170,6 +181,8 @@
     "SQL",
     "SQLite star schema",
     "SVD recommender",
+    "Safety vs liveness",
+    "Saga pattern",
     "Seasonal-naive baseline",
     "Selectivity",
     "Self-healing locators",
@@ -182,6 +195,7 @@
     "Slowly changing dimensions",
     "Solidity 0.8.24",
     "Sorted arrays and binary search",
+    "Spring Boot",
     "Star schema + declared grain",
     "Store-and-forward traffic model",
     "Streamlit",
@@ -243,6 +257,7 @@
     "SciPy",
     "Scikit-learn",
     "Solidity 0.8.24",
+    "Spring Boot + Kafka reference stack",
     "Statsmodels",
     "Streamlit",
     "WSL Ubuntu",
@@ -253,6 +268,7 @@
     "javac only - no build tool",
     "mutmut",
     "no dependencies",
+    "no dependencies (measured core)",
     "no testnet - local EVM only",
     "openpyxl",
     "os.fork (Linux/WSL)",
@@ -266,10 +282,10 @@
     "threading",
     "transformers"
   ],
-  "n_topics": 192,
-  "n_technologies": 54,
-  "n_metrics_extracted": 106,
-  "n_charts": 28,
+  "n_topics": 206,
+  "n_technologies": 56,
+  "n_metrics_extracted": 110,
+  "n_charts": 29,
   "projects": [
     {
       "id": "01",
@@ -2608,6 +2624,113 @@
           ],
           "yaxis": "simulations (log scale)",
           "log_y": true
+        }
+      ],
+      "n_report_files": 4,
+      "screenshots": []
+    },
+    {
+      "id": "22",
+      "slug": "turnstile",
+      "dir": "Turnstile-Event-Ticketing",
+      "title": "Turnstile - Event Ticketing Under Contention",
+      "pitch": "The SAME reservation logic sells every seat once in a monolith and oversells 15 of 20 the moment you split it across four microservices - overcharging \u20b916,000 on \u20b910,000 of real sales. The bug is the distribution, not the algorithm.",
+      "roles": [
+        "Testing & QA",
+        "Data Engineering"
+      ],
+      "topics": [
+        "Microservices",
+        "Distributed transactions",
+        "Saga pattern",
+        "Event sourcing",
+        "CQRS",
+        "Idempotency keys",
+        "Compare-and-set reservation",
+        "At-least-once delivery",
+        "Message reordering",
+        "Partial failure & compensation",
+        "Fault injection",
+        "Deterministic simulation",
+        "Spring Boot",
+        "Apache Kafka",
+        "Docker Compose",
+        "Safety vs liveness"
+      ],
+      "stack": [
+        "Java 17",
+        "no dependencies (measured core)",
+        "Spring Boot + Kafka reference stack"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "Four services - inventory, order, payment, notification - coordinating a purchase saga with event sourcing and CQRS, measured against a known answer key under a deterministic, seeded fault bus that duplicates, drops and reorders messages. The headline is an honest indictment of distribution, not of microservices: the identical check-then-act reservation sells every seat exactly once in a monolith and oversells 15 of 20 seats across four services, overcharging \u20b916,000 on \u20b910,000 of real sales with 9 double charges and 2 ghost charges. Three defences each remove exactly one failure class - an atomic compare-and-set reserve kills oversell, idempotency keys kill double charges, saga compensation kills ghost charges - and together they match the monolith on every safety measure. The unflattering parts are kept: hardening guarantees safety but not liveness (2 of 20 sales lost to message drops that more retries would recover), and the naive system oversells MORE with a perfect network (20/20) than with faults (15/20), because dropped messages accidentally prevent some double-confirmations. 45 tests pass; a real Spring Boot + Kafka + Docker Compose stack implements the same architecture (not required to reproduce any finding).",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "Oversold seats: monolith vs naive vs hardened",
+          "value": "0 vs 15 vs 0",
+          "highlight": true,
+          "note": "same check-then-act logic; the distribution is the bug, not the algorithm",
+          "source": "reports"
+        },
+        {
+          "label": "Naive overcharge",
+          "value": "\u20b916,000 on \u20b910,000 of real sales",
+          "highlight": false,
+          "note": "9 double charges, 2 charges with no ticket",
+          "source": "reports"
+        },
+        {
+          "label": "Hardened, same fault load",
+          "value": "0 oversold / 0 double / 0 ghost",
+          "highlight": false,
+          "note": "matches the monolith on safety; honest cost is 2 sales lost to message drops",
+          "source": "reports"
+        },
+        {
+          "label": "Each defence removes one failure class",
+          "value": "26 \u2192 0 safety violations",
+          "highlight": false,
+          "note": "atomic reserve kills oversell, idempotency kills double charges, saga compensation kills ghost charges",
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "line",
+          "title": "Oversold seats versus contention: naive versus hardened",
+          "note": "Oversell is a concurrency bug: with one buyer per seat even the naive services oversell nothing; as the crowd grows they oversell every seat. The atomic compare-and-set reserve holds the hardened services flat at zero throughout.",
+          "x": [
+            "1",
+            "2",
+            "3",
+            "5",
+            "10"
+          ],
+          "series": [
+            {
+              "name": "naive",
+              "y": [
+                0,
+                10,
+                15,
+                20,
+                20
+              ]
+            },
+            {
+              "name": "hardened",
+              "y": [
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            }
+          ],
+          "yaxis": "oversold seats (of 20)",
+          "xaxis": "buyers per seat"
         }
       ],
       "n_report_files": 4,

@@ -551,6 +551,46 @@ PROJECTS = [
                              "whose application-control policy blocks the tidyverse's native "
                              "libraries).",
     },
+    {
+        "id": "24",
+        "slug": "stratus",
+        "dir": "Stratus-Cloud-Media-Pipeline",
+        "title": "Stratus - Cloud Media-Pipeline Economics",
+        "pitch": "Publish the serverless-vs-always-on crossover for an image pipeline - "
+                  "then find that it barely matters, because the CDN is 97% of the bill. "
+                  "Modelled from published AWS pricing for $0: no account, no spend.",
+        "roles": ["Data Engineering", "Data Analysis"],
+        "topics": ["Cloud economics / FinOps", "AWS pricing model", "Serverless vs always-on",
+                    "Cost-per-image / unit economics", "Fixed vs variable cost crossover",
+                    "Right-sizing", "Queueing theory (M/M/c, M/D/c)", "Erlang C",
+                    "Discrete-event simulation", "Utilisation & headroom", "Egress economics",
+                    "Terraform (reference IaC)", "Billing alarm & teardown",
+                    "Lambda / EC2 / CloudFront / S3", "Reproducible modelling"],
+        "stack": ["Python 3.11+", "standard library only", "no cloud account",
+                   "Terraform (reference, never applied)"],
+        "metrics_source": "reports",
+        "headline_finding": "Models the cost of an image pipeline (upload, resize + watermark, "
+                             "serve via CDN) from AWS's published on-demand price list - in pure "
+                             "Python, locally, with NO AWS account and NO spend (a hard "
+                             "requirement). Publishes what the plan asked for and then subverts "
+                             "it: serverless processing is cheaper below ~4.1M images/month and an "
+                             "always-on instance above it (the crossover), but CloudFront + S3 "
+                             "serving is ~97% of the bill at every volume, so the whole "
+                             "serverless-vs-servers decision moves the total by only 1-2% - the "
+                             "CDN, not the compute architecture, is the real cost lever. "
+                             "Right-sizing is measured with a discrete-event queue simulation "
+                             "validated against the exact Erlang C formula (<0.5% error): "
+                             "over-provisioning the instance wastes 88% of the compute tier, while "
+                             "under-provisioning makes the queue unstable and blows the latency "
+                             "SLO. The cost-optimal choice beats 'always serverless' by 41% and "
+                             "'always the biggest instance' by 88%. Every figure is a MODELLED "
+                             "cost from published pricing, not a real bill - the directions are "
+                             "robust, the dollars drift as AWS changes prices. 33 tests pass; "
+                             "reports bit-reproducible. A real, valid Terraform stack (S3, Lambda, "
+                             "CloudFront, EC2/ALB) with a mandatory billing alarm and teardown "
+                             "script ships in infra/ as reference - never applied, because "
+                             "applying it would cost money and the analysis never does.",
+    },
 ]
 
 AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

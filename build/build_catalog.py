@@ -1085,6 +1085,71 @@ def extract_23(d: Path):
     return metrics, charts
 
 
+def extract_24(d: Path):
+    """Stratus - cloud media-pipeline economics, modelled for $0.
+
+    The headline chart is the processing-tier crossover: serverless cheaper
+    below, always-on above. The metrics carry the twist - serving is 97% of the
+    bill, so the whole crossover is a rounding error on the total.
+    """
+    metrics, charts = [], []
+
+    costs = read_json(d, "costs.json")
+    serving = read_json(d, "serving_dominance.json")
+    rs = read_json(d, "rightsizing.json")
+    base = read_json(d, "baselines.json")
+    brk = read_json(d, "breakdown.json")
+    val = read_json(d, "validation.json")
+
+    if costs and serving:
+        share = serving["rows"][2]["serving_share_of_total"]
+        metrics.append(m("Serverless vs always-on crossover",
+                         f"{costs['crossover_images_per_month']/1e6:.1f}M images/month", True,
+                         "serverless cheaper below, an always-on instance cheaper above"))
+        metrics.append(m("...but the CDN is the whole bill",
+                         f"{share*100:.0f}% is serving (CloudFront+S3)", True,
+                         "so the serverless-vs-servers choice moves the total by ~1-2%; the "
+                         "CDN, not the compute, is the real cost lever"))
+    if rs:
+        metrics.append(m("Right-sizing waste",
+                         f"{rs['over_provision_waste_fraction']*100:.0f}% over-provisioned", False,
+                         "over-provisioning the instance wastes that much of the compute tier; "
+                         "under-provisioning makes the queue unstable and blows the SLO"))
+    if brk:
+        cpi = brk["serverless"]["cost_per_image_usd"]
+        metrics.append(m("Cost per image", f"${cpi:.4f}", False,
+                         "the unit economic that scales the business case, set by the CDN"))
+    if val:
+        err = max(c["rel_error"] for c in val["checks"])
+        metrics.append(m("Queue sim vs Erlang C", f"{err*100:.1f}% error", False,
+                         "the right-sizing latencies come from a discrete-event queue "
+                         "simulation validated against the exact M/M/c formula"))
+
+    if costs:
+        vols = costs["volumes"]
+        sv = [r["serverless_processing_usd"] for r in costs["curves"]]
+        ao = [r["always_on_processing_usd"] for r in costs["curves"]]
+        charts.append({
+            "type": "line",
+            "title": "Processing cost vs monthly volume: serverless vs always-on",
+            "note": "The crossover is where the lines meet (~4.1M images/month): "
+                    "serverless's per-request cost rises with volume, the always-on "
+                    "instance's fixed cost stays flat until it is amortised. Log axes. "
+                    "This is the tier that differs; the shared CDN serving cost, ~97% "
+                    "of the total, is excluded so the crossover is visible.",
+            "x": [f"{v/1e6:g}M" if v >= 1e6 else f"{v/1e3:g}k" for v in vols],
+            "series": [
+                {"name": "serverless processing", "y": [round(x, 2) for x in sv]},
+                {"name": "always-on processing", "y": [round(x, 2) for x in ao]},
+            ],
+            "yaxis": "processing cost ($/month, log)",
+            "xaxis": "images per month (log)",
+            "log_y": True,
+        })
+
+    return metrics, charts
+
+
 EXTRACTORS = {
     "05": extract_05, "06": extract_06, "07": extract_07, "08": extract_08,
     "09": extract_09, "10": extract_10, "11": extract_11, "12": extract_12,
@@ -1099,6 +1164,7 @@ EXTRACTORS = {
     "21": extract_21,
     "22": extract_22,
     "23": extract_23,
+    "24": extract_24,
 }
 
 

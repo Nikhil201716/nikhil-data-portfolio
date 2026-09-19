@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-19T06:54:15+00:00",
+  "generated_at": "2026-09-19T12:40:31+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 23,
+  "n_projects": 24,
   "roles": [
     "Data Analysis",
     "Data Engineering",
@@ -10,8 +10,8 @@
     "Testing & QA"
   ],
   "role_counts": {
-    "Data Analysis": 8,
-    "Data Engineering": 15,
+    "Data Analysis": 9,
+    "Data Engineering": 16,
     "Machine Learning": 13,
     "AI & LLM Systems": 10,
     "Testing & QA": 11
@@ -23,6 +23,7 @@
     "ADALINE / delta rule",
     "AES-128 from FIPS-197",
     "AI-augmented QA",
+    "AWS pricing model",
     "Adversarial red-teaming",
     "Agent trajectories",
     "Airflow DAGs",
@@ -33,6 +34,7 @@
     "Bayesian inference",
     "Bayesian updating (Beta-Binomial)",
     "Belady's anomaly",
+    "Billing alarm & teardown",
     "Bootstrap CIs",
     "Break-even analysis",
     "CDC",
@@ -47,6 +49,7 @@
     "Checks-Effects-Interactions",
     "Churn modeling",
     "Clock skew",
+    "Cloud economics / FinOps",
     "Compare-and-set reservation",
     "Competing risks",
     "Concept drift",
@@ -54,6 +57,7 @@
     "Confounding & collinearity",
     "Constructor-enforced invariants",
     "Contextual bandits",
+    "Cost-per-image / unit economics",
     "Cox proportional hazards",
     "Cross-modal agent",
     "Data contracts",
@@ -63,6 +67,7 @@
     "Deterministic simulation",
     "Difference-in-differences",
     "Dining philosophers",
+    "Discrete-event simulation",
     "Discrete-time hazard",
     "Disparate impact",
     "Distributed transactions",
@@ -73,9 +78,11 @@
     "DuckDB",
     "ETL orchestration",
     "Effect size (Cohen's d)",
+    "Egress economics",
     "Elitism",
     "Encrypt-then-MAC",
     "Equalized odds",
+    "Erlang C",
     "Escrow and dispute windows",
     "Event sourcing",
     "Event time vs processing time",
@@ -90,6 +97,7 @@
     "FastAPI",
     "Fault injection",
     "File allocation and fragmentation",
+    "Fixed vs variable cost crossover",
     "Flaky-test detection",
     "Forecast reconciliation (MinT)",
     "Front-running and MEV",
@@ -127,6 +135,7 @@
     "Knowledge graph",
     "LLM extraction",
     "LLM-as-judge calibration",
+    "Lambda / EC2 / CloudFront / S3",
     "Late-data policy",
     "Length-extension forgery",
     "Lineage & blast radius",
@@ -172,6 +181,7 @@
     "Propensity score matching",
     "Property-based testing",
     "PySpark",
+    "Queueing theory (M/M/c, M/D/c)",
     "RAG",
     "RFM segmentation",
     "RSA, Miller-Rabin, PKCS#1 v1.5",
@@ -182,9 +192,11 @@
     "Reference normalisation",
     "Replay determinism",
     "Replication crisis",
+    "Reproducible modelling",
     "Requirement traceability",
     "Revalidation on load",
     "Right-censoring",
+    "Right-sizing",
     "Risk adjustment",
     "Root-cause analysis",
     "Rules engine",
@@ -201,6 +213,7 @@
     "Self-healing locators",
     "Semantic layer / metrics as code",
     "Sequential testing",
+    "Serverless vs always-on",
     "Servlet lifecycle without a container",
     "Shunting-yard parsing",
     "Skip lists and probabilistic balance",
@@ -215,6 +228,7 @@
     "Subset-sum batch matching",
     "Supply-chain provenance",
     "Survival analysis",
+    "Terraform (reference IaC)",
     "The XOR wall",
     "The stack property",
     "The winner's curse",
@@ -227,6 +241,7 @@
     "Unchecked arithmetic and overflow",
     "Uniform crossover",
     "Upcoding detection",
+    "Utilisation & headroom",
     "WSL",
     "Watermarks",
     "Welch's t-test and Cohen's d",
@@ -277,6 +292,7 @@
     "Spring Boot + Kafka reference stack",
     "Statsmodels",
     "Streamlit",
+    "Terraform (reference, never applied)",
     "WSL Ubuntu",
     "base R only (measured core)",
     "com.sun.net.httpserver",
@@ -285,6 +301,7 @@
     "from scratch",
     "javac only - no build tool",
     "mutmut",
+    "no cloud account",
     "no dependencies",
     "no dependencies (measured core)",
     "no testnet - local EVM only",
@@ -297,14 +314,15 @@
     "pyttsx3",
     "scikit-learn",
     "sentence-transformers",
+    "standard library only",
     "stdlib statistics only",
     "threading",
     "transformers"
   ],
-  "n_topics": 222,
-  "n_technologies": 59,
-  "n_metrics_extracted": 115,
-  "n_charts": 30,
+  "n_topics": 237,
+  "n_technologies": 62,
+  "n_metrics_extracted": 120,
+  "n_charts": 31,
   "projects": [
     {
       "id": "01",
@@ -2850,6 +2868,133 @@
         }
       ],
       "n_report_files": 6,
+      "screenshots": []
+    },
+    {
+      "id": "24",
+      "slug": "stratus",
+      "dir": "Stratus-Cloud-Media-Pipeline",
+      "title": "Stratus - Cloud Media-Pipeline Economics",
+      "pitch": "Publish the serverless-vs-always-on crossover for an image pipeline - then find that it barely matters, because the CDN is 97% of the bill. Modelled from published AWS pricing for $0: no account, no spend.",
+      "roles": [
+        "Data Engineering",
+        "Data Analysis"
+      ],
+      "topics": [
+        "Cloud economics / FinOps",
+        "AWS pricing model",
+        "Serverless vs always-on",
+        "Cost-per-image / unit economics",
+        "Fixed vs variable cost crossover",
+        "Right-sizing",
+        "Queueing theory (M/M/c, M/D/c)",
+        "Erlang C",
+        "Discrete-event simulation",
+        "Utilisation & headroom",
+        "Egress economics",
+        "Terraform (reference IaC)",
+        "Billing alarm & teardown",
+        "Lambda / EC2 / CloudFront / S3",
+        "Reproducible modelling"
+      ],
+      "stack": [
+        "Python 3.11+",
+        "standard library only",
+        "no cloud account",
+        "Terraform (reference, never applied)"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "Models the cost of an image pipeline (upload, resize + watermark, serve via CDN) from AWS's published on-demand price list - in pure Python, locally, with NO AWS account and NO spend (a hard requirement). Publishes what the plan asked for and then subverts it: serverless processing is cheaper below ~4.1M images/month and an always-on instance above it (the crossover), but CloudFront + S3 serving is ~97% of the bill at every volume, so the whole serverless-vs-servers decision moves the total by only 1-2% - the CDN, not the compute architecture, is the real cost lever. Right-sizing is measured with a discrete-event queue simulation validated against the exact Erlang C formula (<0.5% error): over-provisioning the instance wastes 88% of the compute tier, while under-provisioning makes the queue unstable and blows the latency SLO. The cost-optimal choice beats 'always serverless' by 41% and 'always the biggest instance' by 88%. Every figure is a MODELLED cost from published pricing, not a real bill - the directions are robust, the dollars drift as AWS changes prices. 33 tests pass; reports bit-reproducible. A real, valid Terraform stack (S3, Lambda, CloudFront, EC2/ALB) with a mandatory billing alarm and teardown script ships in infra/ as reference - never applied, because applying it would cost money and the analysis never does.",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "Serverless vs always-on crossover",
+          "value": "4.1M images/month",
+          "highlight": true,
+          "note": "serverless cheaper below, an always-on instance cheaper above",
+          "source": "reports"
+        },
+        {
+          "label": "...but the CDN is the whole bill",
+          "value": "97% is serving (CloudFront+S3)",
+          "highlight": true,
+          "note": "so the serverless-vs-servers choice moves the total by ~1-2%; the CDN, not the compute, is the real cost lever",
+          "source": "reports"
+        },
+        {
+          "label": "Right-sizing waste",
+          "value": "88% over-provisioned",
+          "highlight": false,
+          "note": "over-provisioning the instance wastes that much of the compute tier; under-provisioning makes the queue unstable and blows the SLO",
+          "source": "reports"
+        },
+        {
+          "label": "Cost per image",
+          "value": "$0.0004",
+          "highlight": false,
+          "note": "the unit economic that scales the business case, set by the CDN",
+          "source": "reports"
+        },
+        {
+          "label": "Queue sim vs Erlang C",
+          "value": "0.5% error",
+          "highlight": false,
+          "note": "the right-sizing latencies come from a discrete-event queue simulation validated against the exact M/M/c formula",
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "line",
+          "title": "Processing cost vs monthly volume: serverless vs always-on",
+          "note": "The crossover is where the lines meet (~4.1M images/month): serverless's per-request cost rises with volume, the always-on instance's fixed cost stays flat until it is amortised. Log axes. This is the tier that differs; the shared CDN serving cost, ~97% of the total, is excluded so the crossover is visible.",
+          "x": [
+            "10k",
+            "30k",
+            "100k",
+            "300k",
+            "1M",
+            "3M",
+            "6M",
+            "10M",
+            "20M"
+          ],
+          "series": [
+            {
+              "name": "serverless processing",
+              "y": [
+                0.13,
+                0.38,
+                1.27,
+                3.82,
+                12.72,
+                38.15,
+                76.3,
+                127.17,
+                254.34
+              ]
+            },
+            {
+              "name": "always-on processing",
+              "y": [
+                52.63,
+                52.63,
+                52.63,
+                52.63,
+                52.63,
+                52.63,
+                52.63,
+                83.0,
+                113.37
+              ]
+            }
+          ],
+          "yaxis": "processing cost ($/month, log)",
+          "xaxis": "images per month (log)",
+          "log_y": true
+        }
+      ],
+      "n_report_files": 7,
       "screenshots": []
     }
   ]

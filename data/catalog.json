@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-17T18:04:04+00:00",
+  "generated_at": "2026-09-19T06:54:15+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 22,
+  "n_projects": 23,
   "roles": [
     "Data Analysis",
     "Data Engineering",
@@ -10,9 +10,9 @@
     "Testing & QA"
   ],
   "role_counts": {
-    "Data Analysis": 7,
+    "Data Analysis": 8,
     "Data Engineering": 15,
-    "Machine Learning": 12,
+    "Machine Learning": 13,
     "AI & LLM Systems": 10,
     "Testing & QA": 11
   },
@@ -31,10 +31,12 @@
     "At-least-once delivery",
     "B+ trees with leaf chaining",
     "Bayesian inference",
+    "Bayesian updating (Beta-Binomial)",
     "Belady's anomaly",
     "Bootstrap CIs",
     "Break-even analysis",
     "CDC",
+    "CI coverage simulation",
     "CNN from scratch",
     "CPU scheduling (FCFS/SJF/SRTF/RR/MLFQ)",
     "CQRS",
@@ -48,6 +50,8 @@
     "Compare-and-set reservation",
     "Competing risks",
     "Concept drift",
+    "Confidence intervals",
+    "Confounding & collinearity",
     "Constructor-enforced invariants",
     "Contextual bandits",
     "Cox proportional hazards",
@@ -62,11 +66,13 @@
     "Discrete-time hazard",
     "Disparate impact",
     "Distributed transactions",
+    "Distribution fitting (MLE)",
     "Docker Compose",
     "Document AI",
     "Double-entry bookkeeping",
     "DuckDB",
     "ETL orchestration",
+    "Effect size (Cohen's d)",
     "Elitism",
     "Encrypt-then-MAC",
     "Equalized odds",
@@ -78,6 +84,7 @@
     "Excel reporting",
     "Exhaustive grid search baseline",
     "Explainability",
+    "Extreme-value theory (GPD / peaks-over-threshold)",
     "Fairness audit",
     "False-positive measurement",
     "FastAPI",
@@ -106,6 +113,7 @@
     "Holt-Winters",
     "Hopfield associative memory",
     "Hybrid retrieval",
+    "Hypothesis testing",
     "Idempotency",
     "Idempotency keys",
     "Idempotent sinks",
@@ -125,6 +133,8 @@
     "Linear programming",
     "Load testing",
     "Local LLM (Ollama)",
+    "Log-linear regression",
+    "Lognormal vs normal (AIC)",
     "Mamdani fuzzy inference",
     "Message reordering",
     "Metamorphic testing",
@@ -154,6 +164,8 @@
     "Playwright",
     "Playwright E2E",
     "Point-in-time feature store",
+    "Power analysis",
+    "Prior sensitivity",
     "Producer/consumer",
     "Prompt injection",
     "Proof-of-work vs proof-of-stake finality",
@@ -169,6 +181,7 @@
     "Reentrancy and the guard/CEI fix",
     "Reference normalisation",
     "Replay determinism",
+    "Replication crisis",
     "Requirement traceability",
     "Revalidation on load",
     "Right-censoring",
@@ -204,6 +217,7 @@
     "Survival analysis",
     "The XOR wall",
     "The stack property",
+    "The winner's curse",
     "Time-based holdout",
     "Timing side channels",
     "Tournament selection",
@@ -217,12 +231,14 @@
     "Watermarks",
     "Welch's t-test and Cohen's d",
     "Whisper ASR",
+    "Wilson intervals",
     "dbt",
     "dbt semantic layer",
     "fork/exec/pipe and Unix sockets",
     "getrusage kernel accounting",
     "int8 quantization",
-    "k-anonymity"
+    "k-anonymity",
+    "p-value misuse"
   ],
   "all_stack": [
     "Apache Airflow",
@@ -249,6 +265,7 @@
     "PyTorch",
     "Python",
     "Python 3.11+",
+    "R 4.x",
     "Redis (Memurai)",
     "Redis Streams",
     "SHAP",
@@ -261,6 +278,7 @@
     "Statsmodels",
     "Streamlit",
     "WSL Ubuntu",
+    "base R only (measured core)",
     "com.sun.net.httpserver",
     "dbt",
     "ethers v6",
@@ -271,6 +289,7 @@
     "no dependencies (measured core)",
     "no testnet - local EVM only",
     "openpyxl",
+    "optional tidyverse + ggplot2",
     "os.fork (Linux/WSL)",
     "pandas",
     "pdfplumber",
@@ -282,10 +301,10 @@
     "threading",
     "transformers"
   ],
-  "n_topics": 206,
-  "n_technologies": 56,
-  "n_metrics_extracted": 110,
-  "n_charts": 29,
+  "n_topics": 222,
+  "n_technologies": 59,
+  "n_metrics_extracted": 115,
+  "n_charts": 30,
   "projects": [
     {
       "id": "01",
@@ -2734,6 +2753,103 @@
         }
       ],
       "n_report_files": 4,
+      "screenshots": []
+    },
+    {
+      "id": "23",
+      "slug": "quantile",
+      "dir": "Quantile-Air-Quality-Statistics",
+      "title": "Quantile - Applied Statistics on Air Quality",
+      "pitch": "Run the power analysis BEFORE the test. An underpowered air-quality study detects a real 8 \u00b5g/m\u00b3 effect only 28.5% of the time; a trivial difference measured for years is 'significant' 91.8% of the time. Significance is not importance.",
+      "roles": [
+        "Data Analysis",
+        "Machine Learning"
+      ],
+      "topics": [
+        "Power analysis",
+        "Effect size (Cohen's d)",
+        "Confidence intervals",
+        "CI coverage simulation",
+        "Hypothesis testing",
+        "p-value misuse",
+        "Distribution fitting (MLE)",
+        "Lognormal vs normal (AIC)",
+        "Log-linear regression",
+        "Confounding & collinearity",
+        "Wilson intervals",
+        "Extreme-value theory (GPD / peaks-over-threshold)",
+        "Bayesian updating (Beta-Binomial)",
+        "Prior sensitivity",
+        "Replication crisis",
+        "The winner's curse"
+      ],
+      "stack": [
+        "R 4.x",
+        "base R only (measured core)",
+        "optional tidyverse + ggplot2"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "Applied statistics on seeded synthetic Indian air-quality data (PM2.5 across four cities and seasons, driven by meteorology), with injected ground truth so every method is scored against a known answer -- base R only for the measured core, no packages. The headline is a discipline: run the power analysis before the test and judge findings by effect size and interval, never the p-value alone. An underpowered design detects a real 8 \u00b5g/m\u00b3 station difference only 28.5% of the time versus 79.6% for a properly-sized one; and a trivial 1.5 \u00b5g/m\u00b3 difference measured for years is 'significant' 91.8% of the time (effect size 0.08) while a real 9 \u00b5g/m\u00b3 difference measured for days is significant only 18.3% (effect size 0.45) -- so a p-value policy and an effect-size policy pick opposite stations. Lognormal beats normal by AIC in all four cities (the normal fit has the wrong tail); the regression recovers the injected coefficients with measured 95% CI coverage of 0.949 over 200 datasets; a peaks-over-threshold Generalized Pareto tail matches the empirical severe-day rate; and Beta-Binomial updating converges to the Wilson interval under a flat prior. 43 tests pass; reports bit-reproducible. An idiomatic tidyverse + ggplot2 layer is included as reference (not run on the build machine, whose application-control policy blocks the tidyverse's native libraries).",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "Underpowered vs well-powered detection",
+          "value": "28% vs 80%",
+          "highlight": true,
+          "note": "the SAME real 8 ug/m3 effect; power is decided before the test, not after",
+          "source": "reports"
+        },
+        {
+          "label": "Significance is not importance",
+          "value": "92% vs 18% significant",
+          "highlight": false,
+          "note": "trivial effect (d=0.07) beats the real one (d=0.45) on p-value; a p-value policy picks the wrong station",
+          "source": "reports"
+        },
+        {
+          "label": "Lognormal beats normal (distribution shape)",
+          "value": "4/4 cities by AIC",
+          "highlight": false,
+          "note": "a normal fit has the wrong tail and misstates how often the air is unsafe",
+          "source": "reports"
+        },
+        {
+          "label": "Regression CI coverage, measured",
+          "value": "0.949",
+          "highlight": false,
+          "note": "the 95% intervals cover the truth 95% of the time across 200 regenerated datasets - calibrated, not asserted",
+          "source": "reports"
+        },
+        {
+          "label": "Extreme-value tail (peaks-over-threshold GPD)",
+          "value": "0.077 vs 0.077",
+          "highlight": false,
+          "note": "the fitted Generalized Pareto tail matches the thin empirical severe-day rate",
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "bar",
+          "title": "Significance is a function of sample size, not importance",
+          "note": "The trivial 1.5 ug/m3 difference, measured for years, is 'significant' almost always (effect size 0.08, negligible); the real 9 ug/m3 difference, measured for days, usually is not (effect size 0.45). A p-value policy acts on the trivial station; report the effect size and decide on that.",
+          "x": [
+            "Trivial station (d=0.08)",
+            "Meaningful station (d=0.45)"
+          ],
+          "series": [
+            {
+              "name": "P(significant at 0.05)",
+              "y": [
+                0.918,
+                0.183
+              ]
+            }
+          ],
+          "yaxis": "P(significant)"
+        }
+      ],
+      "n_report_files": 6,
       "screenshots": []
     }
   ]

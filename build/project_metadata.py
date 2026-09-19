@@ -509,6 +509,48 @@ PROJECTS = [
                              "real Spring Boot + Kafka + Docker Compose stack implements the same "
                              "architecture (not required to reproduce any finding).",
     },
+    {
+        "id": "23",
+        "slug": "quantile",
+        "dir": "Quantile-Air-Quality-Statistics",
+        "title": "Quantile - Applied Statistics on Air Quality",
+        "pitch": "Run the power analysis BEFORE the test. An underpowered air-quality "
+                  "study detects a real 8 µg/m³ effect only 28.5% of the time; a "
+                  "trivial difference measured for years is 'significant' 91.8% of the time. "
+                  "Significance is not importance.",
+        "roles": ["Data Analysis", "Machine Learning"],
+        "topics": ["Power analysis", "Effect size (Cohen's d)", "Confidence intervals",
+                    "CI coverage simulation", "Hypothesis testing", "p-value misuse",
+                    "Distribution fitting (MLE)", "Lognormal vs normal (AIC)",
+                    "Log-linear regression", "Confounding & collinearity",
+                    "Wilson intervals", "Extreme-value theory (GPD / peaks-over-threshold)",
+                    "Bayesian updating (Beta-Binomial)", "Prior sensitivity",
+                    "Replication crisis", "The winner's curse"],
+        "stack": ["R 4.x", "base R only (measured core)", "optional tidyverse + ggplot2"],
+        "metrics_source": "reports",
+        "headline_finding": "Applied statistics on seeded synthetic Indian air-quality data "
+                             "(PM2.5 across four cities and seasons, driven by meteorology), with "
+                             "injected ground truth so every method is scored against a known "
+                             "answer -- base R only for the measured core, no packages. The "
+                             "headline is a discipline: run the power analysis before the test and "
+                             "judge findings by effect size and interval, never the p-value alone. "
+                             "An underpowered design detects a real 8 µg/m³ station "
+                             "difference only 28.5% of the time versus 79.6% for a properly-sized "
+                             "one; and a trivial 1.5 µg/m³ difference measured for years is "
+                             "'significant' 91.8% of the time (effect size 0.08) while a real "
+                             "9 µg/m³ difference measured for days is significant only "
+                             "18.3% (effect size 0.45) -- so a p-value policy and an effect-size "
+                             "policy pick opposite stations. Lognormal beats normal by AIC in all "
+                             "four cities (the normal fit has the wrong tail); the regression "
+                             "recovers the injected coefficients with measured 95% CI coverage of "
+                             "0.949 over 200 datasets; a peaks-over-threshold Generalized Pareto "
+                             "tail matches the empirical severe-day rate; and Beta-Binomial "
+                             "updating converges to the Wilson interval under a flat prior. 43 "
+                             "tests pass; reports bit-reproducible. An idiomatic tidyverse + "
+                             "ggplot2 layer is included as reference (not run on the build machine, "
+                             "whose application-control policy blocks the tidyverse's native "
+                             "libraries).",
+    },
 ]
 
 AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

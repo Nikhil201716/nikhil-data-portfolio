@@ -46,6 +46,7 @@ const BOOKS = [
   ["20", "Timeslice, an Operating-Systems Laboratory", "Timeslice-OS-Lab", "Timeslice-Notebook.pdf", 60],
   ["21", "Cadence, Soft-Computing Traffic Signal Control", "Cadence-Traffic-Control", "Cadence-Notebook.pdf", 60],
   ["22", "Turnstile, Event Ticketing Under Contention", "Turnstile-Event-Ticketing", "Turnstile-Notebook.pdf", 60],
+  ["23", "Quantile, Applied Statistics on Air Quality", "Quantile-Air-Quality-Statistics", "Quantile-Notebook.pdf", 61],
 ].map(([id, title, repo, file, pages]) => ({ id, title, repo, file, pages }));
 
 const BOOK_BY_ID = Object.fromEntries(BOOKS.map((b) => [b.id, b]));

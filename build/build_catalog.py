@@ -1020,6 +1020,71 @@ def extract_22(d: Path):
     return metrics, charts
 
 
+def extract_23(d: Path):
+    """Quantile - applied statistics on air quality, done honestly.
+
+    The headline is the significance-versus-importance inversion: a trivial
+    difference measured for years is almost always 'significant' while a real
+    difference measured for days usually is not, so a p-value policy and an
+    effect-size policy pick opposite stations. The chart makes that inversion
+    the picture.
+    """
+    metrics, charts = [], []
+
+    hyp = read_json(d, "hypothesis.json")
+    if hyp:
+        up = hyp["underpowering"]
+        si = hyp["significance_vs_importance"]
+        metrics.append(m("Underpowered vs well-powered detection",
+                         f"{up['underpowered']['detection_rate'] * 100:.0f}% vs "
+                         f"{up['well_powered']['detection_rate'] * 100:.0f}%", True,
+                         "the SAME real 8 ug/m3 effect; power is decided before the test, not after"))
+        metrics.append(m("Significance is not importance",
+                         f"{si['trivial_station']['prob_significant'] * 100:.0f}% vs "
+                         f"{si['meaningful_station']['prob_significant'] * 100:.0f}% significant", False,
+                         f"trivial effect (d={si['trivial_station']['cohens_d']:.2f}) beats the real "
+                         f"one (d={si['meaningful_station']['cohens_d']:.2f}) on p-value; a p-value "
+                         f"policy picks the wrong station"))
+        charts.append({
+            "type": "bar",
+            "title": "Significance is a function of sample size, not importance",
+            "note": "The trivial 1.5 ug/m3 difference, measured for years, is "
+                    "'significant' almost always (effect size 0.08, negligible); "
+                    "the real 9 ug/m3 difference, measured for days, usually is "
+                    "not (effect size 0.45). A p-value policy acts on the trivial "
+                    "station; report the effect size and decide on that.",
+            "x": ["Trivial station (d=0.08)", "Meaningful station (d=0.45)"],
+            "series": [{"name": "P(significant at 0.05)",
+                        "y": [round(si["trivial_station"]["prob_significant"], 3),
+                              round(si["meaningful_station"]["prob_significant"], 3)]}],
+            "yaxis": "P(significant)",
+        })
+
+    dist = read_json(d, "distributions.json")
+    if dist:
+        metrics.append(m("Lognormal beats normal (distribution shape)",
+                         f"{dist['cities_where_lognormal_wins']}/{dist['cities_total']} cities by AIC",
+                         False,
+                         "a normal fit has the wrong tail and misstates how often the air is unsafe"))
+
+    reg = read_json(d, "regression.json")
+    if reg:
+        mc = reg["measured_coverage"]
+        metrics.append(m("Regression CI coverage, measured",
+                         f"{mc['mean_coverage']}", False,
+                         f"the 95% intervals cover the truth {mc['mean_coverage'] * 100:.0f}% of the "
+                         f"time across {mc['reps']} regenerated datasets - calibrated, not asserted"))
+
+    exc = read_json(d, "exceedance.json")
+    if exc:
+        et = exc["extreme_tail"]
+        metrics.append(m("Extreme-value tail (peaks-over-threshold GPD)",
+                         f"{et['p_exceed_gpd']:.3f} vs {et['p_exceed_empirical']:.3f}", False,
+                         "the fitted Generalized Pareto tail matches the thin empirical severe-day rate"))
+
+    return metrics, charts
+
+
 EXTRACTORS = {
     "05": extract_05, "06": extract_06, "07": extract_07, "08": extract_08,
     "09": extract_09, "10": extract_10, "11": extract_11, "12": extract_12,
@@ -1033,6 +1098,7 @@ EXTRACTORS = {
     "20": extract_20,
     "21": extract_21,
     "22": extract_22,
+    "23": extract_23,
 }
 
 

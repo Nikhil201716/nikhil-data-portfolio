@@ -26,6 +26,7 @@ const RUN_CMD = {
   "20": "python run.py",
   "21": "python run.py",
   "22": "./build.sh all",
+  "23": "Rscript R/run_all.R",
 };
 
 /* What has to be installed before the command above will run. The Java
@@ -38,6 +39,7 @@ const INSTALL_CMD = {
   "19": "npm install",
   "20": null,
   "22": null,
+  "23": null,
 };
 
 /* Roughly how long a full run takes in a 2-core Codespace, so nobody is
@@ -47,7 +49,7 @@ const RUN_MINUTES = {
   "06": "3-4", "07": "2-4", "08": "4-7", "09": "2-4", "10": "3-6",
   "11": "5-9", "12": "25-35", "13": "4-8", "14": "3-6", "15": "3-6",
   "16": "1-2", "17": "3-5", "18": "2-3", "19": "2-3", "20": "1-2",
-  "21": "1-2", "22": "1-2",
+  "21": "1-2", "22": "1-2", "23": "1-2",
 };
 
 const NEEDS_OLLAMA = new Set(["05", "06", "07", "08", "09", "10", "11", "13", "14", "15"]);
@@ -216,7 +218,7 @@ function render(p, cat) {
         <div class="kicker">Keep going</div>
         <h3 class="h5 mt-1 mb-0">Other projects</h3>
       </div>
-      <a class="btn-x" href="projects.html">All 22 →</a>
+      <a class="btn-x" href="projects.html">All 23 →</a>
     </div>
     <div class="row g-3 g-lg-4 mt-1" id="more"></div>
   </div></section>`;

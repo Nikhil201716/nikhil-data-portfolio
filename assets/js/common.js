@@ -49,6 +49,7 @@ const BOOKS = [
   ["23", "Quantile, Applied Statistics on Air Quality", "Quantile-Air-Quality-Statistics", "Quantile-Notebook.pdf", 61],
   ["24", "Stratus, Cloud Media-Pipeline Economics", "Stratus-Cloud-Media-Pipeline", "Stratus-Notebook.pdf", 60],
   ["25", "Fieldnote, Offline-First Inspection Sync", "Fieldnote-Offline-Inspection", "Fieldnote-Notebook.pdf", 60],
+  ["26", "Relay, a URL Shortener & the Test Pyramid", "Relay-URL-Shortener", "Relay-Notebook.pdf", 60],
 ].map(([id, title, repo, file, pages]) => ({ id, title, repo, file, pages }));
 
 const BOOK_BY_ID = Object.fromEntries(BOOKS.map((b) => [b.id, b]));

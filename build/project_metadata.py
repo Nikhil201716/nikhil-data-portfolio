@@ -635,6 +635,56 @@ PROJECTS = [
                              "built here, because the finding is a distributed-systems property "
                              "provable headless on a bare JVM and needs no device).",
     },
+    {
+        "id": "26",
+        "slug": "relay",
+        "dir": "Relay-URL-Shortener",
+        "title": "Relay - URL Shortener & the Test Pyramid",
+        "pitch": "A smoke test catches 0 of 20 injected bugs; unit reaches 8; the "
+                  "API layer reaches 18. Two bugs survive every layer - a timing "
+                  "side-channel and an untested collision path. A green suite is not "
+                  "an empty bug list.",
+        "roles": ["Testing & QA", "Data Engineering"],
+        "topics": ["Test pyramid", "Fault injection", "Test automation",
+                    "Unit / integration / E2E", "pytest", "Vitest",
+                    "React Testing Library", "Playwright E2E", "FastAPI", "React",
+                    "TypeScript", "REST API", "JWT auth", "Coverage vs correctness",
+                    "Mutation-style catalog", "IDOR / broken access control",
+                    "Allowlist vs blocklist", "CI/CD quality gate",
+                    "Reproducible reports"],
+        "stack": ["Python 3.12+", "FastAPI", "SQLite", "React + TypeScript + Vite",
+                   "pytest", "Vitest", "Playwright", "GitHub Actions"],
+        "metrics_source": "reports",
+        "headline_finding": "A small but complete full-stack URL shortener (React + "
+                             "TypeScript front end, FastAPI back end, SQLite, JWT) built "
+                             "to turn the test pyramid into a measurement. A catalog of 20 "
+                             "realistic, hand-written bugs (a weakened validator, an "
+                             "off-by-one in expiry, a dropped owner check, a "
+                             "non-constant-time password compare, a redirect that ignores "
+                             "its target) is injected one at a time, and every test layer "
+                             "is scored against each. The headline is a discipline: a green "
+                             "suite is not an empty bug list. The smoke test - what many "
+                             "projects ship as 'we have tests' - catches 0 of 20; adding "
+                             "unit tests reaches 8; adding the API/integration layer reaches "
+                             "18. The API layer is the workhorse: it alone catches wiring, "
+                             "persistence, HTTP status codes and authorization (including "
+                             "IDOR - one user reading another's data), which the unit layer "
+                             "is structurally blind to. And 2 bugs survive EVERY "
+                             "deterministic layer: a timing side-channel (== instead of a "
+                             "constant-time compare - it changes no function's output, so "
+                             "every functional assertion still passes) and a skipped "
+                             "collision check (untested because the seeded RNG never "
+                             "produces the collision) - each naming the instrument that "
+                             "would catch it (a timing experiment; a property/load test). "
+                             "Layers: smoke/unit/API via pytest (73 tests) + Vitest with "
+                             "React Testing Library (10 tests) + Playwright E2E (8/8 full "
+                             "browser flows at ~3.2s each - the cost that keeps E2E at the "
+                             "tip). The catch matrix is byte-reproducible, verified by "
+                             "re-running and diffing the reports. CI runs every layer plus "
+                             "the fault-injection scoring on every push. Everything runs "
+                             "free and locally: Python for the backend + measurement, Node "
+                             "for the front end.",
+    },
 ]
 
 AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

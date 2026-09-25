@@ -1220,6 +1220,63 @@ def extract_25(d: Path):
     return metrics, charts
 
 
+def extract_26(d: Path):
+    """Relay - a URL shortener, and the test pyramid as a measurement.
+
+    The headline chart is the cumulative catch curve: how many of the injected
+    bugs are caught as you add each test layer (smoke -> unit -> API). The metrics
+    carry the honest tail - the bugs that survive every layer.
+    """
+    metrics, charts = [], []
+
+    s = read_json(d, "summary.json")
+    e2e = read_json(d, "e2e.json")
+
+    if s:
+        total = s["total_bugs"]
+        cum = s["cumulative_caught_adding_layers"]
+        per = s["caught_per_layer"]
+        metrics.append(m("Smoke baseline (the trivial 'we have tests')",
+                         f"{per['smoke']} of {total} bugs caught", True,
+                         "a minimal 'does it start' check catches almost nothing - "
+                         "the baseline the layered suite must beat"))
+        metrics.append(m("Caught after adding every layer",
+                         f"{cum['api']} of {total} (smoke {cum['smoke']} -> unit "
+                         f"{cum['unit']} -> API {cum['api']})", True,
+                         "the API/integration layer is the workhorse: it alone catches "
+                         "wiring, persistence, status codes and authorization (incl. IDOR)"))
+        metrics.append(m("Bugs that survive every layer",
+                         f"{s['missed_by_all_layers']} of {total}", True,
+                         "a timing side-channel and an untested collision path - real "
+                         "defects functional tests structurally cannot catch"))
+    if e2e:
+        metrics.append(m("End-to-end browser flows",
+                         f"{e2e['passed']}/{e2e['runs']} passed "
+                         f"(~{e2e['mean_seconds_per_full_flow']}s each)", False,
+                         "Playwright drives the built React app + FastAPI; ~1000x the "
+                         "cost of a unit test per assertion - why E2E sits at the tip"))
+
+    if s:
+        total = s["total_bugs"]
+        cum = s["cumulative_caught_adding_layers"]
+        charts.append({
+            "type": "bar",
+            "title": "Cumulative bugs caught as you climb the test pyramid",
+            "note": "Each injected bug is scored against every layer; the bars show "
+                    "how many of the %d bugs are caught once you have the smoke "
+                    "layer, then also unit, then also the API/integration layer. The "
+                    "smoke baseline catches %d; the full stack reaches %d; %d survive "
+                    "every layer. Byte-reproducible (reports/summary.json)."
+                    % (total, cum["smoke"], cum["api"], s["missed_by_all_layers"]),
+            "x": ["smoke", "+ unit", "+ API/integration"],
+            "series": [{"name": "bugs caught (cumulative)",
+                        "y": [cum["smoke"], cum["unit"], cum["api"]]}],
+            "yaxis": "bugs caught (of %d)" % total,
+        })
+
+    return metrics, charts
+
+
 EXTRACTORS = {
     "05": extract_05, "06": extract_06, "07": extract_07, "08": extract_08,
     "09": extract_09, "10": extract_10, "11": extract_11, "12": extract_12,
@@ -1236,6 +1293,7 @@ EXTRACTORS = {
     "23": extract_23,
     "24": extract_24,
     "25": extract_25,
+    "26": extract_26,
 }
 
 

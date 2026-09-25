@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-25T07:38:32+00:00",
+  "generated_at": "2026-09-25T16:07:24+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 25,
+  "n_projects": 26,
   "roles": [
     "Data Analysis",
     "Data Engineering",
@@ -11,10 +11,10 @@
   ],
   "role_counts": {
     "Data Analysis": 9,
-    "Data Engineering": 17,
+    "Data Engineering": 18,
     "Machine Learning": 13,
     "AI & LLM Systems": 10,
-    "Testing & QA": 12
+    "Testing & QA": 13
   },
   "all_topics": [
     "(s,S) inventory policy",
@@ -27,6 +27,7 @@
     "Adversarial red-teaming",
     "Agent trajectories",
     "Airflow DAGs",
+    "Allowlist vs blocklist",
     "Anomaly shapes",
     "Apache Kafka",
     "At-least-once delivery",
@@ -40,6 +41,7 @@
     "Break-even analysis",
     "CDC",
     "CI coverage simulation",
+    "CI/CD quality gate",
     "CNN from scratch",
     "CPU scheduling (FCFS/SJF/SRTF/RR/MLFQ)",
     "CQRS",
@@ -63,6 +65,7 @@
     "Contextual bandits",
     "Convergence vs correctness",
     "Cost-per-image / unit economics",
+    "Coverage vs correctness",
     "Cox proportional hazards",
     "Cross-modal agent",
     "Data contracts",
@@ -127,6 +130,7 @@
     "Hopfield associative memory",
     "Hybrid retrieval",
     "Hypothesis testing",
+    "IDOR / broken access control",
     "Idempotency",
     "Idempotency keys",
     "Idempotent sinks",
@@ -135,6 +139,7 @@
     "Inverted indexes and posting-list merges",
     "JDBC transactions and rollback",
     "JVM microbenchmarking traps",
+    "JWT auth",
     "Jain's fairness index",
     "K-Means",
     "Knowledge graph",
@@ -162,6 +167,7 @@
     "Multi-agent loop",
     "Mutation / injected-bug testing",
     "Mutation testing",
+    "Mutation-style catalog",
     "NIST/RFC known-answer testing",
     "NL-to-governed-metrics",
     "Nakamoto double-spend probability",
@@ -191,8 +197,11 @@
     "PySpark",
     "Queueing theory (M/M/c, M/D/c)",
     "RAG",
+    "REST API",
     "RFM segmentation",
     "RSA, Miller-Rabin, PKCS#1 v1.5",
+    "React",
+    "React Testing Library",
     "Real-time scoring",
     "Red-teaming",
     "Redis Streams",
@@ -240,6 +249,8 @@
     "Supply-chain provenance",
     "Survival analysis",
     "Terraform (reference IaC)",
+    "Test automation",
+    "Test pyramid",
     "The XOR wall",
     "The stack property",
     "The winner's curse",
@@ -249,11 +260,14 @@
     "Training-serving skew",
     "Transformer fine-tuning",
     "Triangular/shoulder membership",
+    "TypeScript",
     "Unchecked arithmetic and overflow",
     "Uniform crossover",
+    "Unit / integration / E2E",
     "Upcoding detection",
     "Utilisation & headroom",
     "Version vectors / vector clocks",
+    "Vitest",
     "WSL",
     "Watermarks",
     "Welch's t-test and Cohen's d",
@@ -265,7 +279,8 @@
     "getrusage kernel accounting",
     "int8 quantization",
     "k-anonymity",
-    "p-value misuse"
+    "p-value misuse",
+    "pytest"
   ],
   "all_stack": [
     "Android: Room + WorkManager + Compose (reference, not built)",
@@ -273,6 +288,7 @@
     "Docker",
     "DuckDB",
     "FastAPI",
+    "GitHub Actions",
     "Gradle",
     "H3",
     "Hardhat",
@@ -296,7 +312,9 @@
     "PyTorch",
     "Python",
     "Python 3.11+",
+    "Python 3.12+",
     "R 4.x",
+    "React + TypeScript + Vite",
     "Redis (Memurai)",
     "Redis Streams",
     "SHAP",
@@ -309,6 +327,7 @@
     "Statsmodels",
     "Streamlit",
     "Terraform (reference, never applied)",
+    "Vitest",
     "WSL Ubuntu",
     "base R only (measured core)",
     "com.sun.net.httpserver",
@@ -335,10 +354,10 @@
     "threading",
     "transformers"
   ],
-  "n_topics": 249,
-  "n_technologies": 66,
-  "n_metrics_extracted": 124,
-  "n_charts": 32,
+  "n_topics": 264,
+  "n_technologies": 70,
+  "n_metrics_extracted": 128,
+  "n_charts": 33,
   "projects": [
     {
       "id": "01",
@@ -3109,6 +3128,106 @@
         }
       ],
       "n_report_files": 3,
+      "screenshots": []
+    },
+    {
+      "id": "26",
+      "slug": "relay",
+      "dir": "Relay-URL-Shortener",
+      "title": "Relay - URL Shortener & the Test Pyramid",
+      "pitch": "A smoke test catches 0 of 20 injected bugs; unit reaches 8; the API layer reaches 18. Two bugs survive every layer - a timing side-channel and an untested collision path. A green suite is not an empty bug list.",
+      "roles": [
+        "Testing & QA",
+        "Data Engineering"
+      ],
+      "topics": [
+        "Test pyramid",
+        "Fault injection",
+        "Test automation",
+        "Unit / integration / E2E",
+        "pytest",
+        "Vitest",
+        "React Testing Library",
+        "Playwright E2E",
+        "FastAPI",
+        "React",
+        "TypeScript",
+        "REST API",
+        "JWT auth",
+        "Coverage vs correctness",
+        "Mutation-style catalog",
+        "IDOR / broken access control",
+        "Allowlist vs blocklist",
+        "CI/CD quality gate",
+        "Reproducible reports"
+      ],
+      "stack": [
+        "Python 3.12+",
+        "FastAPI",
+        "SQLite",
+        "React + TypeScript + Vite",
+        "pytest",
+        "Vitest",
+        "Playwright",
+        "GitHub Actions"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "A small but complete full-stack URL shortener (React + TypeScript front end, FastAPI back end, SQLite, JWT) built to turn the test pyramid into a measurement. A catalog of 20 realistic, hand-written bugs (a weakened validator, an off-by-one in expiry, a dropped owner check, a non-constant-time password compare, a redirect that ignores its target) is injected one at a time, and every test layer is scored against each. The headline is a discipline: a green suite is not an empty bug list. The smoke test - what many projects ship as 'we have tests' - catches 0 of 20; adding unit tests reaches 8; adding the API/integration layer reaches 18. The API layer is the workhorse: it alone catches wiring, persistence, HTTP status codes and authorization (including IDOR - one user reading another's data), which the unit layer is structurally blind to. And 2 bugs survive EVERY deterministic layer: a timing side-channel (== instead of a constant-time compare - it changes no function's output, so every functional assertion still passes) and a skipped collision check (untested because the seeded RNG never produces the collision) - each naming the instrument that would catch it (a timing experiment; a property/load test). Layers: smoke/unit/API via pytest (73 tests) + Vitest with React Testing Library (10 tests) + Playwright E2E (8/8 full browser flows at ~3.2s each - the cost that keeps E2E at the tip). The catch matrix is byte-reproducible, verified by re-running and diffing the reports. CI runs every layer plus the fault-injection scoring on every push. Everything runs free and locally: Python for the backend + measurement, Node for the front end.",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "Smoke baseline (the trivial 'we have tests')",
+          "value": "0 of 20 bugs caught",
+          "highlight": true,
+          "note": "a minimal 'does it start' check catches almost nothing - the baseline the layered suite must beat",
+          "source": "reports"
+        },
+        {
+          "label": "Caught after adding every layer",
+          "value": "18 of 20 (smoke 0 -> unit 8 -> API 18)",
+          "highlight": true,
+          "note": "the API/integration layer is the workhorse: it alone catches wiring, persistence, status codes and authorization (incl. IDOR)",
+          "source": "reports"
+        },
+        {
+          "label": "Bugs that survive every layer",
+          "value": "2 of 20",
+          "highlight": true,
+          "note": "a timing side-channel and an untested collision path - real defects functional tests structurally cannot catch",
+          "source": "reports"
+        },
+        {
+          "label": "End-to-end browser flows",
+          "value": "8/8 passed (~3.2s each)",
+          "highlight": false,
+          "note": "Playwright drives the built React app + FastAPI; ~1000x the cost of a unit test per assertion - why E2E sits at the tip",
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "bar",
+          "title": "Cumulative bugs caught as you climb the test pyramid",
+          "note": "Each injected bug is scored against every layer; the bars show how many of the 20 bugs are caught once you have the smoke layer, then also unit, then also the API/integration layer. The smoke baseline catches 0; the full stack reaches 18; 2 survive every layer. Byte-reproducible (reports/summary.json).",
+          "x": [
+            "smoke",
+            "+ unit",
+            "+ API/integration"
+          ],
+          "series": [
+            {
+              "name": "bugs caught (cumulative)",
+              "y": [
+                0,
+                8,
+                18
+              ]
+            }
+          ],
+          "yaxis": "bugs caught (of 20)"
+        }
+      ],
+      "n_report_files": 4,
       "screenshots": []
     }
   ]

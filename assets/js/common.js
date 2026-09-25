@@ -48,6 +48,7 @@ const BOOKS = [
   ["22", "Turnstile, Event Ticketing Under Contention", "Turnstile-Event-Ticketing", "Turnstile-Notebook.pdf", 60],
   ["23", "Quantile, Applied Statistics on Air Quality", "Quantile-Air-Quality-Statistics", "Quantile-Notebook.pdf", 61],
   ["24", "Stratus, Cloud Media-Pipeline Economics", "Stratus-Cloud-Media-Pipeline", "Stratus-Notebook.pdf", 60],
+  ["25", "Fieldnote, Offline-First Inspection Sync", "Fieldnote-Offline-Inspection", "Fieldnote-Notebook.pdf", 60],
 ].map(([id, title, repo, file, pages]) => ({ id, title, repo, file, pages }));
 
 const BOOK_BY_ID = Object.fromEntries(BOOKS.map((b) => [b.id, b]));

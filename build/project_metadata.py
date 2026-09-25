@@ -591,6 +591,50 @@ PROJECTS = [
                              "script ships in infra/ as reference - never applied, because "
                              "applying it would cost money and the analysis never does.",
     },
+    {
+        "id": "25",
+        "slug": "fieldnote",
+        "dir": "Fieldnote-Offline-Inspection",
+        "title": "Fieldnote - Offline-First Inspection Sync",
+        "pitch": "A naive last-write-wins sync loses 60 of 100 records to one skewed "
+                  "device clock and breaks 85% of mid-sync crashes - yet it 'converges', "
+                  "so it passes the obvious health check. Version vectors + atomic apply "
+                  "lose 0 and break 0. Convergence is not correctness.",
+        "roles": ["Data Engineering", "Testing & QA"],
+        "topics": ["Offline-first sync", "Version vectors / vector clocks",
+                    "Causal ordering (happens-before)", "Clock skew", "Last-write-wins",
+                    "Conflict detection & resolution", "CRDTs",
+                    "Strong eventual consistency", "Atomic apply / transactions",
+                    "Idempotency", "Convergence vs correctness", "Known-correct oracle",
+                    "Room / WorkManager / Compose (reference)", "Deterministic simulation",
+                    "Reproducible reports"],
+        "stack": ["Kotlin", "JVM 17", "Gradle", "no dependencies (measured core)",
+                   "Android: Room + WorkManager + Compose (reference, not built)"],
+        "metrics_source": "reports",
+        "headline_finding": "A verified pure-Kotlin/JVM sync engine for an offline-first "
+                             "inspection app, measuring the two failures such an app actually "
+                             "hits against a known-correct oracle - no Android SDK, no emulator, "
+                             "no network, no spend. The headline is a discipline: convergence is "
+                             "not correctness. A naive last-write-wins sync loses 60 of 100 "
+                             "records to a single skewed device clock (it trusts the wall clock, "
+                             "so a fast phone's stale edits beat the server's causally-newer ones) "
+                             "and detects 0 of the 30 genuine concurrent conflicts; version "
+                             "vectors, which carry causal history instead of a timestamp, lose 0 "
+                             "and flag all 30. Crucially BOTH strategies converge (device == "
+                             "server at the end), so the obvious 'did the two sides agree?' health "
+                             "check passes for the naive design while it is silently wrong 60% of "
+                             "the time. On a mid-sync crash, a non-atomic apply is left with a "
+                             "broken inspection at 50 of 59 interruption points (85%) - a header "
+                             "claiming five findings above three rows; an atomic (all-or-nothing) "
+                             "apply is broken at 0. The naive baseline is not a straw man: "
+                             "last-write-wins is the common default, is trivially convergent, and "
+                             "passes the health check. Every number is read from reports/*.json "
+                             "written by a real run (./gradlew experiments) and reproduces "
+                             "byte-for-byte; 17 scored tests pass. The real Room + WorkManager + "
+                             "Compose Android app ships under app/ as faithful reference (not "
+                             "built here, because the finding is a distributed-systems property "
+                             "provable headless on a bare JVM and needs no device).",
+    },
 ]
 
 AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

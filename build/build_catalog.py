@@ -1150,6 +1150,76 @@ def extract_24(d: Path):
     return metrics, charts
 
 
+def extract_25(d: Path):
+    """Fieldnote - offline-first inspection sync; convergence is not correctness.
+
+    The headline chart contrasts naive last-write-wins against version vectors +
+    atomic apply on the two failure modes that matter (both 'lower is better'):
+    records lost to a skewed clock, and inspections broken by a mid-sync crash.
+    """
+    metrics, charts = [], []
+
+    skew = read_json(d, "clock_skew.json")
+    atom = read_json(d, "atomicity.json")
+
+    if skew:
+        total = skew["naive"]["total_records"]
+        metrics.append(m("Records lost to a skewed clock",
+                         f"{skew['naive']['lost_updates']} of {total} (naive) vs "
+                         f"{skew['hardened']['lost_updates']}",
+                         True,
+                         "last-write-wins trusts the wall clock, so a fast phone's stale "
+                         "edits beat the server's causally-newer ones; version vectors lose 0"))
+        metrics.append(m("Concurrent conflicts detected",
+                         f"{skew['naive']['conflicts_detected']} (naive) vs "
+                         f"{skew['hardened']['conflicts_detected']}",
+                         False,
+                         "the naive strategy cannot even see the 30 genuine conflicts it "
+                         "resolves; version vectors flag every one"))
+        both = skew["naive"]["converged"] and skew["hardened"]["converged"]
+        metrics.append(m("Both converge (device == server)?",
+                         "yes - for both" if both else "no", True,
+                         "so the obvious 'did the two sides agree?' health check passes for "
+                         "the naive design while it is silently wrong - convergence is not "
+                         "correctness"))
+    if atom:
+        metrics.append(m("Mid-sync crashes that break an inspection",
+                         f"{atom['naive']['crashes_leaving_a_broken_inspection']} of "
+                         f"{atom['naive']['crashes_simulated']} "
+                         f"({atom['naive']['broken_rate']*100:.0f}%) vs "
+                         f"{atom['hardened']['crashes_leaving_a_broken_inspection']}",
+                         True,
+                         "a non-atomic apply leaves a header claiming five findings above "
+                         "three rows; an all-or-nothing apply is never broken"))
+
+    if skew and atom:
+        total = skew["naive"]["total_records"]
+        charts.append({
+            "type": "bar",
+            "title": "Two failure modes, naive vs hardened (lower is better)",
+            "note": "Both strategies converge (device == server at the end), so a "
+                    "convergence check cannot tell them apart. Under a skewed clock the "
+                    "naive last-write-wins loses "
+                    f"{skew['naive']['lost_updates']} of {total} records; under mid-sync "
+                    "crashes it breaks the inspection "
+                    f"{atom['naive']['broken_rate']*100:.0f}% of the time. Version vectors "
+                    "plus an atomic apply do neither.",
+            "x": [f"records lost to skew (of {total})",
+                  "inspections broken by crash (%)"],
+            "series": [
+                {"name": "naive (last-write-wins)",
+                 "y": [skew["naive"]["lost_updates"],
+                       round(atom["naive"]["broken_rate"] * 100)]},
+                {"name": "hardened (version vectors + atomic)",
+                 "y": [skew["hardened"]["lost_updates"],
+                       round(atom["hardened"]["broken_rate"] * 100)]},
+            ],
+            "yaxis": "count / percent (lower is better)",
+        })
+
+    return metrics, charts
+
+
 EXTRACTORS = {
     "05": extract_05, "06": extract_06, "07": extract_07, "08": extract_08,
     "09": extract_09, "10": extract_10, "11": extract_11, "12": extract_12,
@@ -1165,6 +1235,7 @@ EXTRACTORS = {
     "22": extract_22,
     "23": extract_23,
     "24": extract_24,
+    "25": extract_25,
 }
 
 

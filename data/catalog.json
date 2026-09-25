@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-19T12:40:31+00:00",
+  "generated_at": "2026-09-25T07:38:32+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 24,
+  "n_projects": 25,
   "roles": [
     "Data Analysis",
     "Data Engineering",
@@ -11,10 +11,10 @@
   ],
   "role_counts": {
     "Data Analysis": 9,
-    "Data Engineering": 16,
+    "Data Engineering": 17,
     "Machine Learning": 13,
     "AI & LLM Systems": 10,
-    "Testing & QA": 11
+    "Testing & QA": 12
   },
   "all_topics": [
     "(s,S) inventory policy",
@@ -30,6 +30,7 @@
     "Anomaly shapes",
     "Apache Kafka",
     "At-least-once delivery",
+    "Atomic apply / transactions",
     "B+ trees with leaf chaining",
     "Bayesian inference",
     "Bayesian updating (Beta-Binomial)",
@@ -42,9 +43,11 @@
     "CNN from scratch",
     "CPU scheduling (FCFS/SJF/SRTF/RR/MLFQ)",
     "CQRS",
+    "CRDTs",
     "Cache locality and dependent loads",
     "Canary deployment",
     "Capacity cliff (0.138 N)",
+    "Causal ordering (happens-before)",
     "Centroid defuzzification",
     "Checks-Effects-Interactions",
     "Churn modeling",
@@ -54,9 +57,11 @@
     "Competing risks",
     "Concept drift",
     "Confidence intervals",
+    "Conflict detection & resolution",
     "Confounding & collinearity",
     "Constructor-enforced invariants",
     "Contextual bandits",
+    "Convergence vs correctness",
     "Cost-per-image / unit economics",
     "Cox proportional hazards",
     "Cross-modal agent",
@@ -133,9 +138,11 @@
     "Jain's fairness index",
     "K-Means",
     "Knowledge graph",
+    "Known-correct oracle",
     "LLM extraction",
     "LLM-as-judge calibration",
     "Lambda / EC2 / CloudFront / S3",
+    "Last-write-wins",
     "Late-data policy",
     "Length-extension forgery",
     "Lineage & blast radius",
@@ -161,6 +168,7 @@
     "OCR",
     "Off-policy evaluation",
     "Offline TTS",
+    "Offline-first sync",
     "Optimal as an unbeatable bound",
     "Oracle-based correctness testing",
     "PII detection",
@@ -193,11 +201,13 @@
     "Replay determinism",
     "Replication crisis",
     "Reproducible modelling",
+    "Reproducible reports",
     "Requirement traceability",
     "Revalidation on load",
     "Right-censoring",
     "Right-sizing",
     "Risk adjustment",
+    "Room / WorkManager / Compose (reference)",
     "Root-cause analysis",
     "Rules engine",
     "SARIMA",
@@ -225,6 +235,7 @@
     "Star schema + declared grain",
     "Store-and-forward traffic model",
     "Streamlit",
+    "Strong eventual consistency",
     "Subset-sum batch matching",
     "Supply-chain provenance",
     "Survival analysis",
@@ -242,6 +253,7 @@
     "Uniform crossover",
     "Upcoding detection",
     "Utilisation & headroom",
+    "Version vectors / vector clocks",
     "WSL",
     "Watermarks",
     "Welch's t-test and Cohen's d",
@@ -256,14 +268,18 @@
     "p-value misuse"
   ],
   "all_stack": [
+    "Android: Room + WorkManager + Compose (reference, not built)",
     "Apache Airflow",
     "Docker",
     "DuckDB",
     "FastAPI",
+    "Gradle",
     "H3",
     "Hardhat",
     "Hypothesis",
+    "JVM 17",
     "Java 17",
+    "Kotlin",
     "Locust",
     "NetworkX",
     "NumPy",
@@ -319,10 +335,10 @@
     "threading",
     "transformers"
   ],
-  "n_topics": 237,
-  "n_technologies": 62,
-  "n_metrics_extracted": 120,
-  "n_charts": 31,
+  "n_topics": 249,
+  "n_technologies": 66,
+  "n_metrics_extracted": 124,
+  "n_charts": 32,
   "projects": [
     {
       "id": "01",
@@ -2995,6 +3011,104 @@
         }
       ],
       "n_report_files": 7,
+      "screenshots": []
+    },
+    {
+      "id": "25",
+      "slug": "fieldnote",
+      "dir": "Fieldnote-Offline-Inspection",
+      "title": "Fieldnote - Offline-First Inspection Sync",
+      "pitch": "A naive last-write-wins sync loses 60 of 100 records to one skewed device clock and breaks 85% of mid-sync crashes - yet it 'converges', so it passes the obvious health check. Version vectors + atomic apply lose 0 and break 0. Convergence is not correctness.",
+      "roles": [
+        "Data Engineering",
+        "Testing & QA"
+      ],
+      "topics": [
+        "Offline-first sync",
+        "Version vectors / vector clocks",
+        "Causal ordering (happens-before)",
+        "Clock skew",
+        "Last-write-wins",
+        "Conflict detection & resolution",
+        "CRDTs",
+        "Strong eventual consistency",
+        "Atomic apply / transactions",
+        "Idempotency",
+        "Convergence vs correctness",
+        "Known-correct oracle",
+        "Room / WorkManager / Compose (reference)",
+        "Deterministic simulation",
+        "Reproducible reports"
+      ],
+      "stack": [
+        "Kotlin",
+        "JVM 17",
+        "Gradle",
+        "no dependencies (measured core)",
+        "Android: Room + WorkManager + Compose (reference, not built)"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "A verified pure-Kotlin/JVM sync engine for an offline-first inspection app, measuring the two failures such an app actually hits against a known-correct oracle - no Android SDK, no emulator, no network, no spend. The headline is a discipline: convergence is not correctness. A naive last-write-wins sync loses 60 of 100 records to a single skewed device clock (it trusts the wall clock, so a fast phone's stale edits beat the server's causally-newer ones) and detects 0 of the 30 genuine concurrent conflicts; version vectors, which carry causal history instead of a timestamp, lose 0 and flag all 30. Crucially BOTH strategies converge (device == server at the end), so the obvious 'did the two sides agree?' health check passes for the naive design while it is silently wrong 60% of the time. On a mid-sync crash, a non-atomic apply is left with a broken inspection at 50 of 59 interruption points (85%) - a header claiming five findings above three rows; an atomic (all-or-nothing) apply is broken at 0. The naive baseline is not a straw man: last-write-wins is the common default, is trivially convergent, and passes the health check. Every number is read from reports/*.json written by a real run (./gradlew experiments) and reproduces byte-for-byte; 17 scored tests pass. The real Room + WorkManager + Compose Android app ships under app/ as faithful reference (not built here, because the finding is a distributed-systems property provable headless on a bare JVM and needs no device).",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "Records lost to a skewed clock",
+          "value": "60 of 100 (naive) vs 0",
+          "highlight": true,
+          "note": "last-write-wins trusts the wall clock, so a fast phone's stale edits beat the server's causally-newer ones; version vectors lose 0",
+          "source": "reports"
+        },
+        {
+          "label": "Concurrent conflicts detected",
+          "value": "0 (naive) vs 30",
+          "highlight": false,
+          "note": "the naive strategy cannot even see the 30 genuine conflicts it resolves; version vectors flag every one",
+          "source": "reports"
+        },
+        {
+          "label": "Both converge (device == server)?",
+          "value": "yes - for both",
+          "highlight": true,
+          "note": "so the obvious 'did the two sides agree?' health check passes for the naive design while it is silently wrong - convergence is not correctness",
+          "source": "reports"
+        },
+        {
+          "label": "Mid-sync crashes that break an inspection",
+          "value": "50 of 59 (85%) vs 0",
+          "highlight": true,
+          "note": "a non-atomic apply leaves a header claiming five findings above three rows; an all-or-nothing apply is never broken",
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "bar",
+          "title": "Two failure modes, naive vs hardened (lower is better)",
+          "note": "Both strategies converge (device == server at the end), so a convergence check cannot tell them apart. Under a skewed clock the naive last-write-wins loses 60 of 100 records; under mid-sync crashes it breaks the inspection 85% of the time. Version vectors plus an atomic apply do neither.",
+          "x": [
+            "records lost to skew (of 100)",
+            "inspections broken by crash (%)"
+          ],
+          "series": [
+            {
+              "name": "naive (last-write-wins)",
+              "y": [
+                60,
+                85
+              ]
+            },
+            {
+              "name": "hardened (version vectors + atomic)",
+              "y": [
+                0,
+                0
+              ]
+            }
+          ],
+          "yaxis": "count / percent (lower is better)"
+        }
+      ],
+      "n_report_files": 3,
       "screenshots": []
     }
   ]

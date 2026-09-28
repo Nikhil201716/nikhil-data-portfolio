@@ -733,6 +733,52 @@ PROJECTS = [
                              "by re-run and diff). Everything runs free: Python for the "
                              "measurement, Node only for Newman.",
     },
+    {
+        "id": "28",
+        "slug": "assay",
+        "dir": "Assay-Data-Quality",
+        "title": "Assay - ETL Data-Quality Testing",
+        "pitch": "\"The pipeline ran\" catches 0 of 14 injected data defects. "
+                  "Expectations catch 8, reconciliation 7, referential 2, "
+                  "distribution 1 - and 2 slip past every check. A green ETL job is "
+                  "not clean data.",
+        "roles": ["Data Engineering", "Testing & QA"],
+        "topics": ["Data quality", "ETL testing", "Data validation",
+                    "Great-Expectations-style suite", "Reconciliation", "Idempotency",
+                    "Referential integrity", "Distribution drift", "Schema checks",
+                    "Property-based testing", "Hypothesis", "Fault injection",
+                    "Silent data corruption", "dbt tests / Soda (mapping)",
+                    "Reproducible reports"],
+        "stack": ["Python 3.12+", "standard-library ETL", "SQLite", "pytest",
+                   "Hypothesis"],
+        "metrics_source": "reports",
+        "headline_finding": "A retail-orders ETL - extract three seeded source tables, "
+                             "join and derive an enriched table, load into SQLite (standard "
+                             "library only, no pandas) - plus six data-quality checks. A harness "
+                             "injects a catalog of 15 realistic defects (14 real, 1 benign) one "
+                             "at a time and measures which check catches which. The finding: a "
+                             "green ETL job proves nothing, and the checks are complementary, not "
+                             "ranked. 'The pipeline ran' (the trivial baseline) catches 0 of 14 "
+                             "defects - a tolerant job loads dirty data and reports success. "
+                             "Schema catches 1, the Great-Expectations-style expectation suite "
+                             "(not-null, unique, between, in-set, regex, computed-field) catches "
+                             "8, referential integrity 2, reconciliation (counts, sums, "
+                             "idempotency vs source of truth) 7, and distribution drift 1; 2 "
+                             "defects slip past every check. The disjoint cells are the point: "
+                             "reconciliation ALONE catches a silent 12% row drop, a "
+                             "non-idempotent load, and a 100x scale error - defects where every "
+                             "surviving row is individually valid, so per-row checks are blind; "
+                             "referential ALONE catches an orphaned foreign key; distribution "
+                             "catches a scale drift the loose per-row range misses. Two defects "
+                             "escape everything - a country silently changed to a DIFFERENT valid "
+                             "country, and an encoding-mangled name - genuine silent-corruption "
+                             "gaps that need row-level reconciliation against the source or a "
+                             "data contract upstream. No check flagged the benign additive change "
+                             "(0 false positives). 18 tests: property-based (Hypothesis) tests of "
+                             "the pure transforms + meta-tests pinning each check against the "
+                             "defect it owns. The checks map one-to-one onto Great Expectations, "
+                             "dbt tests and Soda. Reports byte-reproducible (seeded, in-process).",
+    },
 ]
 
 AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

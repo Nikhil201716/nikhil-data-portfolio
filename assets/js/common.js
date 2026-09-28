@@ -51,6 +51,7 @@ const BOOKS = [
   ["25", "Fieldnote, Offline-First Inspection Sync", "Fieldnote-Offline-Inspection", "Fieldnote-Notebook.pdf", 60],
   ["26", "Relay, a URL Shortener & the Test Pyramid", "Relay-URL-Shortener", "Relay-Notebook.pdf", 60],
   ["27", "Accord, REST + GraphQL Contract Testing", "Accord-Contract-Testing", "Accord-Notebook.pdf", 60],
+  ["28", "Assay, ETL Data-Quality Testing", "Assay-Data-Quality", "Assay-Notebook.pdf", 60],
 ].map(([id, title, repo, file, pages]) => ({ id, title, repo, file, pages }));
 
 const BOOK_BY_ID = Object.fromEntries(BOOKS.map((b) => [b.id, b]));

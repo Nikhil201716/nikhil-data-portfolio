@@ -1338,6 +1338,59 @@ def extract_27(d: Path):
     return metrics, charts
 
 
+def extract_28(d: Path):
+    """Assay - ETL data-quality testing; which check catches which defect.
+
+    The headline chart contrasts the six checks on the injected defects: the
+    trivial 'pipeline ran' baseline against schema, expectations, referential,
+    reconciliation and distribution.
+    """
+    metrics, charts = [], []
+    s = read_json(d, "summary.json")
+
+    if s:
+        nd = s["total_defects"]
+        cpm = s["caught_per_mechanism"]
+        metrics.append(m("'The pipeline ran' (the baseline)",
+                         f"{cpm['pipeline_ran']} of {nd} defects caught", True,
+                         "a green ETL job proves nothing - a tolerant pipeline loads dirty "
+                         "data and reports success"))
+        metrics.append(m("Expectations vs reconciliation",
+                         f"expectations {cpm['expectations']} / reconciliation "
+                         f"{cpm['reconciliation']} (of {nd})", True,
+                         "reconciliation ALONE catches the silent row-drop, non-idempotent "
+                         "load and scale error that per-row expectations are blind to"))
+        metrics.append(m("Defects that slip past every check",
+                         f"{s['defects_missed_by_all']} of {nd}", True,
+                         "a valid-but-wrong value and an encoding-mangled string - "
+                         "silent corruption automated checks cannot see"))
+        metrics.append(m("False positives on the additive change",
+                         f"{len(s['false_positives'])} of {s['additive_changes']}", False,
+                         "adding unreferenced products to the catalog is not a defect, and "
+                         "nothing flagged it"))
+
+    if s:
+        nd = s["total_defects"]
+        cpm = s["caught_per_mechanism"]
+        order = ["pipeline_ran", "schema", "expectations", "referential",
+                 "reconciliation", "distribution"]
+        charts.append({
+            "type": "bar",
+            "title": "Data defects caught, by check",
+            "note": "Each of the %d injected defects is scored against six checks. The "
+                    "'pipeline ran' baseline catches %d; expectations are the workhorse; "
+                    "reconciliation, referential and distribution each own a class the "
+                    "others miss; %d slip past all six. Reproducible (reports/summary.json)."
+                    % (nd, cpm["pipeline_ran"], s["defects_missed_by_all"]),
+            "x": ["pipeline ran", "schema", "expectations", "referential",
+                  "reconciliation", "distribution"],
+            "series": [{"name": "defects caught", "y": [cpm[k] for k in order]}],
+            "yaxis": "defects caught (of %d)" % nd,
+        })
+
+    return metrics, charts
+
+
 EXTRACTORS = {
     "05": extract_05, "06": extract_06, "07": extract_07, "08": extract_08,
     "09": extract_09, "10": extract_10, "11": extract_11, "12": extract_12,
@@ -1356,6 +1409,7 @@ EXTRACTORS = {
     "25": extract_25,
     "26": extract_26,
     "27": extract_27,
+    "28": extract_28,
 }
 
 

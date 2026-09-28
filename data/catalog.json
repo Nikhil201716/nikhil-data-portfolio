@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-28T06:42:50+00:00",
+  "generated_at": "2026-09-28T07:16:24+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 27,
+  "n_projects": 28,
   "roles": [
     "Data Analysis",
     "Data Engineering",
@@ -11,10 +11,10 @@
   ],
   "role_counts": {
     "Data Analysis": 9,
-    "Data Engineering": 19,
+    "Data Engineering": 20,
     "Machine Learning": 13,
     "AI & LLM Systems": 10,
-    "Testing & QA": 14
+    "Testing & QA": 15
   },
   "all_topics": [
     "(s,S) inventory policy",
@@ -75,8 +75,10 @@
     "Cox proportional hazards",
     "Cross-modal agent",
     "Data contracts",
+    "Data quality",
     "Data quality SLAs",
     "Data quality gates",
+    "Data validation",
     "Deadlock detection (wait-for graph)",
     "Deterministic simulation",
     "Difference-in-differences",
@@ -85,12 +87,14 @@
     "Discrete-time hazard",
     "Disparate impact",
     "Distributed transactions",
+    "Distribution drift",
     "Distribution fitting (MLE)",
     "Docker Compose",
     "Document AI",
     "Double-entry bookkeeping",
     "DuckDB",
     "ETL orchestration",
+    "ETL testing",
     "Effect size (Cohen's d)",
     "Egress economics",
     "Elitism",
@@ -122,6 +126,7 @@
     "Graph fraud detection",
     "GraphQL",
     "GraphRAG",
+    "Great-Expectations-style suite",
     "Green-wave progression",
     "Grounded LLM generation",
     "Guardrailed NL-to-SQL",
@@ -136,6 +141,7 @@
     "Holt-Winters",
     "Hopfield associative memory",
     "Hybrid retrieval",
+    "Hypothesis",
     "Hypothesis testing",
     "IDOR / broken access control",
     "Idempotency",
@@ -214,10 +220,12 @@
     "React",
     "React Testing Library",
     "Real-time scoring",
+    "Reconciliation",
     "Red-teaming",
     "Redis Streams",
     "Reentrancy and the guard/CEI fix",
     "Reference normalisation",
+    "Referential integrity",
     "Replay determinism",
     "Replication crisis",
     "Reproducible modelling",
@@ -238,6 +246,7 @@
     "SVD recommender",
     "Safety vs liveness",
     "Saga pattern",
+    "Schema checks",
     "Schema diff",
     "Seasonal-naive baseline",
     "Selectivity",
@@ -247,6 +256,7 @@
     "Serverless vs always-on",
     "Servlet lifecycle without a container",
     "Shunting-yard parsing",
+    "Silent data corruption",
     "Skip lists and probabilistic balance",
     "Sliding-window ARQ with AIMD",
     "Slowly changing dimensions",
@@ -289,6 +299,7 @@
     "Wilson intervals",
     "dbt",
     "dbt semantic layer",
+    "dbt tests / Soda (mapping)",
     "fork/exec/pipe and Unix sockets",
     "getrusage kernel accounting",
     "int8 quantization",
@@ -366,14 +377,15 @@
     "scikit-learn",
     "sentence-transformers",
     "standard library only",
+    "standard-library ETL",
     "stdlib statistics only",
     "threading",
     "transformers"
   ],
-  "n_topics": 278,
-  "n_technologies": 72,
-  "n_metrics_extracted": 133,
-  "n_charts": 34,
+  "n_topics": 289,
+  "n_technologies": 73,
+  "n_metrics_extracted": 137,
+  "n_charts": 35,
   "projects": [
     {
       "id": "01",
@@ -3349,6 +3361,105 @@
         }
       ],
       "n_report_files": 4,
+      "screenshots": []
+    },
+    {
+      "id": "28",
+      "slug": "assay",
+      "dir": "Assay-Data-Quality",
+      "title": "Assay - ETL Data-Quality Testing",
+      "pitch": "\"The pipeline ran\" catches 0 of 14 injected data defects. Expectations catch 8, reconciliation 7, referential 2, distribution 1 - and 2 slip past every check. A green ETL job is not clean data.",
+      "roles": [
+        "Data Engineering",
+        "Testing & QA"
+      ],
+      "topics": [
+        "Data quality",
+        "ETL testing",
+        "Data validation",
+        "Great-Expectations-style suite",
+        "Reconciliation",
+        "Idempotency",
+        "Referential integrity",
+        "Distribution drift",
+        "Schema checks",
+        "Property-based testing",
+        "Hypothesis",
+        "Fault injection",
+        "Silent data corruption",
+        "dbt tests / Soda (mapping)",
+        "Reproducible reports"
+      ],
+      "stack": [
+        "Python 3.12+",
+        "standard-library ETL",
+        "SQLite",
+        "pytest",
+        "Hypothesis"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "A retail-orders ETL - extract three seeded source tables, join and derive an enriched table, load into SQLite (standard library only, no pandas) - plus six data-quality checks. A harness injects a catalog of 15 realistic defects (14 real, 1 benign) one at a time and measures which check catches which. The finding: a green ETL job proves nothing, and the checks are complementary, not ranked. 'The pipeline ran' (the trivial baseline) catches 0 of 14 defects - a tolerant job loads dirty data and reports success. Schema catches 1, the Great-Expectations-style expectation suite (not-null, unique, between, in-set, regex, computed-field) catches 8, referential integrity 2, reconciliation (counts, sums, idempotency vs source of truth) 7, and distribution drift 1; 2 defects slip past every check. The disjoint cells are the point: reconciliation ALONE catches a silent 12% row drop, a non-idempotent load, and a 100x scale error - defects where every surviving row is individually valid, so per-row checks are blind; referential ALONE catches an orphaned foreign key; distribution catches a scale drift the loose per-row range misses. Two defects escape everything - a country silently changed to a DIFFERENT valid country, and an encoding-mangled name - genuine silent-corruption gaps that need row-level reconciliation against the source or a data contract upstream. No check flagged the benign additive change (0 false positives). 18 tests: property-based (Hypothesis) tests of the pure transforms + meta-tests pinning each check against the defect it owns. The checks map one-to-one onto Great Expectations, dbt tests and Soda. Reports byte-reproducible (seeded, in-process).",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "'The pipeline ran' (the baseline)",
+          "value": "0 of 14 defects caught",
+          "highlight": true,
+          "note": "a green ETL job proves nothing - a tolerant pipeline loads dirty data and reports success",
+          "source": "reports"
+        },
+        {
+          "label": "Expectations vs reconciliation",
+          "value": "expectations 8 / reconciliation 7 (of 14)",
+          "highlight": true,
+          "note": "reconciliation ALONE catches the silent row-drop, non-idempotent load and scale error that per-row expectations are blind to",
+          "source": "reports"
+        },
+        {
+          "label": "Defects that slip past every check",
+          "value": "2 of 14",
+          "highlight": true,
+          "note": "a valid-but-wrong value and an encoding-mangled string - silent corruption automated checks cannot see",
+          "source": "reports"
+        },
+        {
+          "label": "False positives on the additive change",
+          "value": "0 of 1",
+          "highlight": false,
+          "note": "adding unreferenced products to the catalog is not a defect, and nothing flagged it",
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "bar",
+          "title": "Data defects caught, by check",
+          "note": "Each of the 14 injected defects is scored against six checks. The 'pipeline ran' baseline catches 0; expectations are the workhorse; reconciliation, referential and distribution each own a class the others miss; 2 slip past all six. Reproducible (reports/summary.json).",
+          "x": [
+            "pipeline ran",
+            "schema",
+            "expectations",
+            "referential",
+            "reconciliation",
+            "distribution"
+          ],
+          "series": [
+            {
+              "name": "defects caught",
+              "y": [
+                0,
+                1,
+                8,
+                2,
+                7,
+                1
+              ]
+            }
+          ],
+          "yaxis": "defects caught (of 14)"
+        }
+      ],
+      "n_report_files": 2,
       "screenshots": []
     }
   ]

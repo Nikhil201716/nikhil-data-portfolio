@@ -1277,6 +1277,67 @@ def extract_26(d: Path):
     return metrics, charts
 
 
+def extract_27(d: Path):
+    """Accord - REST + GraphQL contract testing; which mechanism catches what.
+
+    The headline chart contrasts the three testing mechanisms on the breaking
+    changes: provider tests vs consumer contracts vs schema-diff. The metrics
+    carry the honest tail - the breaks that slip past all three.
+    """
+    metrics, charts = [], []
+
+    s = read_json(d, "summary.json")
+    fz = read_json(d, "fuzz.json")
+
+    if s:
+        nb = s["breaking_changes"]
+        cpm = s["caught_per_mechanism_of_breaking"]
+        metrics.append(m("Breaking changes caught by each mechanism",
+                         f"provider {cpm['provider_tests']} / contract {cpm['contract']} "
+                         f"/ schema-diff {cpm['schema_diff']} (of {nb})", True,
+                         "no single mechanism catches everything - they are complementary, "
+                         "not ranked"))
+        metrics.append(m("Contracts catch what provider tests miss",
+                         f"{len(s['contract_catches_provider_tests_miss'])} of {nb}", True,
+                         "renames/retypes of fields the provider treats as incidental but a "
+                         "consumer renders - the core value of consumer-driven contracts"))
+        metrics.append(m("Breaking changes that slip past all three",
+                         f"{s['breaking_missed_by_all']} of {nb}", True,
+                         "a silent format change and a relaxed validation - semantic/request "
+                         "breaks that structural and type checks cannot see"))
+        metrics.append(m("False positives on additive changes",
+                         f"{len(s['false_positives'])} of {s['additive_changes']}", False,
+                         "the schema-diff correctly treats a new field as non-breaking"))
+    if fz:
+        metrics.append(m("Fuzzing the write path",
+                         f"{'0' if not fz['unhandled_5xx_found'] else 'FAIL'} unhandled 5xx "
+                         f"/ {fz['max_examples']} payloads", False,
+                         "property-based negative testing: Pydantic validation rejects bad "
+                         "input with 4xx, never a crash"))
+
+    if s:
+        nb = s["breaking_changes"]
+        cpm = s["caught_per_mechanism_of_breaking"]
+        charts.append({
+            "type": "bar",
+            "title": "Breaking changes caught, by mechanism",
+            "note": "Each of the %d breaking API changes is injected and scored against "
+                    "three mechanisms. Schema-diff is the broadest single net for "
+                    "structural breaks, but contracts catch %d changes it is blind to via "
+                    "a value matcher, and %d breaks slip past all three. Reproducible "
+                    "(reports/summary.json)."
+                    % (nb, len(s["contract_catches_schema_diff_blind"]),
+                       s["breaking_missed_by_all"]),
+            "x": ["provider tests", "consumer contract", "schema-diff", "caught by any"],
+            "series": [{"name": "breaking changes caught",
+                        "y": [cpm["provider_tests"], cpm["contract"], cpm["schema_diff"],
+                              s["breaking_caught_by_any"]]}],
+            "yaxis": "breaking changes caught (of %d)" % nb,
+        })
+
+    return metrics, charts
+
+
 EXTRACTORS = {
     "05": extract_05, "06": extract_06, "07": extract_07, "08": extract_08,
     "09": extract_09, "10": extract_10, "11": extract_11, "12": extract_12,
@@ -1294,6 +1355,7 @@ EXTRACTORS = {
     "24": extract_24,
     "25": extract_25,
     "26": extract_26,
+    "27": extract_27,
 }
 
 

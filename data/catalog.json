@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-25T16:07:24+00:00",
+  "generated_at": "2026-09-28T06:42:50+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 26,
+  "n_projects": 27,
   "roles": [
     "Data Analysis",
     "Data Engineering",
@@ -11,10 +11,10 @@
   ],
   "role_counts": {
     "Data Analysis": 9,
-    "Data Engineering": 18,
+    "Data Engineering": 19,
     "Machine Learning": 13,
     "AI & LLM Systems": 10,
-    "Testing & QA": 13
+    "Testing & QA": 14
   },
   "all_topics": [
     "(s,S) inventory policy",
@@ -23,6 +23,8 @@
     "ADALINE / delta rule",
     "AES-128 from FIPS-197",
     "AI-augmented QA",
+    "API testing",
+    "API versioning",
     "AWS pricing model",
     "Adversarial red-teaming",
     "Agent trajectories",
@@ -39,8 +41,10 @@
     "Billing alarm & teardown",
     "Bootstrap CIs",
     "Break-even analysis",
+    "Breaking-change detection",
     "CDC",
     "CI coverage simulation",
+    "CI/CD gates",
     "CI/CD quality gate",
     "CNN from scratch",
     "CPU scheduling (FCFS/SJF/SRTF/RR/MLFQ)",
@@ -62,7 +66,9 @@
     "Conflict detection & resolution",
     "Confounding & collinearity",
     "Constructor-enforced invariants",
+    "Consumer-driven contracts",
     "Contextual bandits",
+    "Contract testing",
     "Convergence vs correctness",
     "Cost-per-image / unit economics",
     "Coverage vs correctness",
@@ -114,6 +120,7 @@
     "Gas measurement",
     "Genetic algorithm",
     "Graph fraud detection",
+    "GraphQL",
     "GraphRAG",
     "Green-wave progression",
     "Grounded LLM generation",
@@ -175,11 +182,13 @@
     "Off-policy evaluation",
     "Offline TTS",
     "Offline-first sync",
+    "OpenAPI / SDL",
     "Optimal as an unbeatable bound",
     "Oracle-based correctness testing",
     "PII detection",
     "PII governance",
     "PSI drift",
+    "Pact-style verification",
     "Page replacement (FIFO/LRU/Clock/Optimal)",
     "Pandera",
     "Partial failure & compensation",
@@ -187,12 +196,14 @@
     "Playwright",
     "Playwright E2E",
     "Point-in-time feature store",
+    "Postman / Newman",
     "Power analysis",
     "Prior sensitivity",
     "Producer/consumer",
     "Prompt injection",
     "Proof-of-work vs proof-of-stake finality",
     "Propensity score matching",
+    "Property-based fuzzing",
     "Property-based testing",
     "PySpark",
     "Queueing theory (M/M/c, M/D/c)",
@@ -227,6 +238,7 @@
     "SVD recommender",
     "Safety vs liveness",
     "Saga pattern",
+    "Schema diff",
     "Seasonal-naive baseline",
     "Selectivity",
     "Self-healing locators",
@@ -243,6 +255,7 @@
     "Spring Boot",
     "Star schema + declared grain",
     "Store-and-forward traffic model",
+    "Strawberry GraphQL",
     "Streamlit",
     "Strong eventual consistency",
     "Subset-sum batch matching",
@@ -266,6 +279,7 @@
     "Unit / integration / E2E",
     "Upcoding detection",
     "Utilisation & headroom",
+    "Value matchers",
     "Version vectors / vector clocks",
     "Vitest",
     "WSL",
@@ -298,6 +312,7 @@
     "Kotlin",
     "Locust",
     "NetworkX",
+    "Newman (Postman)",
     "NumPy",
     "NumPy only",
     "Ollama",
@@ -325,6 +340,7 @@
     "Solidity 0.8.24",
     "Spring Boot + Kafka reference stack",
     "Statsmodels",
+    "Strawberry GraphQL",
     "Streamlit",
     "Terraform (reference, never applied)",
     "Vitest",
@@ -354,10 +370,10 @@
     "threading",
     "transformers"
   ],
-  "n_topics": 264,
-  "n_technologies": 70,
-  "n_metrics_extracted": 128,
-  "n_charts": 33,
+  "n_topics": 278,
+  "n_technologies": 72,
+  "n_metrics_extracted": 133,
+  "n_charts": 34,
   "projects": [
     {
       "id": "01",
@@ -3225,6 +3241,111 @@
             }
           ],
           "yaxis": "bugs caught (of 20)"
+        }
+      ],
+      "n_report_files": 4,
+      "screenshots": []
+    },
+    {
+      "id": "27",
+      "slug": "accord",
+      "dir": "Accord-Contract-Testing",
+      "title": "Accord - REST + GraphQL Contract Testing",
+      "pitch": "Of 13 breaking API changes, provider tests catch 5, consumer contracts 7, schema-diff 10 - and 2 slip past all three. No single API test catches everything; the mechanisms are complementary, not ranked.",
+      "roles": [
+        "Testing & QA",
+        "Data Engineering"
+      ],
+      "topics": [
+        "API testing",
+        "Contract testing",
+        "Consumer-driven contracts",
+        "Pact-style verification",
+        "Value matchers",
+        "GraphQL",
+        "REST API",
+        "Schema diff",
+        "OpenAPI / SDL",
+        "Breaking-change detection",
+        "FastAPI",
+        "Strawberry GraphQL",
+        "Property-based fuzzing",
+        "Postman / Newman",
+        "CI/CD gates",
+        "API versioning",
+        "Reproducible reports"
+      ],
+      "stack": [
+        "Python 3.12+",
+        "FastAPI",
+        "Strawberry GraphQL",
+        "pytest",
+        "Hypothesis",
+        "Newman (Postman)"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "A book-catalog API served over BOTH REST (FastAPI) and GraphQL (Strawberry), with a reading-list consumer and a Pact-style contract. A harness injects 15 realistic API changes (13 breaking, 2 additive) one at a time and scores three testing mechanisms against each: the provider's own tests, consumer-driven contract verification, and a structural schema-diff. The finding: no single mechanism catches everything, and they are complementary rather than ranked. Of the 13 breaking changes, provider tests catch 5, consumer contracts catch 7, and schema-diff catches 10; 2 slip past all three (a silent ISBN format change and a relaxed request validation). Contracts catch 5 changes the provider's own tests miss (renames/retypes of fields the provider treats as incidental but the consumer renders); schema-diff catches 4 the contract is blind to (changes to fields/behaviour no consumer declared - a dropped field, a status code, a nullability widening); and a contract VALUE matcher catches 1 semantic rescale (rating 0-5 -> 0-100, still a float) that no structural or type check can see. No mechanism raised a false positive on the 2 additive changes. A typed GraphQL schema turns many breaks into a cheap structural diff; REST's untyped JSON needs the shape derived from live responses. Layers: pytest (19 provider + consumer tests), contract verification with type + value matchers, schema-diff over OpenAPI paths + the GraphQL SDL type map, and a Hypothesis fuzzer of the write path (0 unhandled 5xx across 300 malformed payloads). A Postman/Newman collection and full CI run every mechanism. catch_matrix.json + summary.json are byte-reproducible (verified by re-run and diff). Everything runs free: Python for the measurement, Node only for Newman.",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "Breaking changes caught by each mechanism",
+          "value": "provider 5 / contract 7 / schema-diff 10 (of 13)",
+          "highlight": true,
+          "note": "no single mechanism catches everything - they are complementary, not ranked",
+          "source": "reports"
+        },
+        {
+          "label": "Contracts catch what provider tests miss",
+          "value": "5 of 13",
+          "highlight": true,
+          "note": "renames/retypes of fields the provider treats as incidental but a consumer renders - the core value of consumer-driven contracts",
+          "source": "reports"
+        },
+        {
+          "label": "Breaking changes that slip past all three",
+          "value": "2 of 13",
+          "highlight": true,
+          "note": "a silent format change and a relaxed validation - semantic/request breaks that structural and type checks cannot see",
+          "source": "reports"
+        },
+        {
+          "label": "False positives on additive changes",
+          "value": "0 of 2",
+          "highlight": false,
+          "note": "the schema-diff correctly treats a new field as non-breaking",
+          "source": "reports"
+        },
+        {
+          "label": "Fuzzing the write path",
+          "value": "0 unhandled 5xx / 300 payloads",
+          "highlight": false,
+          "note": "property-based negative testing: Pydantic validation rejects bad input with 4xx, never a crash",
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "bar",
+          "title": "Breaking changes caught, by mechanism",
+          "note": "Each of the 13 breaking API changes is injected and scored against three mechanisms. Schema-diff is the broadest single net for structural breaks, but contracts catch 1 changes it is blind to via a value matcher, and 2 breaks slip past all three. Reproducible (reports/summary.json).",
+          "x": [
+            "provider tests",
+            "consumer contract",
+            "schema-diff",
+            "caught by any"
+          ],
+          "series": [
+            {
+              "name": "breaking changes caught",
+              "y": [
+                5,
+                7,
+                10,
+                11
+              ]
+            }
+          ],
+          "yaxis": "breaking changes caught (of 13)"
         }
       ],
       "n_report_files": 4,

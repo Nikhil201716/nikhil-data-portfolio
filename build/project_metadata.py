@@ -685,6 +685,54 @@ PROJECTS = [
                              "free and locally: Python for the backend + measurement, Node "
                              "for the front end.",
     },
+    {
+        "id": "27",
+        "slug": "accord",
+        "dir": "Accord-Contract-Testing",
+        "title": "Accord - REST + GraphQL Contract Testing",
+        "pitch": "Of 13 breaking API changes, provider tests catch 5, consumer "
+                  "contracts 7, schema-diff 10 - and 2 slip past all three. No "
+                  "single API test catches everything; the mechanisms are "
+                  "complementary, not ranked.",
+        "roles": ["Testing & QA", "Data Engineering"],
+        "topics": ["API testing", "Contract testing", "Consumer-driven contracts",
+                    "Pact-style verification", "Value matchers", "GraphQL", "REST API",
+                    "Schema diff", "OpenAPI / SDL", "Breaking-change detection",
+                    "FastAPI", "Strawberry GraphQL", "Property-based fuzzing",
+                    "Postman / Newman", "CI/CD gates", "API versioning",
+                    "Reproducible reports"],
+        "stack": ["Python 3.12+", "FastAPI", "Strawberry GraphQL", "pytest",
+                   "Hypothesis", "Newman (Postman)"],
+        "metrics_source": "reports",
+        "headline_finding": "A book-catalog API served over BOTH REST (FastAPI) and "
+                             "GraphQL (Strawberry), with a reading-list consumer and a "
+                             "Pact-style contract. A harness injects 15 realistic API changes "
+                             "(13 breaking, 2 additive) one at a time and scores three testing "
+                             "mechanisms against each: the provider's own tests, consumer-driven "
+                             "contract verification, and a structural schema-diff. The finding: "
+                             "no single mechanism catches everything, and they are complementary "
+                             "rather than ranked. Of the 13 breaking changes, provider tests "
+                             "catch 5, consumer contracts catch 7, and schema-diff catches 10; "
+                             "2 slip past all three (a silent ISBN format change and a relaxed "
+                             "request validation). Contracts catch 5 changes the provider's own "
+                             "tests miss (renames/retypes of fields the provider treats as "
+                             "incidental but the consumer renders); schema-diff catches 4 the "
+                             "contract is blind to (changes to fields/behaviour no consumer "
+                             "declared - a dropped field, a status code, a nullability widening); "
+                             "and a contract VALUE matcher catches 1 semantic rescale (rating "
+                             "0-5 -> 0-100, still a float) that no structural or type check can "
+                             "see. No mechanism raised a false positive on the 2 additive "
+                             "changes. A typed GraphQL schema turns many breaks into a cheap "
+                             "structural diff; REST's untyped JSON needs the shape derived from "
+                             "live responses. Layers: pytest (19 provider + consumer tests), "
+                             "contract verification with type + value matchers, schema-diff over "
+                             "OpenAPI paths + the GraphQL SDL type map, and a Hypothesis fuzzer "
+                             "of the write path (0 unhandled 5xx across 300 malformed payloads). "
+                             "A Postman/Newman collection and full CI run every mechanism. "
+                             "catch_matrix.json + summary.json are byte-reproducible (verified "
+                             "by re-run and diff). Everything runs free: Python for the "
+                             "measurement, Node only for Newman.",
+    },
 ]
 
 AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

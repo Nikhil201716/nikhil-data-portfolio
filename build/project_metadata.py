@@ -779,6 +779,54 @@ PROJECTS = [
                              "defect it owns. The checks map one-to-one onto Great Expectations, "
                              "dbt tests and Soda. Reports byte-reproducible (seeded, in-process).",
     },
+    {
+        "id": "29",
+        "slug": "surge",
+        "dir": "Surge-Load-Testing",
+        "title": "Surge - Load & Reliability Testing",
+        "pitch": "A single-user check catches 0 of 8 performance defects. Load "
+                  "testing catches 7 - steady finds the knee, spike the burst "
+                  "headroom, soak the leak, chaos the resilience. And naive retries "
+                  "make an outage worse than no resilience at all.",
+        "roles": ["Testing & QA", "Data Engineering"],
+        "topics": ["Load testing", "Performance testing", "Reliability testing",
+                    "Chaos engineering", "Queueing theory (M/M/c, M/D/c)", "Erlang C",
+                    "Discrete-event simulation", "Latency percentiles (p99 / p99.9)",
+                    "SLOs & the knee", "Little's law", "Circuit breaker",
+                    "Retry storm", "Coordinated omission", "Soak / spike / stress",
+                    "k6 / Locust", "Reproducible reports"],
+        "stack": ["Python 3.12+", "standard-library discrete-event sim", "FastAPI",
+                   "async load driver", "Locust / k6 (reference)", "pytest"],
+        "metrics_source": "reports",
+        "headline_finding": "A load-testing laboratory. A discrete-event queue simulator "
+                             "- validated against the exact Erlang C formula (within 5%) - is "
+                             "the reproducible engine, and a real FastAPI service driven by an "
+                             "async load generator validates its shape. A harness injects 8 "
+                             "performance defects (plus one benign change) and measures which of "
+                             "five load-testing approaches catches which. The finding: a "
+                             "single-user functional latency check catches 0 of 8 defects - it is "
+                             "blind to load. Load testing catches 7, and each pattern owns a class "
+                             "the others miss: steady load finds the capacity knee (p99 SLO breaks "
+                             "above it); a spike finds missing burst headroom (a pool that passes "
+                             "steady load fails a 1.4x burst, p99 110ms -> 3.4s); a soak finds a "
+                             "resource leak (passes a short test, degrades over hours); and chaos "
+                             "(a dependency outage) finds missing resilience. One defect - a rare "
+                             "slow code path on 0.2% of requests - slips past every p99-based "
+                             "approach (p99 83ms, p99.9 240ms): your SLO percentile is a blind "
+                             "spot above it. The sharpest reliability result is counter-intuitive: "
+                             "under a dependency outage, retry-without-backoff (p99 ~36s) is WORSE "
+                             "than no resilience at all (27s), while a circuit breaker keeps p99 "
+                             "at 77ms - naive retries hold workers across attempts and collapse "
+                             "concurrency (a retry storm). Twist findings: the mean lies (p99 is "
+                             "2.1x the mean near saturation), the knee is a number (150 rps healthy "
+                             "vs 50 undersized), and steady-pass is not burst-safe. 19 tests incl. "
+                             "the sim-vs-Erlang-C validation; reports byte-reproducible (seeded). "
+                             "The real service + async driver + Locust + k6 ship as runnable load "
+                             "tests. Building the validation surfaced the coordinated-omission "
+                             "problem first-hand - a single-box generator cannot faithfully "
+                             "saturate an async server, which is why the knee claims rest on the "
+                             "sim and the real run validates the healthy regime.",
+    },
 ]
 
 AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

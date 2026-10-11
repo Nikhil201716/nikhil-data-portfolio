@@ -1391,6 +1391,67 @@ def extract_28(d: Path):
     return metrics, charts
 
 
+def extract_29(d: Path):
+    """Surge - load & reliability testing; which load test catches which defect.
+
+    The headline chart contrasts the five load-testing approaches on the injected
+    performance defects: the single-user baseline against steady, spike, soak and
+    chaos. The metrics carry the reliability twist and the tail gap.
+    """
+    metrics, charts = [], []
+    s = read_json(d, "summary.json")
+    a = read_json(d, "analysis.json")
+
+    if s:
+        nd = s["total_defects"]
+        cpa = s["caught_per_approach"]
+        metrics.append(m("Single-user check (the baseline)",
+                         f"{cpa['single_user']} of {nd} defects caught", True,
+                         "a functional latency check is blind to load - it catches none of "
+                         "the capacity, burst, leak or resilience defects"))
+        metrics.append(m("Load testing catches",
+                         f"{s['defects_caught_by_any']} of {nd} (steady {cpa['steady']}, "
+                         f"spike {cpa['spike']}, soak {cpa['soak']}, chaos {cpa['chaos']})", True,
+                         "each load pattern owns a class: steady->knee, spike->burst headroom, "
+                         "soak->leak, chaos->resilience"))
+        metrics.append(m("Defects that slip past every p99 test",
+                         f"{s['defects_missed_by_all']} of {nd}", True,
+                         "a rare slow path hides below the p99 SLO - your SLO percentile is a "
+                         "blind spot above it"))
+    if a:
+        r = a["retry_vs_breaker_chaos_p99_ms"]
+        metrics.append(m("Retry storm vs circuit breaker (p99 under outage)",
+                         f"retry {r['retry_no_backoff']/1000:.0f}s / breaker "
+                         f"{r['circuit_breaker']:.0f}ms", True,
+                         "retry-without-backoff is WORSE than no resilience; a breaker keeps "
+                         "latency bounded by shedding load"))
+        k = a["knee_rps"]
+        metrics.append(m("The capacity knee",
+                         f"{k['healthy']:.0f} rps healthy vs {k['undersized_pool']:.0f} "
+                         f"undersized", False,
+                         "the highest throughput that holds the p99 SLO; the undersized pool's "
+                         "knee is below the target"))
+
+    if s:
+        nd = s["total_defects"]
+        cpa = s["caught_per_approach"]
+        order = ["single_user", "steady", "spike", "soak", "chaos"]
+        charts.append({
+            "type": "bar",
+            "title": "Performance defects caught, by load-testing approach",
+            "note": "Each of the %d injected defects is scored against five approaches. The "
+                    "single-user baseline catches %d; each load pattern (steady, spike, soak, "
+                    "chaos) owns a defect class the others miss; %d slips past every p99-based "
+                    "test. Reproducible (reports/summary.json)."
+                    % (nd, cpa["single_user"], s["defects_missed_by_all"]),
+            "x": ["single-user", "steady", "spike", "soak", "chaos"],
+            "series": [{"name": "defects caught", "y": [cpa[k] for k in order]}],
+            "yaxis": "defects caught (of %d)" % nd,
+        })
+
+    return metrics, charts
+
+
 EXTRACTORS = {
     "05": extract_05, "06": extract_06, "07": extract_07, "08": extract_08,
     "09": extract_09, "10": extract_10, "11": extract_11, "12": extract_12,
@@ -1410,6 +1471,7 @@ EXTRACTORS = {
     "26": extract_26,
     "27": extract_27,
     "28": extract_28,
+    "29": extract_29,
 }
 
 

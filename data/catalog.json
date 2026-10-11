@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-28T07:16:24+00:00",
+  "generated_at": "2026-10-11T19:11:21+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 28,
+  "n_projects": 29,
   "roles": [
     "Data Analysis",
     "Data Engineering",
@@ -11,10 +11,10 @@
   ],
   "role_counts": {
     "Data Analysis": 9,
-    "Data Engineering": 20,
+    "Data Engineering": 21,
     "Machine Learning": 13,
     "AI & LLM Systems": 10,
-    "Testing & QA": 15
+    "Testing & QA": 16
   },
   "all_topics": [
     "(s,S) inventory policy",
@@ -55,8 +55,10 @@
     "Capacity cliff (0.138 N)",
     "Causal ordering (happens-before)",
     "Centroid defuzzification",
+    "Chaos engineering",
     "Checks-Effects-Interactions",
     "Churn modeling",
+    "Circuit breaker",
     "Clock skew",
     "Cloud economics / FinOps",
     "Compare-and-set reservation",
@@ -70,6 +72,7 @@
     "Contextual bandits",
     "Contract testing",
     "Convergence vs correctness",
+    "Coordinated omission",
     "Cost-per-image / unit economics",
     "Coverage vs correctness",
     "Cox proportional hazards",
@@ -162,9 +165,11 @@
     "Lambda / EC2 / CloudFront / S3",
     "Last-write-wins",
     "Late-data policy",
+    "Latency percentiles (p99 / p99.9)",
     "Length-extension forgery",
     "Lineage & blast radius",
     "Linear programming",
+    "Little's law",
     "Load testing",
     "Local LLM (Ollama)",
     "Log-linear regression",
@@ -199,6 +204,7 @@
     "Pandera",
     "Partial failure & compensation",
     "Perceptron",
+    "Performance testing",
     "Playwright",
     "Playwright E2E",
     "Point-in-time feature store",
@@ -226,11 +232,13 @@
     "Reentrancy and the guard/CEI fix",
     "Reference normalisation",
     "Referential integrity",
+    "Reliability testing",
     "Replay determinism",
     "Replication crisis",
     "Reproducible modelling",
     "Reproducible reports",
     "Requirement traceability",
+    "Retry storm",
     "Revalidation on load",
     "Right-censoring",
     "Right-sizing",
@@ -241,6 +249,7 @@
     "SARIMA",
     "SHA-256 from FIPS 180-4",
     "SHAP",
+    "SLOs & the knee",
     "SQL",
     "SQLite star schema",
     "SVD recommender",
@@ -260,6 +269,7 @@
     "Skip lists and probabilistic balance",
     "Sliding-window ARQ with AIMD",
     "Slowly changing dimensions",
+    "Soak / spike / stress",
     "Solidity 0.8.24",
     "Sorted arrays and binary search",
     "Spring Boot",
@@ -304,6 +314,7 @@
     "getrusage kernel accounting",
     "int8 quantization",
     "k-anonymity",
+    "k6 / Locust",
     "p-value misuse",
     "pytest"
   ],
@@ -322,6 +333,7 @@
     "Java 17",
     "Kotlin",
     "Locust",
+    "Locust / k6 (reference)",
     "NetworkX",
     "Newman (Postman)",
     "NumPy",
@@ -356,6 +368,7 @@
     "Terraform (reference, never applied)",
     "Vitest",
     "WSL Ubuntu",
+    "async load driver",
     "base R only (measured core)",
     "com.sun.net.httpserver",
     "dbt",
@@ -378,14 +391,15 @@
     "sentence-transformers",
     "standard library only",
     "standard-library ETL",
+    "standard-library discrete-event sim",
     "stdlib statistics only",
     "threading",
     "transformers"
   ],
-  "n_topics": 289,
-  "n_technologies": 73,
-  "n_metrics_extracted": 137,
-  "n_charts": 35,
+  "n_topics": 300,
+  "n_technologies": 76,
+  "n_metrics_extracted": 142,
+  "n_charts": 36,
   "projects": [
     {
       "id": "01",
@@ -3460,6 +3474,112 @@
         }
       ],
       "n_report_files": 2,
+      "screenshots": []
+    },
+    {
+      "id": "29",
+      "slug": "surge",
+      "dir": "Surge-Load-Testing",
+      "title": "Surge - Load & Reliability Testing",
+      "pitch": "A single-user check catches 0 of 8 performance defects. Load testing catches 7 - steady finds the knee, spike the burst headroom, soak the leak, chaos the resilience. And naive retries make an outage worse than no resilience at all.",
+      "roles": [
+        "Testing & QA",
+        "Data Engineering"
+      ],
+      "topics": [
+        "Load testing",
+        "Performance testing",
+        "Reliability testing",
+        "Chaos engineering",
+        "Queueing theory (M/M/c, M/D/c)",
+        "Erlang C",
+        "Discrete-event simulation",
+        "Latency percentiles (p99 / p99.9)",
+        "SLOs & the knee",
+        "Little's law",
+        "Circuit breaker",
+        "Retry storm",
+        "Coordinated omission",
+        "Soak / spike / stress",
+        "k6 / Locust",
+        "Reproducible reports"
+      ],
+      "stack": [
+        "Python 3.12+",
+        "standard-library discrete-event sim",
+        "FastAPI",
+        "async load driver",
+        "Locust / k6 (reference)",
+        "pytest"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "A load-testing laboratory. A discrete-event queue simulator - validated against the exact Erlang C formula (within 5%) - is the reproducible engine, and a real FastAPI service driven by an async load generator validates its shape. A harness injects 8 performance defects (plus one benign change) and measures which of five load-testing approaches catches which. The finding: a single-user functional latency check catches 0 of 8 defects - it is blind to load. Load testing catches 7, and each pattern owns a class the others miss: steady load finds the capacity knee (p99 SLO breaks above it); a spike finds missing burst headroom (a pool that passes steady load fails a 1.4x burst, p99 110ms -> 3.4s); a soak finds a resource leak (passes a short test, degrades over hours); and chaos (a dependency outage) finds missing resilience. One defect - a rare slow code path on 0.2% of requests - slips past every p99-based approach (p99 83ms, p99.9 240ms): your SLO percentile is a blind spot above it. The sharpest reliability result is counter-intuitive: under a dependency outage, retry-without-backoff (p99 ~36s) is WORSE than no resilience at all (27s), while a circuit breaker keeps p99 at 77ms - naive retries hold workers across attempts and collapse concurrency (a retry storm). Twist findings: the mean lies (p99 is 2.1x the mean near saturation), the knee is a number (150 rps healthy vs 50 undersized), and steady-pass is not burst-safe. 19 tests incl. the sim-vs-Erlang-C validation; reports byte-reproducible (seeded). The real service + async driver + Locust + k6 ship as runnable load tests. Building the validation surfaced the coordinated-omission problem first-hand - a single-box generator cannot faithfully saturate an async server, which is why the knee claims rest on the sim and the real run validates the healthy regime.",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "Single-user check (the baseline)",
+          "value": "0 of 8 defects caught",
+          "highlight": true,
+          "note": "a functional latency check is blind to load - it catches none of the capacity, burst, leak or resilience defects",
+          "source": "reports"
+        },
+        {
+          "label": "Load testing catches",
+          "value": "7 of 8 (steady 2, spike 3, soak 3, chaos 5)",
+          "highlight": true,
+          "note": "each load pattern owns a class: steady->knee, spike->burst headroom, soak->leak, chaos->resilience",
+          "source": "reports"
+        },
+        {
+          "label": "Defects that slip past every p99 test",
+          "value": "1 of 8",
+          "highlight": true,
+          "note": "a rare slow path hides below the p99 SLO - your SLO percentile is a blind spot above it",
+          "source": "reports"
+        },
+        {
+          "label": "Retry storm vs circuit breaker (p99 under outage)",
+          "value": "retry 36s / breaker 77ms",
+          "highlight": true,
+          "note": "retry-without-backoff is WORSE than no resilience; a breaker keeps latency bounded by shedding load",
+          "source": "reports"
+        },
+        {
+          "label": "The capacity knee",
+          "value": "150 rps healthy vs 50 undersized",
+          "highlight": false,
+          "note": "the highest throughput that holds the p99 SLO; the undersized pool's knee is below the target",
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "bar",
+          "title": "Performance defects caught, by load-testing approach",
+          "note": "Each of the 8 injected defects is scored against five approaches. The single-user baseline catches 0; each load pattern (steady, spike, soak, chaos) owns a defect class the others miss; 1 slips past every p99-based test. Reproducible (reports/summary.json).",
+          "x": [
+            "single-user",
+            "steady",
+            "spike",
+            "soak",
+            "chaos"
+          ],
+          "series": [
+            {
+              "name": "defects caught",
+              "y": [
+                0,
+                2,
+                3,
+                3,
+                5
+              ]
+            }
+          ],
+          "yaxis": "defects caught (of 8)"
+        }
+      ],
+      "n_report_files": 4,
       "screenshots": []
     }
   ]

@@ -827,6 +827,50 @@ PROJECTS = [
                              "saturate an async server, which is why the knee claims rest on the "
                              "sim and the real run validates the healthy regime.",
     },
+    {
+        "id": "30",
+        "slug": "gauntlet",
+        "dir": "Gauntlet-Quality-Gate",
+        "title": "Gauntlet - CI/CD Quality Gate",
+        "pitch": "A green test suite is not a safe release. Five gate layers - unit, "
+                  "BDD, mutation, SAST, DAST - against 10 injected defects: the green "
+                  "suite catches 2, the full gate catches 9, and one IDOR escapes all "
+                  "five because the authz rules are correct and tested but one route "
+                  "forgot to call them.",
+        "roles": ["Testing & QA"],
+        "topics": ["CI/CD quality gate", "BDD (Behave / Gherkin)", "Mutation testing",
+                    "SAST (Bandit + custom AST rules)", "DAST (runtime probes)",
+                    "Fault injection", "Test coverage vs test teeth", "OWASP Top 10",
+                    "SQL injection / XSS / IDOR", "Access control", "GitHub Actions",
+                    "Flask", "Reproducible reports"],
+        "stack": ["Python 3.12+", "Flask", "Behave (BDD)", "standard-library AST mutation",
+                   "Bandit (SAST)", "DAST probes (test client)", "pytest", "GitHub Actions"],
+        "metrics_source": "reports",
+        "headline_finding": "A CI/CD quality gate you can run and measure. A small Flask app "
+                             "(Notekeeper: register, log in, write/search notes, admin export) is "
+                             "wrapped in five independent layers - unit tests, BDD acceptance tests, "
+                             "mutation testing, SAST and DAST - and a harness injects 10 known "
+                             "defects one at a time and records which layer catches which. The clean "
+                             "app passes all five and its authorization core scores a perfect 100% "
+                             "on the mutation gate, so the baseline is a strong control, not a straw "
+                             "man. The finding: the green test suite (unit + BDD) catches only 2 of "
+                             "10 defects - the two functional bugs - and is blind to an injectable "
+                             "query, a stored XSS, a hard-coded secret, MD5 password hashing, a "
+                             "missing admin check, absent security headers, and a unit test that "
+                             "passes while asserting nothing. Each of those is caught, but only by "
+                             "the layer built to see it: mutation uniquely catches the toothless "
+                             "test (score drops 1.00 -> 0.75); SAST catches the code-level vulns "
+                             "including the secret and weak hash that leave no runtime trace; DAST "
+                             "catches the runtime vulns (missing check, absent headers) that leave "
+                             "no code pattern; SAST and DAST agree on injection and XSS (defense in "
+                             "depth). The full five-layer gate catches 9 of 10, with zero false "
+                             "positives on a benign control change. The capstone result: one flaw - "
+                             "an IDOR where the note route stops calling can_view - escapes all five "
+                             "layers, because the authz rules are still correct and fully tested; "
+                             "the app leaks anyway because one route forgot to call them. A quality "
+                             "gate bounds risk; it does not prove safety. Every catch matches the "
+                             "catalog's prediction (10/10) and all reports are byte-reproducible.",
+    },
 ]
 
 AREAS = ["Data Analysis", "Data Engineering", "Machine Learning", "AI & LLM Systems", "Testing & QA"]

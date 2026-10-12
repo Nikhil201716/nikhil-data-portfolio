@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-11T19:11:21+00:00",
+  "generated_at": "2026-10-12T19:24:54+00:00",
   "owner": "Nikhil Sinha",
-  "n_projects": 29,
+  "n_projects": 30,
   "roles": [
     "Data Analysis",
     "Data Engineering",
@@ -14,7 +14,7 @@
     "Data Engineering": 21,
     "Machine Learning": 13,
     "AI & LLM Systems": 10,
-    "Testing & QA": 16
+    "Testing & QA": 17
   },
   "all_topics": [
     "(s,S) inventory policy",
@@ -26,6 +26,7 @@
     "API testing",
     "API versioning",
     "AWS pricing model",
+    "Access control",
     "Adversarial red-teaming",
     "Agent trajectories",
     "Airflow DAGs",
@@ -35,6 +36,7 @@
     "At-least-once delivery",
     "Atomic apply / transactions",
     "B+ trees with leaf chaining",
+    "BDD (Behave / Gherkin)",
     "Bayesian inference",
     "Bayesian updating (Beta-Binomial)",
     "Belady's anomaly",
@@ -77,6 +79,7 @@
     "Coverage vs correctness",
     "Cox proportional hazards",
     "Cross-modal agent",
+    "DAST (runtime probes)",
     "Data contracts",
     "Data quality",
     "Data quality SLAs",
@@ -120,12 +123,14 @@
     "File allocation and fragmentation",
     "Fixed vs variable cost crossover",
     "Flaky-test detection",
+    "Flask",
     "Forecast reconciliation (MinT)",
     "Front-running and MEV",
     "Full factorial ablation",
     "GF(2^8) and the derived S-box",
     "Gas measurement",
     "Genetic algorithm",
+    "GitHub Actions",
     "Graph fraud detection",
     "GraphQL",
     "GraphRAG",
@@ -190,6 +195,7 @@
     "NL-to-governed-metrics",
     "Nakamoto double-spend probability",
     "OCR",
+    "OWASP Top 10",
     "Off-policy evaluation",
     "Offline TTS",
     "Offline-first sync",
@@ -247,10 +253,12 @@
     "Root-cause analysis",
     "Rules engine",
     "SARIMA",
+    "SAST (Bandit + custom AST rules)",
     "SHA-256 from FIPS 180-4",
     "SHAP",
     "SLOs & the knee",
     "SQL",
+    "SQL injection / XSS / IDOR",
     "SQLite star schema",
     "SVD recommender",
     "Safety vs liveness",
@@ -283,6 +291,7 @@
     "Survival analysis",
     "Terraform (reference IaC)",
     "Test automation",
+    "Test coverage vs test teeth",
     "Test pyramid",
     "The XOR wall",
     "The stack property",
@@ -321,9 +330,13 @@
   "all_stack": [
     "Android: Room + WorkManager + Compose (reference, not built)",
     "Apache Airflow",
+    "Bandit (SAST)",
+    "Behave (BDD)",
+    "DAST probes (test client)",
     "Docker",
     "DuckDB",
     "FastAPI",
+    "Flask",
     "GitHub Actions",
     "Gradle",
     "H3",
@@ -390,16 +403,17 @@
     "scikit-learn",
     "sentence-transformers",
     "standard library only",
+    "standard-library AST mutation",
     "standard-library ETL",
     "standard-library discrete-event sim",
     "stdlib statistics only",
     "threading",
     "transformers"
   ],
-  "n_topics": 300,
-  "n_technologies": 76,
-  "n_metrics_extracted": 142,
-  "n_charts": 36,
+  "n_topics": 309,
+  "n_technologies": 81,
+  "n_metrics_extracted": 147,
+  "n_charts": 37,
   "projects": [
     {
       "id": "01",
@@ -3580,6 +3594,110 @@
         }
       ],
       "n_report_files": 4,
+      "screenshots": []
+    },
+    {
+      "id": "30",
+      "slug": "gauntlet",
+      "dir": "Gauntlet-Quality-Gate",
+      "title": "Gauntlet - CI/CD Quality Gate",
+      "pitch": "A green test suite is not a safe release. Five gate layers - unit, BDD, mutation, SAST, DAST - against 10 injected defects: the green suite catches 2, the full gate catches 9, and one IDOR escapes all five because the authz rules are correct and tested but one route forgot to call them.",
+      "roles": [
+        "Testing & QA"
+      ],
+      "topics": [
+        "CI/CD quality gate",
+        "BDD (Behave / Gherkin)",
+        "Mutation testing",
+        "SAST (Bandit + custom AST rules)",
+        "DAST (runtime probes)",
+        "Fault injection",
+        "Test coverage vs test teeth",
+        "OWASP Top 10",
+        "SQL injection / XSS / IDOR",
+        "Access control",
+        "GitHub Actions",
+        "Flask",
+        "Reproducible reports"
+      ],
+      "stack": [
+        "Python 3.12+",
+        "Flask",
+        "Behave (BDD)",
+        "standard-library AST mutation",
+        "Bandit (SAST)",
+        "DAST probes (test client)",
+        "pytest",
+        "GitHub Actions"
+      ],
+      "metrics_source": "reports",
+      "headline_finding": "A CI/CD quality gate you can run and measure. A small Flask app (Notekeeper: register, log in, write/search notes, admin export) is wrapped in five independent layers - unit tests, BDD acceptance tests, mutation testing, SAST and DAST - and a harness injects 10 known defects one at a time and records which layer catches which. The clean app passes all five and its authorization core scores a perfect 100% on the mutation gate, so the baseline is a strong control, not a straw man. The finding: the green test suite (unit + BDD) catches only 2 of 10 defects - the two functional bugs - and is blind to an injectable query, a stored XSS, a hard-coded secret, MD5 password hashing, a missing admin check, absent security headers, and a unit test that passes while asserting nothing. Each of those is caught, but only by the layer built to see it: mutation uniquely catches the toothless test (score drops 1.00 -> 0.75); SAST catches the code-level vulns including the secret and weak hash that leave no runtime trace; DAST catches the runtime vulns (missing check, absent headers) that leave no code pattern; SAST and DAST agree on injection and XSS (defense in depth). The full five-layer gate catches 9 of 10, with zero false positives on a benign control change. The capstone result: one flaw - an IDOR where the note route stops calling can_view - escapes all five layers, because the authz rules are still correct and fully tested; the app leaks anyway because one route forgot to call them. A quality gate bounds risk; it does not prove safety. Every catch matches the catalog's prediction (10/10) and all reports are byte-reproducible.",
+      "exists": true,
+      "metrics": [
+        {
+          "label": "Green test suite (unit + BDD)",
+          "value": "2 of 10 defects caught",
+          "highlight": true,
+          "note": "a passing unit + acceptance suite catches only the functional bugs - it is blind to the vulnerabilities and to a toothless test",
+          "source": "reports"
+        },
+        {
+          "label": "Full five-layer gate",
+          "value": "9 of 10 defects caught",
+          "highlight": true,
+          "note": "adding mutation, SAST and DAST raises coverage from 2 to 9; each layer owns a class the cheaper layers cannot see",
+          "source": "reports"
+        },
+        {
+          "label": "Escaped every layer (an IDOR)",
+          "value": "1 of 10",
+          "highlight": true,
+          "note": "the note route stops calling can_view; the authz rules are still correct and score 100% on mutation, but one route forgot to call them - a quality gate bounds risk, it does not prove safety",
+          "source": "reports"
+        },
+        {
+          "label": "False positives on a benign change",
+          "value": "0 of 10",
+          "highlight": false,
+          "note": "a benign control edit is injected like a defect and trips nothing - the 9 catches are about the defects, not the act of editing",
+          "source": "reports"
+        },
+        {
+          "label": "Mutation catches the toothless test",
+          "value": "score 1.00 -> 0.75",
+          "highlight": true,
+          "note": "defect T1 swaps in a shallow authz suite that still passes (green!); only mutation testing notices the lost teeth",
+          "source": "reports"
+        }
+      ],
+      "charts": [
+        {
+          "type": "bar",
+          "title": "Defects caught, by gate layer",
+          "note": "Each of the 10 injected defects is scored against five gate layers. The green test suite (unit + BDD) catches 2; mutation uniquely catches the toothless test; SAST and DAST own the code-level and runtime vulns; 1 IDOR escapes all five. Reproducible (reports/summary.json).",
+          "x": [
+            "unit",
+            "BDD",
+            "mutation",
+            "SAST",
+            "DAST"
+          ],
+          "series": [
+            {
+              "name": "defects caught",
+              "y": [
+                1,
+                1,
+                1,
+                4,
+                5
+              ]
+            }
+          ],
+          "yaxis": "defects caught (of 10)"
+        }
+      ],
+      "n_report_files": 3,
       "screenshots": []
     }
   ]

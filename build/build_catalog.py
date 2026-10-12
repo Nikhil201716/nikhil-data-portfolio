@@ -1452,6 +1452,73 @@ def extract_29(d: Path):
     return metrics, charts
 
 
+def extract_30(d: Path):
+    """Gauntlet - CI/CD quality gate; which gate layer catches which defect.
+
+    The headline chart contrasts the five layers (unit, BDD, mutation, SAST,
+    DAST) on the injected defects. The metrics carry the baseline-vs-gate gap,
+    the mutation-score drop, and the IDOR that escaped every layer.
+    """
+    metrics, charts = [], []
+    s = read_json(d, "summary.json")
+    cm = read_json(d, "catch_matrix.json")
+
+    if s:
+        nd = s["n_defects"]
+        base = s["baseline_green_suite"]
+        gate = s["full_gate"]
+        plc = s["per_layer_catches"]
+        esc = s["escaped_all_layers"]
+        metrics.append(m("Green test suite (unit + BDD)",
+                         f"{base['n_caught']} of {nd} defects caught", True,
+                         "a passing unit + acceptance suite catches only the functional "
+                         "bugs - it is blind to the vulnerabilities and to a toothless test"))
+        metrics.append(m("Full five-layer gate",
+                         f"{gate['n_caught']} of {nd} defects caught", True,
+                         f"adding mutation, SAST and DAST raises coverage from "
+                         f"{base['n_caught']} to {gate['n_caught']}; each layer owns a class "
+                         "the cheaper layers cannot see"))
+        metrics.append(m("Escaped every layer (an IDOR)",
+                         f"{len(esc)} of {nd}", True,
+                         "the note route stops calling can_view; the authz rules are still "
+                         "correct and score 100% on mutation, but one route forgot to call "
+                         "them - a quality gate bounds risk, it does not prove safety"))
+        metrics.append(m("False positives on a benign change",
+                         f"{len(s['false_positives_on_benign'])} of {nd}", False,
+                         "a benign control edit is injected like a defect and trips nothing - "
+                         "the 9 catches are about the defects, not the act of editing"))
+
+    t1 = None
+    if cm:
+        for row in cm["defects"]:
+            if row["id"] == "T1":
+                t1 = row.get("mutation_score")
+    if s and t1 is not None:
+        metrics.append(m("Mutation catches the toothless test",
+                         f"score {s['clean_mutation_score']:.2f} -> {t1:.2f}", True,
+                         "defect T1 swaps in a shallow authz suite that still passes (green!); "
+                         "only mutation testing notices the lost teeth"))
+
+    if s:
+        nd = s["n_defects"]
+        plc = s["per_layer_catches"]
+        order = ["unit", "bdd", "mutation", "sast", "dast"]
+        charts.append({
+            "type": "bar",
+            "title": "Defects caught, by gate layer",
+            "note": "Each of the %d injected defects is scored against five gate layers. "
+                    "The green test suite (unit + BDD) catches %d; mutation uniquely catches "
+                    "the toothless test; SAST and DAST own the code-level and runtime vulns; "
+                    "1 IDOR escapes all five. Reproducible (reports/summary.json)."
+                    % (nd, s["baseline_green_suite"]["n_caught"]),
+            "x": ["unit", "BDD", "mutation", "SAST", "DAST"],
+            "series": [{"name": "defects caught", "y": [plc[k] for k in order]}],
+            "yaxis": "defects caught (of %d)" % nd,
+        })
+
+    return metrics, charts
+
+
 EXTRACTORS = {
     "05": extract_05, "06": extract_06, "07": extract_07, "08": extract_08,
     "09": extract_09, "10": extract_10, "11": extract_11, "12": extract_12,
@@ -1472,6 +1539,7 @@ EXTRACTORS = {
     "27": extract_27,
     "28": extract_28,
     "29": extract_29,
+    "30": extract_30,
 }
 
 

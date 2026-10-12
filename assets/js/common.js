@@ -53,6 +53,7 @@ const BOOKS = [
   ["27", "Accord, REST + GraphQL Contract Testing", "Accord-Contract-Testing", "Accord-Notebook.pdf", 60],
   ["28", "Assay, ETL Data-Quality Testing", "Assay-Data-Quality", "Assay-Notebook.pdf", 60],
   ["29", "Surge, Load & Reliability Testing", "Surge-Load-Testing", "Surge-Notebook.pdf", 60],
+  ["30", "Gauntlet, a CI/CD Quality Gate", "Gauntlet-Quality-Gate", "Gauntlet-Notebook.pdf", 62],
 ].map(([id, title, repo, file, pages]) => ({ id, title, repo, file, pages }));
 
 const BOOK_BY_ID = Object.fromEntries(BOOKS.map((b) => [b.id, b]));

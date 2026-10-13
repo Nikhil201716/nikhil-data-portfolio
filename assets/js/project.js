@@ -171,6 +171,82 @@ async function runTerminal(host, p, token) {
   finish();
 }
 
+/* ---- local runner: real execution on a machine that has the projects ----
+   Detects the bundled run_local.py (served same-origin when it hosts the site,
+   or at http://localhost:8800 otherwise) and, if this project is present there,
+   streams its real stdout into the terminal via Server-Sent Events. */
+let _runner;
+async function detectRunner() {
+  if (_runner !== undefined) return _runner;
+  // Only probe when the page is actually served by the local runner (localhost),
+  // so the public https site never fires a failed request to http://localhost.
+  const h = location.hostname;
+  if (h !== "localhost" && h !== "127.0.0.1") { _runner = null; return _runner; }
+  const origin = location.origin;
+  try {
+    const ctrl = new AbortController();
+    const to = setTimeout(() => ctrl.abort(), 1200);
+    const r = await fetch(origin + "/api/health", { signal: ctrl.signal, cache: "no-store" });
+    clearTimeout(to);
+    _runner = r.ok ? { origin, health: await r.json() } : null;
+  } catch { _runner = null; }
+  return _runner;
+}
+
+function liveRun(origin, p) {
+  const host = $("[data-term]");
+  const body = host.querySelector(".term-lines");
+  const runBtn = host.querySelector(".term-run");
+  const skip = host.querySelector(".term-skip");
+  const qs = $(".run-install")?.checked ? "?install=1" : "";
+  const shown = replayData(p).cmds.filter((c) => !c.startsWith("git clone") && !c.startsWith("cd "));
+  if (!confirm(`Run project ${p.id} on THIS machine?\n\nIt will execute, in ${p.dir}/:\n  `
+    + shown.join("\n  ") + `\n\nThe real output streams below.`)) return;
+
+  body.innerHTML = "";
+  host.querySelector(".term-title").textContent = `${p.dir} — live on this machine`;
+  const add = (cls, txt) => {
+    const d = document.createElement("div");
+    d.className = "tl " + cls; d.textContent = txt;
+    body.appendChild(d); body.scrollTop = body.scrollHeight; return d;
+  };
+  add("hint", "▸ starting local run…");
+  runBtn.disabled = true;
+
+  let es;
+  try { es = new EventSource(origin + "/api/run/" + p.id + qs); }
+  catch { add("done", "⚠ could not reach the local runner"); runBtn.disabled = false; return; }
+
+  let finished = false;
+  skip.hidden = false; skip.textContent = "Stop";
+  skip.onclick = () => { finished = true; es.close(); add("done", "■ stopped"); skip.hidden = true; runBtn.disabled = false; };
+  es.onmessage = (e) => add("out", e.data);
+  es.addEventListener("done", (e) => {
+    finished = true; es.close();
+    add("done", `✓ finished (exit ${e.data}) — executed on this machine`);
+    skip.hidden = true; runBtn.disabled = false;
+  });
+  es.onerror = () => {
+    if (finished) return;
+    finished = true; es.close();
+    add("done", "⚠ runner connection ended");
+    skip.hidden = true; runBtn.disabled = false;
+  };
+}
+
+function wireRunner(p) {
+  detectRunner().then((info) => {
+    if (!info || !info.health || !info.health.available) return;
+    const a = info.health.available[p.id];
+    const row = $("[data-runner]");
+    if (!row || !a || !a.exists) return;
+    row.hidden = false;
+    const note = $(".runner-note");
+    if (note) note.textContent = a.venv ? "local runner connected · .venv found" : "local runner connected";
+    $(".term-live")?.addEventListener("click", () => liveRun(info.origin, p));
+  });
+}
+
 function runPanel(p) {
   const mins = RUN_MINUTES[p.id] || "2-5";
   const ollama = NEEDS_OLLAMA.has(p.id);
@@ -194,6 +270,15 @@ function runPanel(p) {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         Run live in Codespaces
       </a>
+    </div>
+
+    <div class="runner-row" data-runner hidden>
+      <button class="btn-x run term-live">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        Run on this machine (live)
+      </button>
+      <label class="runner-chk"><input type="checkbox" class="run-install"> install deps first</label>
+      <span class="runner-note mono"></span>
     </div>
 
     <div class="term mt-3" data-term>
@@ -221,9 +306,12 @@ function runPanel(p) {
     </div>
 
     <p class="text-ink-3 small mt-3 mb-0">
-      The in-page terminal <strong>replays a real run's output</strong>; it does not execute
-      code on your computer — no website can, and none should. For real execution use
-      Codespaces above (a free GitHub account; compute is billed to that account, not to me).
+      The in-page <strong>▶ Run</strong> above <strong>replays a real run's output</strong> — a
+      website cannot execute code on a stranger's computer, and none should. Two ways to run it
+      for real: <strong>Codespaces</strong> (free GitHub account, runs in the cloud), or — on a
+      machine that has the projects — start the bundled local runner
+      (<code>python run_local.py</code>) and reload; a <strong>Run on this machine</strong> button
+      appears that executes this project locally and streams the real output here.
       ${ollama ? `This project has optional local-LLM stages; without Ollama they are skipped
       and the deterministic control arm still runs.` : ""}
     </p>
@@ -381,6 +469,9 @@ function render(p, cat) {
     termToken = { cancelled: false };
     runTerminal(termHost, p, termToken);
   });
+
+  // reveal "Run on this machine" if the local runner is up
+  wireRunner(p);
 
   // related projects — same primary role where possible
   const role = (p.roles || [])[0];

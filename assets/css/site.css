@@ -90,6 +90,16 @@ code, .mono { font-family: var(--mono); font-size: .9em; }
 }
 :root[data-theme="light"] .grain { opacity: .05; }
 
+/* GPU flowing-gradient backdrop (WebGL). Sits at the very back; the grain and
+   mesh layer over it. Resolution-independent, so crisp at any size, and it
+   fades to the page background in the centre to keep text readable. If WebGL
+   is unavailable the canvas is removed and the CSS mesh below carries the look. */
+.bg-flow {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; display: block;
+  width: 100%; height: 100%; opacity: .78;
+}
+:root[data-theme="light"] .bg-flow { opacity: .5; }
+
 /* slow animated mesh gradient */
 .mesh {
   position: fixed; inset: -30vh -20vw; z-index: 0; pointer-events: none;
@@ -420,4 +430,57 @@ main, .site-nav, .site-footer { position: relative; z-index: 2; }
   .spot { display: none; }
   .hero { padding-top: 3rem; }
   .card-x { padding: 1.2rem; }
+}
+
+/* ------------------------------------------------- tabs (project view) */
+.tabbar { display: flex; gap: .25rem; border-bottom: 1px solid var(--line);
+  margin-bottom: 1.25rem; flex-wrap: wrap; }
+.tabx { appearance: none; background: none; border: 0; color: var(--ink-3);
+  font: inherit; font-weight: 600; font-size: .95rem; padding: .6rem .95rem;
+  cursor: pointer; position: relative; border-radius: 8px 8px 0 0;
+  transition: color .2s, background .2s; }
+.tabx:hover { color: var(--ink); background: color-mix(in srgb, var(--brand) 7%, transparent); }
+.tabx.active { color: var(--ink); }
+.tabx.active::after { content: ""; position: absolute; left: .6rem; right: .6rem;
+  bottom: -1px; height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--brand), var(--accent)); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: tabin .4s var(--ease); }
+@keyframes tabin { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ------------------------------------------- terminal replay (run tab) */
+.run-head { display: flex; flex-wrap: wrap; justify-content: space-between;
+  align-items: flex-start; gap: 1rem; }
+.run-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .9rem; }
+.term-badge { margin-left: .5rem; font-size: .66rem; font-family: var(--mono);
+  color: #9fb0d0; border: 1px solid #22304d; border-radius: 999px; padding: .06rem .5rem; }
+.term-ctl { margin-left: auto; display: flex; gap: .4rem; }
+.term-run, .term-skip { appearance: none; font: inherit; font-size: .74rem;
+  font-weight: 700; border-radius: 7px; padding: .26rem .7rem; cursor: pointer;
+  border: 1px solid #2b3a5c; background: #132037; color: #cfe0ff; transition: .2s; }
+.term-run:hover { border-color: var(--brand); color: #fff; }
+.term-run:disabled { opacity: .5; cursor: default; }
+.term-skip { background: transparent; color: #9fb0d0; }
+.term-lines { font: inherit; color: #cfe0ff; }
+.tl { white-space: pre; line-height: 1.5; min-height: 1.25em; }
+.tl.hint { color: #6b7a99; white-space: normal; }
+.tl.done { color: #34d399; margin-top: .45rem; white-space: normal; font-weight: 600; }
+.tl .c-cmd { color: #eaf1ff; }
+.term-cursor { display: inline-block; width: .55em; height: 1.05em; vertical-align: -2px;
+  background: var(--brand-2); margin-left: 1px; animation: blink 1.05s steps(2) infinite; }
+
+/* -------------------------------------------------- location pill + clock */
+.loc-pill { display: inline-flex; align-items: center; gap: .45rem;
+  border: 1px solid var(--line); border-radius: 999px; padding: .2rem .7rem;
+  background: color-mix(in srgb, var(--panel) 60%, transparent); font-size: .82rem; }
+.loc-city { font-weight: 600; }
+.loc-sep { opacity: .5; margin: 0 .12rem; }
+.loc-clock { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink-2); }
+.loc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--good);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--good) 60%, transparent);
+  animation: locpulse 2.4s infinite; }
+@keyframes locpulse {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--good) 55%, transparent); }
+  70%  { box-shadow: 0 0 0 7px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
 }

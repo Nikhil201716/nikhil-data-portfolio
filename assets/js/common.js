@@ -111,6 +111,177 @@ function base() {
 function projectUrl(id) { return base() + "pages/project.html?id=" + id; }
 function codespaceUrl(repo) { return "https://codespaces.new/Nikhil201716/" + repo + "?quickstart=1"; }
 
+/* -------------------------------------------------------------- location */
+/* A public page cannot auto-detect where Nikhil is, so the city is read from a
+   single editable file (data/location.json). The live clock is computed in that
+   city's timezone with Intl, so it is always correct without a server. Change
+   the one file to relocate; every pill and footer updates. */
+let _loc = null;
+async function getLocation() {
+  if (_loc) return _loc;
+  try {
+    const r = await fetch(base() + "data/location.json", { cache: "no-cache" });
+    _loc = r.ok ? await r.json() : null;
+  } catch { _loc = null; }
+  if (!_loc) _loc = { label: "Currently in", city: "Bengaluru",
+                      region: "Karnataka, India", tz: "Asia/Kolkata" };
+  return _loc;
+}
+function _clockText(tz) {
+  try {
+    const t = new Intl.DateTimeFormat("en-GB",
+      { timeZone: tz, hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date());
+    const parts = new Intl.DateTimeFormat("en-US",
+      { timeZone: tz, timeZoneName: "short" }).formatToParts(new Date());
+    const abbr = (parts.find((p) => p.type === "timeZoneName") || {}).value || "";
+    return abbr ? `${t} ${abbr}` : t;
+  } catch { return ""; }
+}
+async function initLocation() {
+  const hooks = $$("[data-location]");
+  if (!hooks.length) return;
+  const loc = await getLocation();
+  const clocks = [];
+  hooks.forEach((el) => {
+    const mode = el.getAttribute("data-location") || "inline";
+    if (mode === "pill") {
+      el.classList.add("loc-pill");
+      el.innerHTML = `<span class="loc-dot" aria-hidden="true"></span>`
+        + `<span class="loc-city">${esc(loc.city)}</span>`
+        + `<span class="loc-sep">·</span><span class="loc-clock mono"></span>`;
+      el.title = `${loc.label} ${loc.city}, ${loc.region}`;
+    } else {
+      el.innerHTML = `${esc(loc.city)} <span class="loc-sep">·</span> `
+        + `<span class="loc-clock mono"></span>`;
+      el.title = `${loc.label} ${loc.city}, ${loc.region}`;
+    }
+    const c = el.querySelector(".loc-clock");
+    if (c) clocks.push(c);
+  });
+  const tick = () => { const t = _clockText(loc.tz); clocks.forEach((c) => (c.textContent = t)); };
+  tick();
+  if (!REDUCED) setInterval(tick, 1000);
+}
+
+/* ------------------------------------------------- dynamic WebGL backdrop */
+/* A flowing, domain-warped gradient rendered on the GPU: resolution-independent
+   (crisp at any size), a few KB, ~60fps, and it drifts toward the pointer. It
+   fades to the page background in the centre so text stays readable, pauses in a
+   hidden tab, renders a single still frame under prefers-reduced-motion, and
+   removes itself (leaving the CSS mesh) if WebGL is unavailable. */
+function _hexRGB(v) {
+  v = (v || "").trim().replace("#", "");
+  if (v.length === 3) v = v.split("").map((c) => c + c).join("");
+  const n = parseInt(v || "000000", 16);
+  return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
+}
+function _cssRGB(name) {
+  return _hexRGB(getComputedStyle(document.documentElement).getPropertyValue(name));
+}
+function initBackground() {
+  const canvas = document.createElement("canvas");
+  canvas.className = "bg-flow";
+  canvas.setAttribute("aria-hidden", "true");
+  document.body.insertBefore(canvas, document.body.firstChild);
+
+  let gl;
+  try { gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl"); }
+  catch { gl = null; }
+  if (!gl) { canvas.remove(); return; }
+
+  const VS = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+  const FS = `precision highp float;
+uniform vec2 u_res; uniform float u_time; uniform vec2 u_mouse;
+uniform vec3 u_c1,u_c2,u_c3,u_bg;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);
+  return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);}
+float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*noise(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}
+void main(){
+  vec2 uv=gl_FragCoord.xy/u_res.xy; vec2 p=uv*2.-1.; p.x*=u_res.x/u_res.y;
+  float t=u_time*0.045;
+  vec2 q=vec2(fbm(p+t), fbm(p+vec2(5.2,1.3)-t));
+  vec2 r=vec2(fbm(p+3.5*q+vec2(1.7,9.2)+t*0.6+u_mouse*0.35),
+              fbm(p+3.5*q+vec2(8.3,2.8)-t*0.6));
+  float f=fbm(p+3.5*r);
+  vec3 base=mix(u_c1,u_c2,clamp(f*f*1.6,0.,1.));
+  base=mix(base,u_c3,clamp(length(q)*0.9,0.,1.));
+  float vig=smoothstep(0.05,1.3,length(p));
+  float amt=clamp(vig*(0.32+0.5*f),0.,0.86);
+  gl_FragColor=vec4(mix(u_bg,base,amt),1.0);
+}`;
+  const compile = (type, src) => {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+      console.warn("bg-flow shader:", gl.getShaderInfoLog(s)); return null;
+    }
+    return s;
+  };
+  const vs = compile(gl.VERTEX_SHADER, VS), fs = compile(gl.FRAGMENT_SHADER, FS);
+  if (!vs || !fs) { canvas.remove(); return; }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { canvas.remove(); return; }
+  gl.useProgram(prog);
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(prog, "p");
+  gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const U = (n) => gl.getUniformLocation(prog, n);
+  const uRes = U("u_res"), uTime = U("u_time"), uMouse = U("u_mouse");
+  const uC1 = U("u_c1"), uC2 = U("u_c2"), uC3 = U("u_c3"), uBg = U("u_bg");
+
+  let col = {};
+  const refresh = () => {
+    col = { c1: _cssRGB("--brand"), c2: _cssRGB("--accent"),
+            c3: _cssRGB("--brand-2"), bg: _cssRGB("--bg") };
+  };
+  refresh();
+  document.addEventListener("themechange", refresh);
+
+  const scale = Math.min(window.devicePixelRatio || 1, 1) * (innerWidth < 768 ? 0.5 : 0.65);
+  const size = () => {
+    canvas.width = Math.max(2, Math.floor(innerWidth * scale));
+    canvas.height = Math.max(2, Math.floor(innerHeight * scale));
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  };
+  size();
+  addEventListener("resize", size, { passive: true });
+
+  let mx = 0, my = 0, tmx = 0, tmy = 0;
+  if (matchMedia("(pointer: fine)").matches) {
+    addEventListener("pointermove", (e) => {
+      tmx = (e.clientX / innerWidth) * 2 - 1;
+      tmy = -((e.clientY / innerHeight) * 2 - 1);
+    }, { passive: true });
+  }
+
+  const t0 = performance.now();
+  const draw = (tms, mXY) => {
+    gl.uniform2f(uRes, canvas.width, canvas.height);
+    gl.uniform1f(uTime, tms);
+    gl.uniform2f(uMouse, mXY[0], mXY[1]);
+    gl.uniform3fv(uC1, col.c1); gl.uniform3fv(uC2, col.c2);
+    gl.uniform3fv(uC3, col.c3); gl.uniform3fv(uBg, col.bg);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  };
+
+  // one frame immediately, so it is never blank even in a throttled tab
+  draw(8.0, [0, 0]);
+  if (REDUCED) return;
+
+  (function loop(now) {
+    requestAnimationFrame(loop);
+    if (document.hidden) return;
+    mx += (tmx - mx) * 0.04; my += (tmy - my) * 0.04;
+    draw((now - t0) / 1000, [mx, my]);
+  })(performance.now());
+}
+
 /* ------------------------------------------------------------------ chrome */
 function initChrome() {
   // theme
@@ -282,4 +453,4 @@ function projectCard(p, delayClass = "") {
   </a>`;
 }
 
-document.addEventListener("DOMContentLoaded", () => { initChrome(); });
+document.addEventListener("DOMContentLoaded", () => { initBackground(); initChrome(); initLocation(); });

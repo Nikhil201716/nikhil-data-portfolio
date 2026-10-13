@@ -78,49 +78,140 @@ function notFound() {
     </div></section>`;
 }
 
-function runPanel(p) {
+/* ---------------------------------------------------- terminal replay engine */
+/* Types the real commands, then streams the output of a real run. CASTS[id] is
+   genuine captured stdout; otherwise the output is reconstructed from the
+   project's own reports/*.json (also real-run data). It does NOT execute code on
+   the visitor's machine — browsers don't allow that — which the panel says
+   plainly. "Run live in Codespaces" is the button that executes it for real. */
+function replayData(p) {
   const cmd = RUN_CMD[p.id] || "python scripts/run_pipeline.py";
+  const install = p.id in INSTALL_CMD ? INSTALL_CMD[p.id] : "pip install -r requirements.txt";
+  const cmds = [`git clone ${GH}/${p.dir}.git`, `cd ${p.dir}`];
+  if (install) cmds.push(install);
+  cmds.push(cmd);
+
+  const cast = (typeof CASTS !== "undefined") ? CASTS[p.id] : null;
+  if (cast) return { cmds, out: cast.lines, real: true,
+                     source: `captured from a real run · ${cast.date}` };
+
+  const out = ["▸ running the pipeline…", ""];
+  (p.metrics || []).slice(0, 6).forEach((m) => out.push(`✓ ${m.label}: ${m.value}`));
+  if (p.n_report_files) out.push("", `✓ wrote ${p.n_report_files} report file(s) → reports/`);
+  return { cmds, out, real: false,
+           source: "reconstructed from this project's reports/*.json (a real run)" };
+}
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function runTerminal(host, p, token) {
+  const body = host.querySelector(".term-lines");
+  const runBtn = host.querySelector(".term-run");
+  const skipBtn = host.querySelector(".term-skip");
+  const data = replayData(p);
+  host.dataset.state = "running";
+  host.dataset.skip = "";
+  runBtn.disabled = true;
+  skipBtn.hidden = false;
+  skipBtn.onclick = () => (host.dataset.skip = "1");
+
+  const bottom = () => (body.scrollTop = body.scrollHeight);
+  const cur = document.createElement("span");
+  cur.className = "term-cursor";
+  const addLine = (cls) => {
+    const d = document.createElement("div");
+    d.className = "tl " + (cls || "");
+    body.appendChild(d); bottom(); return d;
+  };
+
+  const finish = () => {
+    cur.remove();
+    host.dataset.state = "done";
+    runBtn.disabled = false;
+    runBtn.textContent = "↻ Replay";
+    skipBtn.hidden = true;
+  };
+  const dump = () => {
+    body.innerHTML = "";
+    data.cmds.forEach((c) => {
+      const d = addLine("cmd");
+      d.innerHTML = '<span class="c-dim">$</span> <span class="c-cmd"></span>';
+      d.querySelector(".c-cmd").textContent = c;
+    });
+    data.out.forEach((o) => (addLine("out").textContent = o));
+    addLine("done").textContent = "✓ done — " + data.source;
+    bottom();
+  };
+
+  body.innerHTML = "";
+  if (REDUCED) { dump(); return finish(); }
+
+  for (const c of data.cmds) {
+    if (token.cancelled) return;
+    if (host.dataset.skip === "1") { dump(); return finish(); }
+    const d = addLine("cmd");
+    d.innerHTML = '<span class="c-dim">$</span> <span class="c-cmd"></span>';
+    const span = d.querySelector(".c-cmd");
+    d.appendChild(cur);
+    for (const ch of c) {
+      if (token.cancelled) return;
+      if (host.dataset.skip === "1") { dump(); return finish(); }
+      span.textContent += ch; bottom(); await sleep(11);
+    }
+    await sleep(130);
+  }
+  for (const o of data.out) {
+    if (token.cancelled) return;
+    if (host.dataset.skip === "1") { dump(); return finish(); }
+    const d = addLine("out");
+    d.appendChild(cur);
+    d.insertBefore(document.createTextNode(o), cur);
+    bottom(); await sleep(o ? 75 : 25);
+  }
+  finish();
+}
+
+function runPanel(p) {
   const mins = RUN_MINUTES[p.id] || "2-5";
   const ollama = NEEDS_OLLAMA.has(p.id);
-  const install = p.id in INSTALL_CMD
-    ? INSTALL_CMD[p.id]
-    : "pip install -r requirements.txt";
+  const install = p.id in INSTALL_CMD ? INSTALL_CMD[p.id] : "pip install -r requirements.txt";
+  const rd = replayData(p);
 
   return `
   <div class="card-x reveal" id="run">
-    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+    <div class="run-head">
       <div>
         <div class="kicker">Run it</div>
-        <h3 class="h5 mt-1 mb-1">Run this project in your browser</h3>
-        <p class="text-ink-2 small mb-0" style="max-width:60ch">
-          Opens the repository in a free GitHub Codespace. It ${install
-            ? "installs the dependencies and runs"
-            : "runs"} the full pipeline automatically — you watch the real
-          output stream into a real terminal. Takes about <strong>${mins} minutes</strong>.
+        <h3 class="h5 mt-1 mb-1">See it actually run — two honest ways</h3>
+        <p class="text-ink-2 small mb-0" style="max-width:64ch">
+          <strong>Run live in Codespaces</strong> opens the repo in a free GitHub cloud
+          sandbox that ${install ? "installs dependencies and runs" : "runs"} the whole
+          pipeline for real — you watch real output in a real terminal (~${mins} min).
+          Or press <strong>▶ Run</strong> below to replay a real run right here, no sign-in.
         </p>
       </div>
       <a class="btn-x run" href="${codespaceUrl(p.dir)}" target="_blank" rel="noopener">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        Run this project
+        Run live in Codespaces
       </a>
     </div>
 
-    <div class="term mt-3">
+    <div class="term mt-3" data-term>
       <div class="term-bar">
         <span class="term-dot" style="background:#ff5f57"></span>
         <span class="term-dot" style="background:#febc2e"></span>
         <span class="term-dot" style="background:#28c840"></span>
-        <span class="term-title">${esc(p.dir)} — codespace</span>
+        <span class="term-title">${esc(p.dir)} — ${rd.real ? "replay of a real run" : "real-run results"}</span>
+        <span class="term-badge">${rd.real ? "captured stdout" : "from reports/*.json"}</span>
+        <span class="term-ctl">
+          <button class="term-skip" hidden>Skip</button>
+          <button class="term-run">▶ Run</button>
+        </span>
       </div>
-      <div class="term-body"><pre><span class="c-dim">$</span> <span class="c-key">git clone</span> https://github.com/Nikhil201716/${esc(p.dir)}.git
-<span class="c-dim">$</span> <span class="c-key">cd</span> ${esc(p.dir)}
-${install ? `<span class="c-dim">$</span> ${esc(install)}\n` : ""}<span class="c-dim">$</span> ${esc(cmd)}
-
-<span class="c-dim"># the pipeline writes everything it measures into reports/,
-# which is where every number on this page comes from.</span></pre></div>
+      <div class="term-body"><div class="term-lines"><div class="tl hint">Press ▶ Run to replay a real run of this project — ${esc(rd.source)}.</div></div></div>
     </div>
 
-    <div class="d-flex flex-wrap gap-2 mt-3">
+    <div class="run-actions">
       <button class="btn-x py-2 px-3" style="font-size:.85rem" id="copy-cmd">Copy the commands</button>
       <a class="btn-x py-2 px-3" style="font-size:.85rem"
          href="https://github.com/Nikhil201716/${esc(p.dir)}/blob/main/RUN.md"
@@ -129,16 +220,12 @@ ${install ? `<span class="c-dim">$</span> ${esc(install)}\n` : ""}<span class="c
          href="https://github.com/Nikhil201716/${esc(p.dir)}" target="_blank" rel="noopener">View the code →</a>
     </div>
 
-    <p class="text-ink-3 small mt-2 mb-0">
-      <code>RUN.md</code> in the repository has the full VS Code terminal reference —
-      PowerShell and bash setup, every stage individually, and a troubleshooting table.
-    </p>
-
     <p class="text-ink-3 small mt-3 mb-0">
-      A free GitHub account is needed to open a Codespace, and the compute is billed
-      to that account's free monthly allowance — not to me.
-      ${ollama ? `This project has optional local-LLM stages; without Ollama installed
-      they are skipped and the deterministic control arm still runs.` : ""}
+      The in-page terminal <strong>replays a real run's output</strong>; it does not execute
+      code on your computer — no website can, and none should. For real execution use
+      Codespaces above (a free GitHub account; compute is billed to that account, not to me).
+      ${ollama ? `This project has optional local-LLM stages; without Ollama they are skipped
+      and the deterministic control arm still runs.` : ""}
     </p>
   </div>`;
 }
@@ -150,8 +237,10 @@ function render(p, cat) {
 
   document.title = `${p.title} — Nikhil Sinha`;
 
+  const hasCharts = charts.length > 0;
+
   $("#project-root").innerHTML = `
-  <section class="section" style="padding-top:2.5rem;padding-bottom:2rem">
+  <section class="section" style="padding-top:2.5rem;padding-bottom:1.5rem">
     <div class="wrap">
       <a class="text-ink-3 small" href="projects.html">← All projects</a>
 
@@ -176,7 +265,7 @@ function render(p, cat) {
               <a class="btn-x" href="https://github.com/Nikhil201716/${esc(p.dir)}" target="_blank" rel="noopener">Repository →</a>
               ${book ? `<a class="btn-x" href="${GH}/${book.repo}/blob/main/docs/${book.file}" target="_blank" rel="noopener">
                  Notebook · ${book.pages} pages →</a>` : ""}
-              <a class="btn-x run" href="${codespaceUrl(p.dir)}" target="_blank" rel="noopener">Run this project →</a>
+              <a class="btn-x run" href="${codespaceUrl(p.dir)}" target="_blank" rel="noopener">Run live in Codespaces →</a>
             </div>
           </div>
         </div>
@@ -185,7 +274,7 @@ function render(p, cat) {
   </section>
 
   ${p.headline_finding ? `
-  <section style="padding:0 0 2rem">
+  <section style="padding:0 0 1.5rem">
     <div class="wrap">
       <div class="card-x reveal" style="border-left:3px solid var(--brand)">
         <div class="kicker">Headline finding</div>
@@ -194,38 +283,54 @@ function render(p, cat) {
     </div>
   </section>` : ""}
 
-  <section style="padding:0 0 2rem">
+  <section style="padding:0 0 3rem">
     <div class="wrap">
-      <div class="row g-4">
-        <div class="col-lg-5">
-          <div class="card-x reveal h-100">
-            <div class="kicker">Measured results</div>
-            <p class="text-ink-3 small mt-1 mb-3">
-              ${p.metrics_source === "reports"
-                ? `Extracted from this project's own <code>reports/*.json</code>, produced by a real run.`
-                : `Quoted from the results table in the project README — this project predates the reports convention, so the provenance is weaker and is labelled as such.`}
-            </p>
-            ${metrics.length
-              ? metrics.map((m) => `<div class="metric-row">
-                   <span class="metric-k">${esc(m.label)}${m.note ? `<br><span class="text-ink-3" style="font-size:.78rem">${esc(m.note)}</span>` : ""}</span>
-                   <span class="metric-v${m.highlight ? " hi" : ""}">${esc(m.value)}</span>
-                 </div>`).join("")
-              : `<p class="text-ink-2 mb-0">No machine-readable metrics for this project.</p>`}
-            ${p.n_report_files ? `<div class="text-ink-3 small mono mt-3">${p.n_report_files} report file${p.n_report_files === 1 ? "" : "s"} in the repository</div>` : ""}
+      <div class="tabbar reveal" role="tablist" aria-label="Project sections">
+        <button class="tabx active" role="tab" data-tab="overview">Overview</button>
+        ${hasCharts ? `<button class="tabx" role="tab" data-tab="charts">Charts</button>` : ""}
+        <button class="tabx" role="tab" data-tab="run">Run &amp; replay</button>
+      </div>
+
+      <div class="tab-panel active" data-panel="overview">
+        <div class="row g-4">
+          <div class="col-lg-5">
+            <div class="card-x h-100">
+              <div class="kicker">Measured results</div>
+              <p class="text-ink-3 small mt-1 mb-3">
+                ${p.metrics_source === "reports"
+                  ? `Extracted from this project's own <code>reports/*.json</code>, produced by a real run.`
+                  : `Quoted from the project README — this project predates the reports convention, so the provenance is weaker and labelled as such.`}
+              </p>
+              ${metrics.length
+                ? metrics.map((m) => `<div class="metric-row">
+                     <span class="metric-k">${esc(m.label)}${m.note ? `<br><span class="text-ink-3" style="font-size:.78rem">${esc(m.note)}</span>` : ""}</span>
+                     <span class="metric-v${m.highlight ? " hi" : ""}">${esc(m.value)}</span>
+                   </div>`).join("")
+                : `<p class="text-ink-2 mb-0">No machine-readable metrics for this project.</p>`}
+              ${p.n_report_files ? `<div class="text-ink-3 small mono mt-3">${p.n_report_files} report file${p.n_report_files === 1 ? "" : "s"} in the repository</div>` : ""}
+            </div>
           </div>
-        </div>
-        <div class="col-lg-7">
-          <div class="card-x reveal d1 h-100">
-            <div class="kicker mb-2">What it covers</div>
-            <div>${(p.topics || []).map((t) => `<span class="chip">${esc(t)}</span>`).join("")}</div>
-            ${charts.length ? `<div class="row g-3 mt-2" id="charts"></div>` : ""}
+          <div class="col-lg-7">
+            <div class="card-x h-100">
+              <div class="kicker mb-2">What it covers</div>
+              <div>${(p.topics || []).map((t) => `<span class="chip">${esc(t)}</span>`).join("")}</div>
+              ${hasCharts ? `<p class="text-ink-3 small mt-3 mb-0">Open the <strong>Charts</strong> tab for the figures built from the report files.</p>` : ""}
+            </div>
           </div>
         </div>
       </div>
+
+      ${hasCharts ? `
+      <div class="tab-panel" data-panel="charts">
+        <div class="card-x">
+          <div class="kicker mb-2">Charts from the report files</div>
+          <div class="row g-3" id="charts"></div>
+        </div>
+      </div>` : ""}
+
+      <div class="tab-panel" data-panel="run">${runPanel(p)}</div>
     </div>
   </section>
-
-  <section style="padding:0 0 3rem"><div class="wrap">${runPanel(p)}</div></section>
 
   <section style="padding:0 0 4rem"><div class="wrap">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 reveal">
@@ -233,19 +338,49 @@ function render(p, cat) {
         <div class="kicker">Keep going</div>
         <h3 class="h5 mt-1 mb-0">Other projects</h3>
       </div>
-      <a class="btn-x" href="projects.html">All 24 →</a>
+      <a class="btn-x" href="projects.html">All 30 →</a>
     </div>
     <div class="row g-3 g-lg-4 mt-1" id="more"></div>
   </div></section>`;
 
-  // charts
-  if (charts.length) {
+  // ----- tabs
+  let chartsDrawn = false;
+  const drawAllCharts = () => {
+    if (!hasCharts) return;
     $("#charts").innerHTML = charts
       .map((_, i) => `<div class="col-12"><div class="chart-box" id="chart-${i}"></div></div>`).join("");
     charts.forEach((c, i) => drawChart($(`#chart-${i}`), c));
-    document.addEventListener("themechange", () =>
-      charts.forEach((c, i) => drawChart($(`#chart-${i}`), c)));
+  };
+  const tabs = $$(".tabx");
+  const activate = (name) => {
+    tabs.forEach((t) => t.classList.toggle("active", t.dataset.tab === name));
+    $$(".tab-panel").forEach((pn) => pn.classList.toggle("active", pn.dataset.panel === name));
+    if (name === "charts" && !chartsDrawn) { drawAllCharts(); chartsDrawn = true; }
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener("click", () => activate(t.dataset.tab));
+    t.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+        e.preventDefault();
+        const next = (i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length;
+        tabs[next].focus(); activate(tabs[next].dataset.tab);
+      }
+    });
+  });
+  if (hasCharts) {
+    document.addEventListener("themechange", () => {
+      if (chartsDrawn) charts.forEach((c, i) => drawChart($(`#chart-${i}`), c));
+    });
   }
+
+  // ----- terminal replay
+  let termToken = { cancelled: false };
+  const termHost = $("[data-term]");
+  termHost?.querySelector(".term-run")?.addEventListener("click", () => {
+    termToken.cancelled = true;
+    termToken = { cancelled: false };
+    runTerminal(termHost, p, termToken);
+  });
 
   // related projects — same primary role where possible
   const role = (p.roles || [])[0];

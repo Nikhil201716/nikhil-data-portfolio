@@ -163,6 +163,182 @@ async function initLocation() {
   if (!REDUCED) setInterval(tick, 1000);
 }
 
+/* ------------------------------------------------------------- profile IO */
+let _profile = null, _profileP = null;
+function getProfile() {
+  if (_profile) return Promise.resolve(_profile);
+  if (_profileP) return _profileP;
+  _profileP = fetch(base() + "data/profile.json", { cache: "no-cache" })
+    .then((r) => (r.ok ? r.json() : null)).catch(() => null)
+    .then((p) => { _profile = p; return p; });
+  return _profileP;
+}
+/* If a photo path is set in profile.json and it loads, swap the monogram for it.
+   When it's null (default) nothing is requested, so the console stays clean. */
+function hydrateAvatars() {
+  getProfile().then((pr) => {
+    const src = pr && pr.photo;
+    if (!src) return;
+    const url = /^https?:/.test(src) ? src : base() + src;
+    const probe = new Image();
+    probe.onload = () => $$("[data-avatar]").forEach((a) => {
+      if (a.querySelector(".avatar-img")) return;
+      const im = document.createElement("img");
+      im.className = "avatar-img"; im.src = url; im.alt = "Nikhil Sinha";
+      a.insertBefore(im, a.firstChild);
+    });
+    probe.src = url;
+  });
+}
+
+/* -------------------------------------------------- ⌘K command palette */
+/* A keyboard-first launcher over everything on the site: projects, books,
+   skill areas, pages and quick actions. Built once, lazily, from the catalog. */
+let _cmdkIndex = null;
+async function _buildCmdkIndex() {
+  if (_cmdkIndex) return _cmdkIndex;
+  const b = base();
+  const items = [
+    { type: "Page", label: "Home", sub: "the landing page", href: b + "index.html" },
+    { type: "Page", label: "Projects", sub: "all 30, filterable", href: b + "pages/projects.html" },
+    { type: "Page", label: "Books", sub: "30 notebooks", href: b + "pages/books.html" },
+    { type: "Page", label: "About", sub: "my story", href: b + "pages/about.html" },
+    { type: "Action", label: "Toggle light / dark", sub: "theme", action: "theme" },
+    { type: "Action", label: "Email me", sub: EMAIL, action: "email" },
+    { type: "Action", label: "GitHub", sub: "github.com/Nikhil201716", action: "github" },
+  ];
+  for (const r of ["Data Analysis", "Data Engineering", "Machine Learning",
+                   "AI & LLM Systems", "Testing & QA"]) {
+    items.push({ type: "Area", label: r, sub: "projects in this area",
+                 href: b + "pages/projects.html?role=" + encodeURIComponent(r) });
+  }
+  for (const bk of BOOKS) {
+    items.push({ type: "Book", label: bk.title, sub: `${bk.pages}-page notebook`,
+                 href: `${GH}/${bk.repo}/blob/main/docs/${bk.file}`, ext: true, kw: bk.id });
+  }
+  try {
+    const cat = await getCatalog();
+    for (const p of cat.projects) {
+      items.push({
+        type: "Project", label: p.title,
+        sub: `Project ${p.id} · ${(p.roles || []).join(", ")}`,
+        href: b + "pages/project.html?id=" + p.id,
+        kw: `${p.id} ${(p.topics || []).join(" ")} ${(p.stack || []).join(" ")} ${(p.roles || []).join(" ")}`,
+      });
+    }
+  } catch { /* catalog optional for the palette */ }
+  _cmdkIndex = items;
+  return items;
+}
+function _cmdkScore(item, tokens) {
+  if (!tokens.length) return 0.001;
+  const label = item.label.toLowerCase();
+  const hay = (item.label + " " + item.sub + " " + (item.kw || "")).toLowerCase();
+  let s = 0;
+  for (const t of tokens) {
+    if (hay.indexOf(t) < 0) return -1;      // every token must appear somewhere
+    const li = label.indexOf(t);
+    s += li === 0 ? 3 : li > 0 ? 2 : 1;
+  }
+  return s;
+}
+function initCommandPalette() {
+  // inject a trigger into both nav clusters
+  const trigger = () => {
+    const btn = document.createElement("button");
+    btn.className = "icon-btn cmdk-trigger";
+    btn.type = "button";
+    btn.setAttribute("aria-label", "Search (Ctrl/Cmd K)");
+    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+    btn.addEventListener("click", open);
+    return btn;
+  };
+  const deskNav = $(".site-nav .d-none.d-lg-flex");
+  const mobNav = $(".site-nav .d-flex.d-lg-none");
+  if (deskNav) deskNav.insertBefore(trigger(), $("#theme", deskNav) || deskNav.firstChild);
+  if (mobNav) mobNav.insertBefore(trigger(), mobNav.firstChild);
+
+  const el = document.createElement("div");
+  el.className = "cmdk"; el.id = "cmdk"; el.hidden = true;
+  el.innerHTML = `
+    <div class="cmdk-backdrop" data-close></div>
+    <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Search">
+      <div class="cmdk-input-row">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input class="cmdk-input" type="text" autocomplete="off" spellcheck="false"
+               placeholder="Search projects, books, skills, pages…">
+        <kbd class="cmdk-esc">esc</kbd>
+      </div>
+      <div class="cmdk-list" role="listbox"></div>
+      <div class="cmdk-foot"><span><kbd>↑</kbd><kbd>↓</kbd> navigate</span><span><kbd>↵</kbd> open</span><span class="ms-auto">Nikhil Sinha</span></div>
+    </div>`;
+  document.body.appendChild(el);
+  const input = $(".cmdk-input", el);
+  const list = $(".cmdk-list", el);
+  let active = 0, results = [];
+
+  function render() {
+    const tokens = input.value.toLowerCase().split(/\s+/).filter(Boolean);
+    results = (_cmdkIndex || [])
+      .map((it) => ({ it, s: _cmdkScore(it, tokens) }))
+      .filter((x) => x.s >= 0)
+      .sort((a, b) => b.s - a.s)
+      .slice(0, 14)
+      .map((x) => x.it);
+    active = 0;
+    list.innerHTML = results.length ? results.map((it, i) => `
+      <div class="cmdk-item${i === 0 ? " active" : ""}" role="option" data-i="${i}">
+        <span class="cmdk-type t-${it.type.toLowerCase()}">${esc(it.type)}</span>
+        <span class="cmdk-text"><span class="cmdk-label">${esc(it.label)}</span>
+          <span class="cmdk-sub">${esc(it.sub)}</span></span>
+        ${it.ext ? '<span class="cmdk-ext">↗</span>' : ""}
+      </div>`).join("")
+      : `<div class="cmdk-empty">No matches for “${esc(input.value)}”.</div>`;
+    $$(".cmdk-item", list).forEach((n) => {
+      n.addEventListener("mousemove", () => setActive(+n.dataset.i));
+      n.addEventListener("click", () => go(results[+n.dataset.i]));
+    });
+  }
+  function setActive(i) {
+    active = i;
+    $$(".cmdk-item", list).forEach((n, j) => n.classList.toggle("active", j === i));
+    $$(".cmdk-item", list)[i]?.scrollIntoView({ block: "nearest" });
+  }
+  function go(it) {
+    if (!it) return;
+    close();
+    if (it.action === "theme") return $("#theme")?.click();
+    if (it.action === "email") return window.open(GMAIL, "_blank");
+    if (it.action === "github") return window.open(GH, "_blank");
+    if (it.ext) return window.open(it.href, "_blank");
+    if (it.href) location.href = it.href;
+  }
+  async function open() {
+    await _buildCmdkIndex();
+    el.hidden = false;
+    document.body.classList.add("cmdk-open");
+    input.value = ""; render();
+    requestAnimationFrame(() => input.focus());
+  }
+  function close() {
+    el.hidden = true;
+    document.body.classList.remove("cmdk-open");
+  }
+  input.addEventListener("input", render);
+  $$("[data-close]", el).forEach((n) => n.addEventListener("click", close));
+  el.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") { close(); }
+    else if (e.key === "ArrowDown") { e.preventDefault(); setActive(Math.min(active + 1, results.length - 1)); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setActive(Math.max(active - 1, 0)); }
+    else if (e.key === "Enter") { e.preventDefault(); go(results[active]); }
+  });
+  addEventListener("keydown", (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); el.hidden ? open() : close(); }
+    else if (e.key === "/" && el.hidden && !/^(INPUT|TEXTAREA)$/.test(document.activeElement?.tagName || "")
+             && !document.activeElement?.isContentEditable) { e.preventDefault(); open(); }
+  });
+}
+
 /* ------------------------------------------------- dynamic WebGL backdrop */
 /* A flowing, domain-warped gradient rendered on the GPU: resolution-independent
    (crisp at any size), a few KB, ~60fps, and it drifts toward the pointer. It
@@ -337,6 +513,27 @@ function initMotion() {
     $$(".reveal").forEach((el) => io.observe(el));
   }
 
+  // subtle scroll parallax (only on elements that are NOT reveal-animated, so
+  // the two transforms never fight)
+  if (!REDUCED) {
+    const px = $$("[data-parallax]").filter((el) => !el.classList.contains("reveal"));
+    if (px.length) {
+      let ticking = false;
+      const apply = () => {
+        const y = window.scrollY;
+        px.forEach((el) => {
+          const s = parseFloat(el.dataset.parallax) || 0.08;
+          el.style.transform = `translate3d(0, ${(y * s).toFixed(1)}px, 0)`;
+        });
+        ticking = false;
+      };
+      addEventListener("scroll", () => {
+        if (!ticking) { ticking = true; requestAnimationFrame(apply); }
+      }, { passive: true });
+      apply();
+    }
+  }
+
   // pointer spotlight + card glow, desktop only
   if (!REDUCED && matchMedia("(pointer: fine)").matches) {
     document.body.classList.add("has-pointer");
@@ -439,6 +636,34 @@ function bookCard(b) {
   </a>`;
 }
 
+/* A round avatar that shows the real photo at assets/img/nikhil.jpg when it
+   exists, and falls back to the "NS" monogram if the file is not there yet. */
+function avatarHTML(extra = "") {
+  // Monogram by default; hydrateAvatars() swaps in the real photo if profile.photo is set.
+  return `<span class="avatar ${extra}" data-avatar><span class="avatar-ini">NS</span></span>`;
+}
+
+/* Availability card, rendered from data/profile.json into any [data-availability]. */
+function renderAvailability(root = document) {
+  const hooks = $$("[data-availability]", root);
+  if (!hooks.length) return;
+  getProfile().then((pr) => {
+    const a = pr && pr.availability;
+    if (!a) return;
+    const html = `
+      <div class="avail-head"><span class="avail-dot"></span>${esc(a.status || "Open to work")}</div>
+      ${a.headline ? `<div class="avail-headline">${esc(a.headline)}</div>` : ""}
+      ${a.looking_for ? `<div class="avail-line">${esc(a.looking_for)}</div>` : ""}
+      ${a.mode ? `<div class="avail-line text-ink-3">${esc(a.mode)}</div>` : ""}
+      ${(a.points || []).length ? `<ul class="avail-points">${a.points.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>` : ""}
+      <a class="btn-x primary w-100 mt-2" data-gmail href="#">Get in touch</a>`;
+    hooks.forEach((el) => { el.innerHTML = html; });
+    $$("[data-availability] [data-gmail]", root).forEach((el) => {
+      el.href = GMAIL; el.target = "_blank"; el.rel = "noopener";
+    });
+  });
+}
+
 function projectCard(p, delayClass = "") {
   const m = (p.metrics || [])[0];
   return `<a class="card-x pcard tilt reveal ${delayClass}" href="${projectUrl(p.id)}">
@@ -453,4 +678,6 @@ function projectCard(p, delayClass = "") {
   </a>`;
 }
 
-document.addEventListener("DOMContentLoaded", () => { initBackground(); initChrome(); initLocation(); });
+document.addEventListener("DOMContentLoaded", () => {
+  initBackground(); initChrome(); initLocation(); initCommandPalette();
+});

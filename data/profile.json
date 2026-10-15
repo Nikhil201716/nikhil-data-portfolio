@@ -1,0 +1,63 @@
+{
+  "_note": "Personal content, kept here so it's easy to edit without touching code. The site reads this for the hero, About and the journey timeline.",
+  "name": "Nikhil Sinha",
+  "photo": null,
+  "_photo_hint": "Set this to \"assets/img/nikhil.jpg\" after you add your photo there; leave null to use the NS monogram.",
+  "roles": [
+    "I build data & AI systems",
+    "and the tests that prove they work",
+    "MCA · CHRIST University, Bengaluru",
+    "thirty projects, every number measured"
+  ],
+  "hero_pitch": "Hi, I'm Nikhil. I learn a subject by building something real with it and then trying my hardest to break it. What's here is thirty end-to-end projects — analytics, data engineering, machine learning, LLM systems and test engineering — where every single number is scored against a known ground truth, and the results that proved me wrong are written up as carefully as the ones that proved me right.",
+  "bio": [
+    "I taught myself to build by being stubborn about one question: how do I actually know this works? It's easy to write down a number that flatters the thing you made. I got interested in the harder habit — planting a known answer in the data first, then grading my own work against it, and reporting the result even when it embarrasses me.",
+    "I did my BCA in Patna and my MCA at CHRIST University in Bengaluru. For eight months I worked a Google Pay voice-support process at Cognizant on US-shift hours — and, oddly, that's where I learned what data is really for. Working complaint queues teaches you that a metric is a promise someone is accountable for, that an average hides the cases that actually hurt, and that a dashboard number is only as good as the definition nobody wrote down.",
+    "So I went all in on building. Over the past year I've shipped thirty public, reproducible projects and written a full notebook for each — thirty of them, nearly two thousand pages — because writing it up is how I find out which parts I didn't actually understand. Several of these projects exist only because the checkable version of the answer disagreed with the obvious one.",
+    "I'm the kind of person who reads the error message, reaches for the trivial baseline before the fancy model, and would rather ship an honest 0.18 than a flattering 1.00. If that's the kind of care you want on a team, I'd love to talk."
+  ],
+  "availability": {
+    "status": "Open to work · available immediately",
+    "headline": "Looking for my first full-time role (internships welcome too)",
+    "looking_for": "Remote roles in Data, Machine Learning, AI/LLM systems or QA / test engineering",
+    "mode": "Remote-first · based in Bengaluru, India",
+    "points": [
+      "Available to start immediately",
+      "Comfortable across the whole path — data, pipelines, models, tests and the interface",
+      "Every claim on this site is reproducible from a public repo"
+    ]
+  },
+  "journey": [
+    {
+      "year": "2022",
+      "title": "Where it started",
+      "place": "CETPA Infotech · Noida",
+      "body": "A web-development internship — my first taste of making something real run in a browser. HTML, CSS, JavaScript, Bootstrap. Small, but it hooked me."
+    },
+    {
+      "year": "2023",
+      "title": "BCA — the foundations",
+      "place": "St. Xavier's College of Management & Technology · Patna",
+      "body": "Finished my Bachelor of Computer Applications. Programming, databases, the basics done properly — the groundwork everything since has stood on."
+    },
+    {
+      "year": "2023 – 2025",
+      "title": "MCA at CHRIST University",
+      "place": "CHRIST (Deemed to be University) · Bengaluru",
+      "body": "Moved to Bengaluru for my master's. Went deeper into data structures, machine learning and systems — and started building projects that were graded against ground truth, not vibes."
+    },
+    {
+      "year": "2025 – 2026",
+      "title": "Eight months in the real world",
+      "place": "Cognizant · Process Executive (Voice)",
+      "body": "Worked a Google Pay voice-support process on US-shift hours. Running complaint queues taught me, bluntly, what data is for — that behind every metric is a person it's accountable to."
+    },
+    {
+      "year": "2026",
+      "title": "All in on building",
+      "place": "Thirty projects · all public · all measured",
+      "body": "Went all-in on the craft: thirty end-to-end data, AI, systems and testing projects, each reproducible from a fixed seed, each with its own notebook — and each with at least one finding that corrected my own first guess."
+    }
+  ],
+  "principle": "A result you cannot check is not a result."
+}

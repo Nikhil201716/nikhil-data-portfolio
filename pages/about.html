@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <title>About — Nikhil Sinha</title>
 <meta name="description" content="A student in Bengaluru learning data and AI by building things and then trying to break them.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/site.css?v=2026-10-13c">
+<link rel="stylesheet" href="../assets/css/site.css?v=2026-10-15b">
 </head>
 <body>
 
@@ -52,58 +53,57 @@
 
 <section class="section" style="padding-top:3rem">
   <div class="wrap">
-    <div class="row g-5">
+    <!-- intro: photo + who I am -->
+    <div class="about-intro reveal">
+      <div class="hero-avatar-wrap" data-hero-avatar></div>
+      <div>
+        <div class="kicker">Hello</div>
+        <h2 class="mb-2">I'm Nikhil.</h2>
+        <p class="sec-sub mb-0" data-tagline-line>
+          I build data &amp; AI systems — and the tests that prove they work.
+          MCA from CHRIST University, based in Bengaluru, open to work.
+        </p>
+      </div>
+    </div>
+
+    <div class="row g-5 mt-1">
       <div class="col-lg-7">
-        <div class="reveal">
-          <div class="kicker">Background</div>
-          <h2>About</h2>
-          <p class="sec-sub">
-            I am a student in Bengaluru. Before this I spent time in customer support
-            operations, which turned out to be an unusually good way to learn what data
-            is actually for. Working complaint queues teaches you that a metric is a
-            promise someone is accountable for, that an average hides the cases that
-            actually hurt, and that the number on the dashboard is only as good as the
-            definition nobody wrote down.
-          </p>
-          <p class="sec-sub">
-            That shows up in how I build. Every one of these projects starts by asking
-            what would make the result <em>checkable</em> &mdash; and several of them exist
-            because the checkable version disagreed with the obvious one.
-          </p>
-          <p class="sec-sub">
-            I try to follow the whole path rather than stopping at the interesting part:
-            designing the data, modelling the warehouse, building the pipeline, training
-            and calibrating the model, testing it adversarially, and building the
-            interface someone would actually use. Most of what I have learned came from
-            the last two steps.
-          </p>
-        </div>
+        <div class="reveal" data-bio><!-- paragraphs from profile.json --></div>
 
         <div class="card-x reveal d1 mt-4">
           <div class="kicker mb-2">What thirty projects taught me</div>
           <p class="text-ink-2 small">
-            None of these needed more data, a better model or more compute. Each cost me
-            an afternoon, and each one changed what I was entitled to claim. I learned
-            every one of them by getting it wrong first.
+            None of these needed more data, a better model or more compute. Each one
+            changed what I was entitled to claim — and I learned every one of them by
+            getting it wrong first.
           </p>
-          <div class="metric-row"><span class="metric-k">Build the trivial baseline first</span><span class="metric-v">5 of 15 beat the sophisticated method</span></div>
+          <div class="metric-row"><span class="metric-k">Build the trivial baseline first</span><span class="metric-v">it often wins</span></div>
           <div class="metric-row"><span class="metric-k">Treat a perfect score as a bug report</span><span class="metric-v">1.000 &rarr; 0.20 held out</span></div>
           <div class="metric-row"><span class="metric-k">Stratify before concluding</span><span class="metric-v">a fix that harmed thin files</span></div>
           <div class="metric-row"><span class="metric-k">Split on time, not at random</span><span class="metric-v">24x PR-AUC difference</span></div>
           <div class="metric-row"><span class="metric-k">Grade the grader</span><span class="metric-v">+77.8pt inflation</span></div>
-          <div class="metric-row"><span class="metric-k">Let an adversary adapt</span><span class="metric-v">0.9545 &rarr; 0.1818</span></div>
+          <div class="metric-row"><span class="metric-k">A green test suite isn't a safe release</span><span class="metric-v">caught 2 of 10, gate caught 9</span></div>
+        </div>
+
+        <div class="card-x reveal d1 mt-4">
+          <div class="kicker mb-3">My journey so far</div>
+          <div class="timeline" data-journey><!-- milestones from profile.json --></div>
         </div>
       </div>
 
       <div class="col-lg-5">
-        <div class="card-x reveal d1">
+        <div class="card-x reveal d1 avail-card-lg" data-availability></div>
+
+        <div class="card-x reveal d2 mt-4">
           <div class="kicker mb-2">Education</div>
-          <div class="fw-bold">CHRIST (Deemed to be University)</div>
-          <div class="text-ink-3 small">Bengaluru, India</div>
+          <div class="fw-bold">Master of Computer Applications</div>
+          <div class="text-ink-3 small">CHRIST (Deemed to be University), Bengaluru · 2023–2025</div>
+          <div class="mt-3 fw-bold">Bachelor of Computer Applications</div>
+          <div class="text-ink-3 small">St. Xavier's College of Management &amp; Technology, Patna · 2023</div>
 
           <div class="divider my-4"></div>
 
-          <div class="kicker mb-2">Focus areas</div>
+          <div class="kicker mb-2">What I work on</div>
           <ul class="text-ink-2 small mb-0" style="padding-left:1.1rem">
             <li>Analytics engineering &amp; semantic layers</li>
             <li>Streaming and event-time correctness</li>
@@ -115,19 +115,7 @@
           <div class="divider my-4"></div>
 
           <div class="kicker mb-2">Principle</div>
-          <p class="mb-0" style="font-size:1.05rem">&ldquo;A result you cannot check is not a result.&rdquo;</p>
-        </div>
-
-        <div class="card-x reveal d2 mt-4 text-center">
-          <div class="kicker mb-2">Get in touch</div>
-          <p class="text-ink-2 small">If you find a mistake in any of these, or want to talk about something I built, please do get in touch.</p>
-          <div class="d-flex flex-column gap-2">
-            <a class="btn-x primary" data-gmail href="#">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5Z"/></svg>
-              Email me
-            </a>
-            <a class="btn-x" href="https://github.com/Nikhil201716" target="_blank" rel="noopener">GitHub</a>
-          </div>
+          <p class="mb-0" style="font-size:1.05rem" data-principle>&ldquo;A result you cannot check is not a result.&rdquo;</p>
         </div>
       </div>
     </div>
@@ -149,7 +137,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../assets/js/common.js?v=2026-10-13c"></script>
-<script src="../assets/js/about.js?v=2026-10-13c"></script>
+<script src="../assets/js/common.js?v=2026-10-15b"></script>
+<script src="../assets/js/about.js?v=2026-10-15b"></script>
 </body>
 </html>
